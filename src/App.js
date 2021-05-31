@@ -1,24 +1,66 @@
 import logo from './logo.svg';
 import './App.css';
+import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import DrawerContainer from './components/DrawerContainer';
+import {Route} from 'react-router-dom';
+import Performance from './pages/Performance';
+import  Claim from './pages/Claim';
+import Settings from './pages/AdminSettings/AdminSettings';
+import Board from './pages/Board';
+import Welcome from './pages/Welcome';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      display: 'flex',
+    },
+    drawer: {
+      [theme.breakpoints.up('sm')]: {
+        width: drawerWidth,
+        flexShrink: 0,
+      },
+    },
+    appBar: {
+      [theme.breakpoints.up('sm')]: {
+        width: `calc(100% - ${drawerWidth}px)`,
+        marginLeft: drawerWidth,
+      },
+    },
+    menuButton: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('sm')]: {
+        display: 'none',
+      },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+      width: drawerWidth,
+    },
+    content: {
+      flexGrow: 1,
+      padding: theme.spacing(3),
+    },
+  }),
+);
 
 function App() {
+  const classes = useStyles();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <div className={classes.root}>
+      <DrawerContainer/>
+      <main className={classes.content}>
+        <div className={classes.toolbar} />
+          <Route exact path='/' component={Welcome}/>
+          <Route path='/claim' component={Claim}/>
+          <Route path='/settings' component={Settings}/>
+          <Route path='/performanceState' component={Performance}/>
+          <Route path='/board' component={Board}/>
+
+      </main> 
+    </div> 
   );
 }
 
