@@ -12,4 +12,4 @@ const mapStateToProps =state=>({channels:state.channels});
 
 
 
-export default Claim;
+export default connect(mapStateToProps)(Claim);

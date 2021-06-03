@@ -64,9 +64,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     link: {
       textDecoration: 'none',
-      color: 'black',
+      color: 'white',
 
 
+    },
+    whiteColor:{
+      color: 'white',
     }
   }),
 );
@@ -91,9 +94,9 @@ const DrawerContainer = (props: Props) => {
 
   const drawer = (
     <div>
-      <div className='theme.mixins.toolbar, drawerPaper: 240' />
+      <div className='theme.mixins.toolbar, drawerPaper: 240'  />
       <Divider />
-      <List className='mt-5'>
+      <List className='mt-5' style={{backgroundColor:'#2d292a'}}>
         <div style={{textAlign: 'center',background:'#000'}}>
         <img src='/favicon.png' />
         </div>
@@ -103,28 +106,28 @@ const DrawerContainer = (props: Props) => {
         <br />
         <Link to='/claim' className={classes.link}>
           <ListItem button key='1'>
-            <ListItemIcon><InboxIcon /> </ListItemIcon>
+            <ListItemIcon className={classes.whiteColor}><InboxIcon /> </ListItemIcon>
             <ListItemText primary='Claim' />
           </ListItem>
         </Link>
         <hr />
         <Link to='/settings' className={classes.link}>
           <ListItem button key='2'>
-            <ListItemIcon><SettingsIcon /> </ListItemIcon>
+            <ListItemIcon className={classes.whiteColor}><SettingsIcon /> </ListItemIcon>
             <ListItemText primary='Admin Settings' />
           </ListItem>
         </Link>
         <hr />
         <Link to='/performanceState' className={classes.link}>
           <ListItem button key='3'>
-            <ListItemIcon><BarChartIcon /> </ListItemIcon>
+            <ListItemIcon className={classes.whiteColor}><BarChartIcon /> </ListItemIcon>
             <ListItemText primary='Statistics' />
           </ListItem>
         </Link>
         <hr />
         <Link to='/board' className={classes.link}>
           <ListItem button key='3'>
-            <ListItemIcon><BusinessIcon /> </ListItemIcon>
+            <ListItemIcon className={classes.whiteColor}><BusinessIcon /> </ListItemIcon>
             <ListItemText primary='Production Board' />
           </ListItem>
         </Link>

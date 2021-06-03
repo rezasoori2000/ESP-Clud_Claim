@@ -1,11 +1,11 @@
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles,  Theme, createStyles } from '@material-ui/core/styles';
 import DrawerContainer from './components/DrawerContainer';
 import {Route} from 'react-router-dom';
 import Performance from './pages/Performance';
 import  Claim from './pages/Claim';
-import Settings from './pages/AdminSettings/AdminSettings';
+import Settings from './pages/AdminSettings/AdminSettingsContainer';
 import Board from './pages/Board';
 import Welcome from './pages/Welcome';
 
