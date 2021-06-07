@@ -10,7 +10,6 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -19,9 +18,7 @@ import BarChartIcon from '@material-ui/icons/BarChart';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import SaveIcon from '@material-ui/icons/Save';
 
 const drawerWidth = 240;
 
@@ -159,11 +156,7 @@ const DrawerContainer = (props: Props) => {
     </Typography>
             </Grid>
             <Grid item lg={1}   >
-              <Button variant="contained"
-                color="primary"
-                size="large"
-                startIcon={<SaveIcon />}
-                >Save</Button>
+
             </Grid>
           </Grid>
         </Toolbar>

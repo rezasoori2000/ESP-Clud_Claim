@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+
 
 const Claim=()=>(
     <div>
@@ -7,9 +7,6 @@ const Claim=()=>(
     </div>
 );
 
-const mapStateToProps =state=>({channels:state.channels});
 
 
-
-
-export default connect(mapStateToProps)(Claim);
+export default Claim;

@@ -1,23 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Provider,connect} from 'react-redux';
-
-import store from './store';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, withRouter } from 'react-router-dom';
 
-const mapStateToProps = state => store;
-const AppWithRouter = withRouter(App);
-const ConnectedAppWithRouter = connect(mapStateToProps)(AppWithRouter)
-ReactDOM.render(
-  <Provider  store={store}>
-    <BrowserRouter>
-      <ConnectedAppWithRouter/>
-    </BrowserRouter>
 
-  </Provider>,
+const AppWithRouter = withRouter(App);
+
+ReactDOM.render(
+    <BrowserRouter>
+      <AppWithRouter/>
+    </BrowserRouter>
+  ,
   document.getElementById('root')
 );
 

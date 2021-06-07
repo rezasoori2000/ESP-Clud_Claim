@@ -5,7 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import FormHelperText from '@material-ui/core/FormHelperText';
 
 
-const ESPSelect = ({ name, label, helptext, items }) => {
+const ESPSelect = ({ name, label, helptext,onPropertyChange, items }) => {
     if (!items)
         return <div></div>
     else
@@ -17,7 +17,9 @@ const ESPSelect = ({ name, label, helptext, items }) => {
                     labelId="demo-simple-select-outlined-label"
                     id={name}
                     value={items && items.length > 0 ? (items.filter(x => x.Selected).length>0? items.filter(x => x.Selected)[0].Value: -1) : -1}
-                //onChange={handleChange}
+                    onChange={onPropertyChange}
+                    name={name}
+                    type='select'
                 >
                     <MenuItem value="-1">
                         <em>Select</em>
