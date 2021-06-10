@@ -4,10 +4,11 @@ import { makeStyles,  Theme, createStyles } from '@material-ui/core/styles';
 import DrawerContainer from './components/DrawerContainer';
 import {Route} from 'react-router-dom';
 import Performance from './pages/Performance';
-import  Claim from './pages/Claim';
+import  Claim from './pages/Claim/ClaimFull';
 import Settings from './pages/AdminSettings/AdminSettingsContainer';
 import Board from './pages/Board';
 import Welcome from './pages/Welcome';
+import ClaimContainer from './pages/Claim/ClaimContainer';
 
 const drawerWidth = 240;
 
@@ -54,7 +55,7 @@ function App() {
       <main className={classes.content}>
         <div className={classes.toolbar} />
           <Route exact path='/' component={Welcome}/>
-          <Route path='/claim' component={Claim}/>
+          <Route path='/claim' component={ClaimContainer}/>
           <Route path='/settings' component={Settings}/>
           <Route path='/performanceState' component={Performance}/>
           <Route path='/board' component={Board}/>

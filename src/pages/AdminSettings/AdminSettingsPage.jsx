@@ -44,8 +44,11 @@ const AdminSettingsPage = (props) => {
         saveBtn:{
             marginTop:40,
             
+        },
+        saveBtnTop:{
+            marginTop:10,
+            
         }
-
     }));
     
 
@@ -55,9 +58,23 @@ const AdminSettingsPage = (props) => {
     return (
         <div >
             <Card >
-
-                <CardHeader title="Database Settings" subheader="ESP database connection settings " avatar={<Avatar aria-label="recipe" style={{ backgroundColor: 'blue' }}> D </Avatar>
+            <Grid container spacing={3}>
+                        <Grid item lg={11}   >
+                        <CardHeader title="Database Settings" subheader="ESP database connection settings " avatar={<Avatar aria-label="recipe" style={{ backgroundColor: 'blue' }}> D </Avatar>
                 } />
+                        </Grid>
+                        <Grid item lg={1}   >
+                        <Button variant="contained"
+                                color="primary"
+                                className={classes.saveBtnTop}
+                                size="large"
+                                onClick={props.onSave}
+                                startIcon={<SaveIcon />}
+                            >Save</Button>
+                        </Grid>
+
+                        </Grid>
+                
                 <CardContent></CardContent>
                 <CardContent>
                     <Grid container spacing={3}>

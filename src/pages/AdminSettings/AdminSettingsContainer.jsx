@@ -75,7 +75,9 @@ class AdminSettingsContainer extends React.Component {
             name:event.target.name,
             value:newSelectedId    
         });
-
+if (event.target.name==='Factories'){
+    this.getGroupsByAPI(newSelectedId);
+}
         adSettings[event.target.name] = newValues;
         adSettings[event.target.name+"Id"] = newSelectedId;
         this.setState({
@@ -100,6 +102,23 @@ class AdminSettingsContainer extends React.Component {
             });
     }
 
+    getGroupsByAPI = async (oid) => {
+        var response = {};
+        var oldAdminSettings=this.state.adminSettings;
+        try {
+            const res = await axios.get(`${config.apiUrl}adminSettings/GetGroup?oid=`+oid);
+            response = JSON.parse(res.data);
+            oldAdminSettings.Groups=response;
+
+            this.setState({
+                ...this.state,
+                adminSettings: oldAdminSettings
+            });
+        }
+        catch (err) {
+            alert(`Error in calling ESP API- ${err}`);
+        }
+    };
 
     getAdminSettingsByAPI = async () => {
         var response = {};
@@ -119,36 +138,7 @@ class AdminSettingsContainer extends React.Component {
     saveAdminSettingsByAPI = async () => {
         var response = {};
         let state = this.state.adminSettings;
-        // let data = {
-        //     User:"",
-        //     IP: this.state.IP,
-        //     Id: state.Id,
-        //     FactoryId: state.Factories.filter(x => x.Selected)[0].Value,
-        //     GroupId: state.Groups.filter(x => x.Selected)[0].Value,
-        //     MultipleJobs: false,
-        //     ScheduledJobs: false,
-        //     IncrementPercentage: 0,
-        //     JobListOrderingId: state.JobListOrdering.filter(x => x.Selected)[0].Value,
-        //     ShowingCodeId: state.ShowingCode.filter(x => x.Selected)[0].Value,
-        //     CanFinishWholeJob: false,
-        //     AllowClaimingOutOfFactoryWork: false,
-        //     TrackLateLogin: false,
-        //     LateAllowance: 0,
-        //     TrackEarlyLeave: false,
-        //     EarlyLeaveAlloance: 0,
-        //     HidePreProductionJobs: false,
-        //     PBShowProductionBoard: false,
-        //     PBJobOrderId: state.PBJobOrders.filter(x => x.Selected)[0].Value,
-        //     PBTitleColumn: false,
-        //     PBHourColumn: false,
-        //     PBDueDateColumn: false,
-        //     PBHideOutOfFactoryWorkTypes: false,
-        //     PSShowPerformanceStates: false,
-        //     PSStatisticChartId: state.PSStatisticChart.filter(x => x.Selected)[0].Value,
-        //     PSStatisticGroupId: state.PSStatisticGroup.filter(x => x.Selected)[0].Value,
-        //     PSPerformanceChartId: state.PSPerformanceChart.filter(x => x.Selected)[0].Value,
-        //     PSEnableIndividual: false,
-        // }
+
        var data=JSON.stringify(state);
         try {
             const headers = {
