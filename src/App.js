@@ -1,4 +1,4 @@
-// import logo from './logo.svg';
+
 import './App.css';
 import { makeStyles,  Theme, createStyles } from '@material-ui/core/styles';
 import DrawerContainer from './components/DrawerContainer';
@@ -9,6 +9,7 @@ import Settings from './pages/AdminSettings/AdminSettingsContainer';
 import Board from './pages/Board';
 import Welcome from './pages/Welcome';
 import ClaimContainer from './pages/Claim/ClaimContainer';
+import loading from './logo.svg';
 
 const drawerWidth = 240;
 
@@ -49,6 +50,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function App() {
   const classes = useStyles();
+
   return (
     <div className={classes.root}>
       <DrawerContainer/>

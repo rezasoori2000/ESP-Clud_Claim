@@ -44,7 +44,7 @@ export default function Login(props) {
                                 style={{ width: '100%', height: '100%', fontSize: '1.3rem' }}
                                 onClick={() => { props.handleLogin(e.OId) }}
                                 // onDelete={()=>{}}
-                                {...(e.LoggedIn && e.LoggedIn.Hours > 0 && { deleteIcon: <DoneIcon />, color: 'primary', icon: <FaceIcon /> })}
+                                {...(e.IsLoggedIn && { deleteIcon: <DoneIcon />, color: 'primary', icon: <FaceIcon /> })}
                                 clickable
                             />
                         </Box>
