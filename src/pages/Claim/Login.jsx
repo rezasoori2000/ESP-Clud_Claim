@@ -12,9 +12,8 @@ import gridSearchStyles from '../../components/controls/Styles';
 
 export default function Login(props) {
     const classes =gridSearchStyles();
-    var rowItems = props.items.length;
     let id = 0;
-    let newProps = {};
+    
     console.log('runned');
     return (
         <Fragment>
@@ -40,7 +39,7 @@ export default function Login(props) {
                         <Box p={2} key={e.OId}>
                             <Chip
                                 key={e.OId}
-                                label={e.Fullname}
+                                label={e.Name}
                                 style={{ width: '100%', height: '100%', fontSize: '1.3rem' }}
                                 onClick={() => { props.handleLogin(e.OId) }}
                                 // onDelete={()=>{}}

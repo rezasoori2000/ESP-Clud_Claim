@@ -2,9 +2,11 @@ import React, { Fragment } from 'react';
 import axios from 'axios';
 import Login from './Login';
 import WorkTypes from './WorkTypes';
+import JobItems from './JobItems';
 import Jobs from './Jobs';
 import config from '../../config';
 import Loginlogics from '../../components/logics/Login';
+import ClaimLogic from '../../components/logics/ClaimLogic';
 import Loading from '../loading.js';
 
 class CalimContainer extends React.Component {
@@ -19,9 +21,11 @@ class CalimContainer extends React.Component {
             mainJobs: [],
             claimingOId: 0,
             page: 0,
-            loading: false
+            loading: false,
+            worktypeId: 0,
+            jobItems: [],
+            mainJobItems: []
         };
-
     }
 
 
@@ -30,7 +34,6 @@ class CalimContainer extends React.Component {
             ...this.state,
             loading: true
         });
-
         Loginlogics.getListOfWorkersFromApi().then((response) =>
             this.setState({
                 ...this.state,
@@ -44,8 +47,6 @@ class CalimContainer extends React.Component {
     componentDidMount() {
 
     }
-
-
 
     /* #region  Login Methods */
 
@@ -113,10 +114,10 @@ class CalimContainer extends React.Component {
 
     }
 
-    searchNames(event) {
+    searchNames = (event) => {
         this.setState({
             ...this.state,
-            workersList: Loginlogics.searchName(event, this.state.mainWorkersList)
+            workersList: Loginlogics.searchNames(event, this.state.mainWorkersList)
         });
     }
     /* #endregion */
@@ -136,6 +137,7 @@ class CalimContainer extends React.Component {
                 workTypes: response,
                 mainWorkTypes: response,
                 loading: false
+
             });
         }).catch((err) => {
 
@@ -157,7 +159,10 @@ class CalimContainer extends React.Component {
 
     handleWorkTypeClick = async (id) => {
         var response = {};
-
+        this.setState({
+            ...this.state,
+            loading: true
+        });
         try {
             var data = await axios.get(`${config.apiUrl}/Claim/GetJobs?id=${id}`);
             response = JSON.parse(data.data);
@@ -165,16 +170,14 @@ class CalimContainer extends React.Component {
                 ...this.state,
                 jobs: response,
                 mainJobs: response,
-                page: 2
+                page: 2,
+                loading: false,
+                worktypeId: id
             });
         }
         catch (err) {
             alert(`Error in calling ESP API (Get Jobs)- ${err}`);
         }
-    }
-
-    handleJobClick = () => {
-
     }
 
     searchJobs = (event) => {
@@ -192,16 +195,40 @@ class CalimContainer extends React.Component {
     }
     /* #endregion */
 
+    /*#region Job*/
+
+    handleBack = (pageId) => {
+        this.setState({
+            page: pageId
+        });
+    }
+    handleJobClick = (jobId) => {
+        const worktypeId = this.state.worktypeId;
+        const response = ClaimLogic.getJobItemsFromApi(jobId, worktypeId);
+        response.then((r) => {
+            var data=JSON.parse(r.data);
+            this.setState({
+                ...this.state,
+                jobItems: data,
+                mainJobItems: data,
+                page: 3
+            });
+        }).catch((err) => {
+            alert(`Error in getting Job items information- ${err}`);
+        });
+    }
+    /* #endregion */
+
+
     render() {
         const renderConditionaly = () => {
-            
+
             if (this.state.loading) {
                 return (<Loading />)
             }
             switch (this.state.page) {
                 case 0: {
                     return <Login items={this.state.workersList} searchNames={this.searchNames} handleLogin={this.handleLogin} />
-                    break;
                 }
                 case 1: {
                     return <WorkTypes claimingOId={this.state.claimingOId}
@@ -209,20 +236,25 @@ class CalimContainer extends React.Component {
                         workTypes={this.state.workTypes}
                         handleLogOut={this.handleLogOut}
                         handleWorkTypeClick={this.handleWorkTypeClick} />
-                    break;
                 }
                 case 2: {
                     return <Jobs claimingOId={this.state.claimingOId}
                         searchJobs={this.searchJobs}
                         jobs={this.state.jobs}
-                        handleJobClick={this.handleJobClick} />
-                    break;
+                        handleJobClick={this.handleJobClick}
+                        handleBack={this.handleBack} />
+                }
+                case 3: {
+                    return <JobItems claimingOId={this.state.claimingOId}
+                        searchJobs={this.searchJobs}
+                        items={this.state.mainJobItems}
+                        handleBack={this.handleBack} 
+                    />
                 }
                 default: return (<div></div>)
             }
         }
         return (
-            !this.state.loading &&
             <Fragment>
                 {
                     renderConditionaly()

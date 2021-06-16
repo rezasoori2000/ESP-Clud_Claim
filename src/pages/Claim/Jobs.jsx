@@ -17,12 +17,11 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
+import Link from '@material-ui/core/Link';
 
 export default function Jobs(props) {
     const classes = gridSearchStyles();
-    var rowItems = props.jobs.length;
     let id = 0;
-    let newProps = {};
 
     return (
         <Fragment>
@@ -45,77 +44,65 @@ export default function Jobs(props) {
                     </div>
                 </Grid>
                 <Grid ml={2} item lg={1} sm={1} xs={1} >
-                    <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<ArrowBack />} onClick={props.handleLogOut}>Log out</Button>
+                    <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<ArrowBack />} onClick={() => { props.handleBack(1) }}>Back</Button>
                 </Grid>
             </Grid>
-            <Accordion  defaultExpanded='true'>
+            <Accordion defaultExpanded='true'>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel1a-content"
-                    id="panel1a-header"
-                   
-                >
+                    id="panel1a-header">
                     <Typography >Production</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
-
                     <Grid container spacing={1}>
-
                         {props.jobs && props.jobs.filter(x => x.JobStageName.toLowerCase() == 'production').map(e =>
                             <Grid item lg={2} sm={4} xs={6} key={e.OId}>
                                 {id = e.Id}
-                                {/* <Box p={2} key={e.OId}> */}
-                                <Box elevation={3} key={e.OId} spacing={1} mb={1}  >
-
-                                    <TableContainer component={Paper} bgColor='#666' style={{ height: '150px' }}>
-                                        <Table aria-label="customized table" >
-                                            <TableBody  >
-                                                <TableRow style={{ backgroundColor: '#eee' }}  >
-
-                                                    <TableCell align='center'>{e.Code == e.V6Code ? `Code: ${e.Code}` : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}</TableCell >
-                                                </TableRow>
-                                                <TableRow >
-
-                                                    <TableCell style={{ borderBottom: "none" }}  >{e.Title}</TableCell >
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Box>
-
+                                <Link href='#' onClick={()=>{props.handleJobClick(e.OId)}}>
+                                    <Box elevation={3} key={e.OId} spacing={1} mb={1}  >
+                                        <TableContainer component={Paper} bgColor='#666' style={{ height: '150px' }}>
+                                            <Table aria-label="customized table" >
+                                                <TableBody  >
+                                                    <TableRow style={{ backgroundColor: '#eee' }}  >
+                                                        <TableCell align='center'>{e.Code == e.V6Code ? `Code: ${e.Code}` : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}</TableCell >
+                                                    </TableRow>
+                                                    <TableRow >
+                                                        <TableCell style={{ borderBottom: "none" }}  >{e.Title}</TableCell >
+                                                    </TableRow>
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
+                                </Link>
                             </Grid>
                         )}
                     </Grid>
-
-
                 </AccordionDetails>
             </Accordion>
             <Accordion>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     aria-controls="panel2a-content"
-                    id="panel2a-header"
-                >
+                    id="panel2a-header">
                     <Typography className={classes.heading}>Post Production</Typography>
                 </AccordionSummary>
                 <AccordionDetails>
                     <Grid container spacing={1}>
-
                         {props.jobs && props.jobs.filter(x => x.JobStageName.toLowerCase() == 'postproduction').map(e =>
                             <Grid item lg={2} sm={4} xs={6} key={e.OId}>
                                 {id = e.Id}
                                 <Box elevation={3} key={e.OId} spacing={1} mb={1}  >
-
-                                    <TableContainer component={Paper} bgColor='#666' style={{ height: '150px' }}>
+                                    <TableContainer component={Paper} bgColor='#666' style={{ height: '190px' }}>
                                         <Table aria-label="customized table" >
                                             <TableBody  >
                                                 <TableRow style={{ backgroundColor: '#eee' }}  >
-
+                                                <TableCell> <Button color="primary">Full </Button></TableCell >
                                                     <TableCell align='center'>{e.Code == e.V6Code ? `Code: ${e.Code}` : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}</TableCell >
+                                                    <TableCell>  <Button color="primary">Partial</Button></TableCell >
                                                 </TableRow>
                                                 <TableRow >
-
-                                                    <TableCell style={{ borderBottom: "none" }}  >{e.Title}</TableCell >
+                                                    <TableCell colSpan='3' style={{ borderBottom: "none" }}  >{e.Title}</TableCell >
                                                 </TableRow>
                                             </TableBody>
                                         </Table>

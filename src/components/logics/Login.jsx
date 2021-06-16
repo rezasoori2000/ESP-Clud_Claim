@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import config from '../../config'
 
-class Login extends React.Component {
+class LoginLogic extends React.Component {
 
     getListOfWorkersFromApi = async () => {
         var response = {};
@@ -31,7 +31,7 @@ class Login extends React.Component {
 
         var txt = event.target.value;
         return event.target.value.length > 0 ?
-            mainWorkersList.filter(t => t.Fullname.toLowerCase().includes(txt.toLowerCase())) :
+            mainWorkersList.filter(t => t.Name.toLowerCase().includes(txt.toLowerCase())) :
             mainWorkersList;
     }
 
@@ -78,5 +78,5 @@ class Login extends React.Component {
     }
 }
 //module.exports={_:LoginLogics};
-const Loginlogics = new Login();
+const Loginlogics = new LoginLogic();
 export default Loginlogics;
