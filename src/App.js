@@ -1,70 +1,58 @@
-
+import React from 'react';
 import './App.css';
-import { makeStyles,  Theme, createStyles } from '@material-ui/core/styles';
 import DrawerContainer from './components/DrawerContainer';
-import {Route} from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Performance from './pages/Performance';
-import  Claim from './pages/Claim/ClaimFull';
 import Settings from './pages/AdminSettings/AdminSettingsContainer';
 import Board from './pages/Board';
 import Welcome from './pages/Welcome';
 import ClaimContainer from './pages/Claim/ClaimContainer';
-import loading from './logo.svg';
 
-const drawerWidth = 240;
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-    },
-    drawer: {
-      [theme.breakpoints.up('sm')]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
-    },
-    appBar: {
-      [theme.breakpoints.up('sm')]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      },
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-      [theme.breakpoints.up('sm')]: {
-        display: 'none',
-      },
-    },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-      width: drawerWidth,
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-  }),
-);
 
-function App() {
-  const classes = useStyles();
 
-  return (
-    <div className={classes.root}>
-      <DrawerContainer/>
-      <main className={classes.content}>
-        <div className={classes.toolbar} />
-          <Route exact path='/' component={Welcome}/>
-          <Route path='/claim' component={ClaimContainer}/>
-          <Route path='/settings' component={Settings}/>
-          <Route path='/performanceState' component={Performance}/>
-          <Route path='/board' component={Board}/>
 
-      </main> 
-    </div> 
-  );
+class App extends React.Component {
+
+
+  constructor() {
+    super();
+    this.state = {
+      step: 0
+    }
+
+  }
+
+  changeStep = (j) => {
+    this.setState({
+      ...this.state,
+      step: j
+    });
+
+
+
 }
+
+  render() {
+
+      return (
+      <div style={{ display: 'flex'}}>
+        <DrawerContainer step={this.state.step}/>
+        <main style={{flexGrow: 1, paddingLeft:'10px', paddingRight:'10px',paddingTop:'80px'}}>
+          <div style={{drawerPaper: {width: 240 }}} />
+          <Route exact path='/' component={Welcome} />
+          <Route path='/claim'  render={(props)=><ClaimContainer changeStep={this.changeStep} {...props}/> }  />
+          <Route path='/settings' render={(props)=><Settings changeStep={this.changeStep} {...props}/> } />
+          <Route path='/performanceState' component={Performance} />
+          <Route path='/board' component={Board} />
+        </main>
+      </div>
+
+    )
+  }
+}
+
+
+
 
 export default App;

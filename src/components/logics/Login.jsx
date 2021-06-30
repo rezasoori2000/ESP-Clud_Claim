@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import config from '../../config'
 
+
 class LoginLogic extends React.Component {
 
     getListOfWorkersFromApi = async () => {
@@ -16,16 +17,7 @@ class LoginLogic extends React.Component {
         }
     }
 
-    claimUser = (OId, mainWorkTypes, WorkersList) => {
-        const worker = WorkersList.filter(x => x.OId === OId)[0];
-        const workerWorkTypIds = worker.Skills.map((s) => { return s.WorkTypeId; });
-        const workerWorkTypes = mainWorkTypes.filter(x => workerWorkTypIds.some((w) => { return w == x.OId }));
-        return {
-            claimingOId: OId,
-            workTypes: workerWorkTypes,
-            page: 1
-        };
-    }
+
 
     searchNames = (event, mainWorkersList) => {
 

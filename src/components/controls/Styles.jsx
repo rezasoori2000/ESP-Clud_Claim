@@ -51,5 +51,20 @@ const gridSearchStyles = makeStyles((theme) => ({
             },
         },
     },
+
+    bolding: {
+        
+        '&:hover': {
+          //textShadow: '3px 3px 0px #ffd324',
+          cursor: 'pointer',
+          opacity: 2,
+          transformOrigin: '-100px -100px',
+          transform: 'scale(1.05) translate(-17px, -10px)',
+          zIndex:'1000',
+          backgroundColor:'#ddd',
+          
+          
+        }
+      }
 }));
 export default gridSearchStyles;

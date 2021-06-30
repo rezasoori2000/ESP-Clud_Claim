@@ -2,7 +2,6 @@ import React from 'react';
 import AdminSettingsPage from './AdminSettingsPage';
 import config from '../../config';
 import axios from 'axios';
-import { TitleSharp } from '@material-ui/icons';
 
 class AdminSettingsContainer extends React.Component {
 
@@ -23,13 +22,14 @@ class AdminSettingsContainer extends React.Component {
     componentWillMount() {
         this.getAdminSettingsByAPI();
         this.captureIPAddress();
+        this.props.changeStep(0);
 
     }
     handelPropertyChange = (event) => {
         var adSettings = this.state.adminSettings;
 
         let value = '';
-        if (event.target.type != undefined && event.target.type === 'checkbox')
+        if (event.target.type !== undefined && event.target.type === 'checkbox')
             value = event.target.checked;
         else
             value = event.target.value;
@@ -52,7 +52,7 @@ class AdminSettingsContainer extends React.Component {
         var newSelectedId = event.target.value;
         let newValues = [];
         adSettings[event.target.name].map((item) => {
-            if (item.Value == newSelectedId)
+            if (item.Value === newSelectedId)
                 newValues.push({
                     'Value': item.Value,
                     'Text': item.Text,
@@ -136,7 +136,7 @@ if (event.target.name==='Factories'){
     };
 
     saveAdminSettingsByAPI = async () => {
-        var response = {};
+        
         let state = this.state.adminSettings;
 
        var data=JSON.stringify(state);
@@ -149,7 +149,7 @@ if (event.target.name==='Factories'){
                 headers: headers
             })
                 .then((res) => {
-                     let response=res.data[0];
+
                      this.props.history.push('/');
                 })
                 .catch((error) => {

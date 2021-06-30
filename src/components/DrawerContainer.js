@@ -16,9 +16,10 @@ import Typography from '@material-ui/core/Typography';
 import BusinessIcon from '@material-ui/icons/Business';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles,  Theme, createStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
+import VerticalStepper from './controls/VerticalStepper';
 
 const drawerWidth = 240;
 
@@ -71,65 +72,71 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
-const DrawerContainer = (props: Props) => {
+// interface Props {
+//   /**
+//    * Injected by the documentation to work in an iframe.
+//    * You won't need it on your project.
+//    */
+//   window?: () => Window;
+// }
+  const DrawerContainer = (props) => {
 
-  const { window } = props;
+  
   const classes = useStyles();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+  
+  //const { forwardRef, useRef, useImperativeHandle } = React;
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-
+ // const childRef = useRef();
+  // const handleNextStep = (step) => {
+  //   setStep(step);
+  //   childRef.current.handleSetStep(activeStep);
+  // };
+  
   const drawer = (
     <div>
       <div className='theme.mixins.toolbar, drawerPaper: 240'  />
       <Divider />
       <List className='mt-5' style={{backgroundColor:'#2d292a'}}>
         <div style={{textAlign: 'center',background:'#000'}}>
-        <img src='/favicon.png' />
+        {/* <img src='/favicon.png' /> */}
         </div>
 
         <br />
         <br />
         <br />
-        <Link to='/claim' className={classes.link}>
+        <Link to='/claim' style={{textDecoration: 'none',color: 'white'}}>
           <ListItem button key='1'>
-            <ListItemIcon className={classes.whiteColor}><InboxIcon /> </ListItemIcon>
+            <ListItemIcon style={{color: 'white'}}><InboxIcon /> </ListItemIcon>
             <ListItemText primary='Claim' />
           </ListItem>
         </Link>
         <hr />
-        <Link to='/settings' className={classes.link}>
+        <Link to='/settings'  style={{textDecoration: 'none',color: 'white'}}>
           <ListItem button key='2'>
-            <ListItemIcon className={classes.whiteColor}><SettingsIcon /> </ListItemIcon>
+            <ListItemIcon style={{color: 'white'}}><SettingsIcon /> </ListItemIcon>
             <ListItemText primary='Admin Settings' />
           </ListItem>
         </Link>
         <hr />
-        <Link to='/performanceState' className={classes.link}>
+        <Link to='/performanceState' style={{textDecoration: 'none',color: 'white'}}>
           <ListItem button key='3'>
-            <ListItemIcon className={classes.whiteColor}><BarChartIcon /> </ListItemIcon>
+            <ListItemIcon style={{color: 'white'}}><BarChartIcon /> </ListItemIcon>
             <ListItemText primary='Statistics' />
           </ListItem>
         </Link>
         <hr />
-        <Link to='/board' className={classes.link}>
+        <Link to='/board' style={{textDecoration: 'none',color: 'white'}}>
           <ListItem button key='3'>
-            <ListItemIcon className={classes.whiteColor}><BusinessIcon /> </ListItemIcon>
+            <ListItemIcon style={{color: 'white'}}><BusinessIcon /> </ListItemIcon>
             <ListItemText primary='Production Board' />
           </ListItem>
         </Link>
       </List>
       <Divider />
+      <VerticalStepper step={props.step}/>
     </div>
   );
 
@@ -137,6 +144,7 @@ const DrawerContainer = (props: Props) => {
 
   return (
     <div>
+      {/* {setStep(props.step)} */}
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>

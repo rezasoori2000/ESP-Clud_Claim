@@ -1,14 +1,15 @@
 import React, { Fragment } from 'react';
-import axios from 'axios';
 import Login from './Login';
 import WorkTypes from './WorkTypes';
 import JobItems from './JobItems';
 import Summary from './Summary';
 import Jobs from './Jobs';
-import config from '../../config';
 import Loginlogics from '../../components/logics/Login';
 import ClaimLogic from '../../components/logics/ClaimLogic';
 import Loading from '../loading.js';
+import ClaimFull from './ClaimFull'
+import { SignalCellularNullSharp } from '@material-ui/icons';
+
 
 
 class CalimContainer extends React.Component {
@@ -21,15 +22,20 @@ class CalimContainer extends React.Component {
             mainWorkTypes: [],
             jobs: [],
             mainJobs: [],
+            adminJobs: [],
+            mainAdminJobs: [],
             claimingOId: 0,
-            claimingUser:'',
+            claimingUser: '',
             page: 0,
             loading: false,
             worktypeId: 0,
-            jobId:0,
+            jobId: 0,
+            adminWorkType: null,
             jobItems: [],
             mainJobItems: [],
-            changedClaimingItems:[]
+            changedClaimingItems: [],
+            canClaimWholeJob: false,
+            claimingFullJob: false
         };
     }
 
@@ -80,7 +86,7 @@ class CalimContainer extends React.Component {
                 this.setState({
                     ...this.state,
                     claimingOId: id,
-                    claimingUser:worker.Name,
+                    claimingUser: worker.Name,
                     workersList
                 });
             }).catch((err) => {
@@ -113,7 +119,7 @@ class CalimContainer extends React.Component {
                 workersList
             });
             this.props.changeStep(1);
-            
+
         }).catch((err) => {
             alert(err);
         });
@@ -150,8 +156,9 @@ class CalimContainer extends React.Component {
             var data = JSON.parse(r.data);
             this.setState({
                 ...this.state,
-                jobItems: data,
-                mainJobItems: data,
+                jobItems: data.jobItems,
+                mainJobItems: data.jobItems,
+                canClaimWholeJob: data.canClaimWholeJob,
                 page: 3,
                 loading: false,
                 worktypeId: worktypeId,
@@ -169,9 +176,17 @@ class CalimContainer extends React.Component {
                 t.Code.includes(txt))
             :
             this.state.mainJobs;
+
+        var adminJobs = event.target.value.length > 0 ?
+            this.state.mainAdminJobs.filter(t =>
+                t.Name.toLowerCase().includes(txt.toLowerCase()))
+            :
+            this.state.mainAdminJobs;
+
         this.setState({
             ...this.state,
             jobs,
+            adminJobs
         });
     }
     /* #endregion */
@@ -191,8 +206,8 @@ class CalimContainer extends React.Component {
                 ...this.state,
                 jobs: values.Item1,
                 mainJobs: values.Item1,
-                workTypes:values.Item2,
-                mainWorkTypes:values.Item2,
+                adminJobs: values.Item2,
+                mainAdminJobs: values.Item2,
                 loading: false,
                 claimingOId,
                 page
@@ -204,27 +219,113 @@ class CalimContainer extends React.Component {
         this.setState({
             page: pageId
         });
-        this.props.changeStep(pageId+1);
+        this.props.changeStep(pageId + 1);
     }
-    handleJobClick = (jobId) => {
-        this.setState({
-            ...this.state,
-            jobId,
-            page: 2
-        });
-        this.props.changeStep(3);
+    handleJobClick = (jobId, isAdmin = false) => {
+        if (isAdmin) {
+            const selectedAdminJob = this.state.adminJobs.find(x => x.OId === jobId);
+            this.setState({
+                ...this.state,
+                adminWorkType: selectedAdminJob,
+                page: 4
+            });
+            this.props.changeStep(5);
+        } else {
+
+            const selectedJob = this.state.jobs.find(x => x.OId === jobId);
+            this.setState({
+                ...this.state,
+                jobId,
+                workTypes: selectedJob.WorkTypes,
+                mainWorkTypes: selectedJob.WorkTypes,
+                page: 2
+            });
+            this.props.changeStep(3);
+        }
     }
     /* #endregion */
 
     /*#region jobItem*/
 
-    handleSaveClaim=(changedClaimingItems)=>{
+    handleSaveClaim = (changedClaimingItems, fullJob) => {
+        if (fullJob) {
+            this.setState({
+                ...this.state,
+                claimingFullJob: true,
+                page: 4
+            });
+
+        } else {
+            this.setState({
+                ...this.state,
+                changedClaimingItems,
+                page: 4
+            });
+        }
+        this.props.changeStep(5);
+    }
+
+    handleSubmitClaim = (comment, isAdmin = false) => {
         this.setState({
             ...this.state,
-            changedClaimingItems,
-            page: 4
+            loading: true
         });
-        this.props.changeStep(5);
+
+        if (!isAdmin) {
+
+            if (this.state.claimingFullJob){
+                const response =
+                ClaimLogic.submitFullJobClaimInAPI(
+                    this.state.claimingOId,
+                    this.state.jobId,
+                    this.state.worktypeId,
+                    comment);
+
+            response.then((e) => {
+                this.setState({
+                    ...this.state,
+                    loading: false,
+                    page: 0
+                });
+                this.props.changeStep(1);
+            });
+
+            }else{
+            const response =
+                ClaimLogic.submitClaimInAPI(
+                    this.state.claimingOId,
+                    this.state.jobId,
+                    this.state.jobItems.filter(x => x.Progress100 !== x.Main_Progress100),
+                    comment);
+
+            response.then((e) => {
+                this.setState({
+                    ...this.state,
+                    loading: false,
+                    page: 0
+                });
+                this.props.changeStep(1);
+            });
+        }
+        }
+        else {
+            const response =
+                ClaimLogic.submitAdminJobClaimInAPI(this.state.claimingOId, this.state.adminWorkType.OId, comment);
+
+            response.then((e) => {
+                this.setState({
+                    ...this.state,
+                    loading: false,
+                    page: 0
+                });
+                this.props.changeStep(1);
+            });
+
+        }
+    }
+
+    handleFullSubmitClaim = (comment, isAdmin = false) => {
+
     }
     /* #endregion */
     render() {
@@ -243,7 +344,9 @@ class CalimContainer extends React.Component {
                     return <Jobs claimingOId={this.state.claimingOId}
                         searchJobs={this.searchJobs}
                         jobs={this.state.jobs}
+                        adminJobs={this.state.adminJobs}
                         handleJobClick={this.handleJobClick}
+                        handleBack={this.handleBack}
                         handleLogOut={this.handleLogOut} />
                 }
                 case 2: {
@@ -260,16 +363,26 @@ class CalimContainer extends React.Component {
                         items={this.state.mainJobItems}
                         handleBack={this.handleBack}
                         handleSave={this.handleSaveClaim}
+                        canClaimWholeJob={this.state.canClaimWholeJob}
                     />
                 }
                 case 4: {
                     return <Summary claimingOId={this.state.claimingOId}
-                        claimingName={this.state.mainWorkersList.find(x=>x.OId==this.state.claimingOId).Name}
-                        worktypeName={this.state.mainWorkTypes.find(x=>x.OId==this.state.worktypeId).Name}
-                        jobName={this.state.mainJobs.find(x=>x.OId==this.state.jobId).Title}
+                        claimingName={this.state.mainWorkersList.find(x => x.OId === this.state.claimingOId).Name}
+                        worktypeName={this.state.adminWorkType ?
+                            "Admin Work" :
+                            this.state.mainWorkTypes.find(x => x.OId === this.state.worktypeId).Name}
+
+                        jobName={this.state.adminWorkType ?
+                            this.state.adminWorkType.Name :
+                            this.state.mainJobs.find(x => x.OId === this.state.jobId).Title
+                        }
                         claimingItems={this.state.changedClaimingItems}
+                        isFullJobClaim={this.state.claimingFullJob}
+                        isAdimJob={this.state.adminWorkType !== null}
                         handleBack={this.handleBack}
-                        handleSave={this.handleSaveClaim}
+                        handleSubmit={this.handleSubmitClaim}
+                        
                     />
                 }
                 default: return (<div></div>)

@@ -4,36 +4,53 @@ import Box from '@material-ui/core/Box';
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import gridSearchStyles from '../../components/controls/Styles';
-import { Button } from '@material-ui/core';
+import { Button, IconButton } from '@material-ui/core';
 import ArrowBack from '@material-ui/icons/ArrowBack';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableRow from '@material-ui/core/TableRow';
+
 import Accordion from '@material-ui/core/Accordion';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import AccordionDetails from '@material-ui/core/AccordionDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
 
 export default function Jobs(props) {
     const classes = gridSearchStyles();
-    let id = 0;
 
     return (
         <Fragment>
-            <Grid container>
-                <Grid item lg={11} sm={11} xs={11} >
+            <Grid container spacing={2}>
+                <Grid ml={0} item lg={11} sm={10} xs={8} style={{ textAlign: 'right' }}>
+                    <Button
+                        variant="outlined"
+                        size="large"
+                        onClick={() => { this.props.handleBack(0) }}
+                        startIcon={<ArrowBack />}>
+                        Back
+                        </Button>
+                </Grid>
+                <Grid ml={0} item lg={1} sm={2} xs={4} style={{ textAlign: 'right' }}>
+
+                    <Button
+
+                        variant="outlined"
+
+                        size="large"
+
+                        onClick={props.handleLogOut}
+                        startIcon={<MeetingRoomIcon />}>
+                        logout
+                        </Button>
+                    {/* <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<MeetingRoomIcon />} onClick={props.handleLogOut}>Logout</Button> */}
+                </Grid>
+                <Grid item lg={12} sm={12} xs={12} >
                     <div className={classes.search}>
                         <div className={classes.searchIcon}>
                             <SearchIcon />
                         </div>
                         <InputBase
                             placeholder="Search…"
-
                             classes={{
                                 root: classes.inputRoot,
                                 input: classes.inputInput,
@@ -43,9 +60,6 @@ export default function Jobs(props) {
                         />
                     </div>
                 </Grid>
-                <Grid ml={2} item lg={1} sm={1} xs={1} >
-                    <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<ArrowBack />} onClick={() => { props.handleBack(1) }}>Back</Button>
-                </Grid>
             </Grid>
             <Accordion defaultExpanded='true'>
                 <AccordionSummary
@@ -54,66 +68,69 @@ export default function Jobs(props) {
                     id="panel1a-header">
                     <Typography >Production</Typography>
                 </AccordionSummary>
+
                 <AccordionDetails>
-                    <Grid container spacing={1}>
-                        {props.jobs && props.jobs.filter(x => x.JobStageName.toLowerCase() == 'production').map(e =>
-                            <Grid item lg={2} sm={4} xs={6} key={e.OId}>
-                                {id = e.Id}
-                                <Link href='#' onClick={()=>{props.handleJobClick(e.OId)}}>
-                                    <Box elevation={3} key={e.OId} spacing={1} mb={1}  >
-                                        <TableContainer component={Paper} bgColor='#666' style={{ height: '150px' }}>
-                                            <Table aria-label="customized table" >
-                                                <TableBody  >
-                                                    <TableRow style={{ backgroundColor: '#eee' }}  >
-                                                        <TableCell align='center'>{e.Code == e.V6Code ? `Code: ${e.Code}` : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}</TableCell >
-                                                    </TableRow>
-                                                    <TableRow >
-                                                        <TableCell style={{ borderBottom: "none" }}  >{e.Title}</TableCell >
-                                                    </TableRow>
-                                                </TableBody>
-                                            </Table>
-                                        </TableContainer>
-                                    </Box>
-                                </Link>
-                            </Grid>
-                        )}
-                    </Grid>
                 </AccordionDetails>
+                <Grid container spacing={1}>
+                    {props.jobs && props.jobs.map(e =>
+
+                        <Grid item lg={2} sm={6} xs={12} key={e.OId} className={classes.bolding}>
+                            <Box p={4}
+                                key={e.OId}
+                                boxShadow={4}
+                                color="black"
+                                bgcolor={e.IsLoggedIn ? '#757de8' : 'white'}
+                                spacing={3}
+                                style={{ width: '100%', height: '100%', fontSize: '1.3rem', textAlign: 'center' }}
+                                onClick={() => { props.handleJobClick(e.OId) }}>
+                                <div style={{ backgroundColor: '#eee' }}>
+                                    {e.Code === e.V6Code ? `Code: ${e.Code}` : e.V6Code == null ? `Code: ${e.Code}` : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}
+                                </div>
+                                <hr />
+                                <div>
+                                    {e.Title}
+                                </div>
+
+                            </Box>
+                        </Grid>
+
+                    )}
+                </Grid>
             </Accordion>
-            <Accordion>
+            <Accordion defaultExpanded='true'>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel2a-content"
-                    id="panel2a-header">
-                    <Typography className={classes.heading}>Post Production</Typography>
+                    aria-controls="panel1a-content"
+                    id="panel1a-header">
+                    <Typography >Admin</Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                    <Grid container spacing={1}>
-                        {props.jobs && props.jobs.filter(x => x.JobStageName.toLowerCase() == 'postproduction').map(e =>
-                            <Grid item lg={2} sm={4} xs={6} key={e.OId}>
-                                {id = e.Id}
-                                <Box elevation={3} key={e.OId} spacing={1} mb={1}  >
-                                    <TableContainer component={Paper} bgColor='#666' style={{ height: '190px' }}>
-                                        <Table aria-label="customized table" >
-                                            <TableBody  >
-                                                <TableRow style={{ backgroundColor: '#eee' }}  >
-                                                <TableCell> <Button color="primary">Full </Button></TableCell >
-                                                    <TableCell align='center'>{e.Code == e.V6Code ? `Code: ${e.Code}` : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}</TableCell >
-                                                    <TableCell>  <Button color="primary">Partial</Button></TableCell >
-                                                </TableRow>
-                                                <TableRow >
-                                                    <TableCell colSpan='3' style={{ borderBottom: "none" }}  >{e.Title}</TableCell >
-                                                </TableRow>
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                </Box>
-                            </Grid>
-                        )}
-                    </Grid>
 
+                <AccordionDetails>
                 </AccordionDetails>
+                <Grid container spacing={1}>
+                    {props.jobs && props.adminJobs.map(e =>
+
+                        <Grid item lg={2} sm={6} xs={12} key={e.OId} className={classes.bolding}>
+                            <Box p={4}
+                                key={e.OId}
+                                boxShadow={4}
+                                color="black"
+                                bgcolor={e.IsLoggedIn ? '#757de8' : 'white'}
+                                spacing={3}
+                                style={{ width: '100%', height: '100%', fontSize: '1.3rem', textAlign: 'center' }}
+                                onClick={() => { props.handleJobClick(e.OId) }}>
+
+                                <div>
+                                    {e.Name}
+                                </div>
+
+                            </Box>
+                        </Grid>
+
+                    )}
+                </Grid>
             </Accordion>
+
         </Fragment>
     );
 }

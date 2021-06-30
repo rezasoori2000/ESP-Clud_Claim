@@ -1,7 +1,5 @@
 import React, { Fragment } from 'react';
-import { fade, makeStyles  } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Chip from '@material-ui/core/Chip';
 import DoneIcon from '@material-ui/icons/Done';
 import FaceIcon from '@material-ui/icons/Face';
 import Box from '@material-ui/core/Box';
@@ -11,10 +9,7 @@ import gridSearchStyles from '../../components/controls/Styles';
 
 
 export default function Login(props) {
-    const classes =gridSearchStyles();
-    let id = 0;
-    
-    console.log('runned');
+    const classes = gridSearchStyles();
     return (
         <Fragment>
             <div className={classes.search}>
@@ -34,9 +29,10 @@ export default function Login(props) {
             </div>
             <Grid container spacing={1}>
                 {props.items && props.items.map(e =>
-                    <Grid item lg={2} sm={4} xs={6} key={e.OId}>
-                        {id = e.Id}
-                        <Box p={2} key={e.OId}>
+                
+                    <Grid item lg={2} sm={6} xs={12} key={e.OId}  className={classes.bolding}>
+                
+                        {/* <Box p={2} key={e.OId}>
                             <Chip
                                 key={e.OId}
                                 label={e.Name}
@@ -46,6 +42,21 @@ export default function Login(props) {
                                 {...(e.IsLoggedIn && { deleteIcon: <DoneIcon />, color: 'primary', icon: <FaceIcon /> })}
                                 clickable
                             />
+                        </Box> */}
+                        <Box p={4} 
+                        key={e.OId}
+                            boxShadow={4}
+                            color="black" 
+                            bgcolor={e.IsLoggedIn?'#757de8':'white'}
+                            spacing={3}
+                            style={{ width: '100%', height: '100%', fontSize: '1.3rem', textAlign: 'center' }}
+                            onClick={() => { props.handleLogin(e.OId) }}
+                           
+                            >
+                            {e.IsLoggedIn && <div><DoneIcon /><FaceIcon /> </div>}
+                            
+
+                            {e.Name}
                         </Box>
                     </Grid>
                 )}

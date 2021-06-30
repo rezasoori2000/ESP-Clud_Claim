@@ -9,7 +9,6 @@ import ESPTextField from '../../components/controls/ESPTextField';
 import ESPCheckbox from '../../components/controls/ESPCheckbox';
 import CardHeader from '@material-ui/core/CardHeader';
 import { Avatar } from '@material-ui/core';
-import { grey } from '@material-ui/core/colors'
 import SaveIcon from '@material-ui/icons/Save';
 import Button from '@material-ui/core/Button';
 
@@ -53,8 +52,7 @@ const AdminSettingsPage = (props) => {
     
 
     const classes = useStyles();
-    const bull = <span className={classes.bullet}>•</span>;
-    const props1 = {};
+
     return (
         <div >
             <Card >
@@ -250,7 +248,7 @@ const AdminSettingsPage = (props) => {
                             <ESPSelect name='PSPerformanceChart' label='Performance Chart Duration' helptext='' items={props.adminSettings.PSPerformanceChart} onPropertyChange={props.onSelectChange} />
                         </Grid>
                         <Grid item lg={5}></Grid>
-                        <Grid item lg={1} mx="auto" bgcolor="background.paper">
+                        <Grid item lg={1} mx="auto" >
                             <Button variant="contained"
                                 color="primary"
                                 className={classes.saveBtn}
