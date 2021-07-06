@@ -16,12 +16,10 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import DoneAllIcon from "@material-ui/icons/DoneAll";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-import { IconButton } from "@material-ui/core";
-import gridSearchStyles from "../../components/controls/Styles";
 
 const AirbnbSlider = withStyles({
   root: {
-    color: "#555",
+    color: "#ff0000",
     height: 3,
     padding: "13px 0",
   },
@@ -75,10 +73,15 @@ class JobItems extends React.Component {
     this.state = {
       jobItems: props.items,
       changed: props.items.some((x) => x.Progress100 !== x.Main_Progress100),
+      groupPercent: 0,
     };
   }
 
-  componentWillMount() {}
+  componentWillMount() {
+    this.setState({
+      groupPercent: this.groupSliderValue(),
+    });
+  }
   componentDidMount() {}
   checkChange = (item) => {
     for (var i = 0; i < item.length; i++) {
@@ -98,6 +101,7 @@ class JobItems extends React.Component {
       ...this.state,
       jobItems: items,
       changed,
+      groupPercent: this.groupSliderValue(),
     });
   };
   handleBtn = (val, inx) => {
@@ -107,7 +111,7 @@ class JobItems extends React.Component {
       if (items[inx].Progress100 + val > 100) {
         items[inx].Progress100 = 100;
       } else {
-        items[inx].Progress100 = items[inx].Progress100 + parseInt(val);
+        items[inx].Progress100 = items[inx].Progress100 + val;
       }
       var changed = this.checkChange(items);
       this.setState({
@@ -129,6 +133,23 @@ class JobItems extends React.Component {
       changed,
     });
   };
+  handleGroupedChanged(v) {
+    const items = this.state.jobItems;
+    this.state.jobItems.map((e, i) => {
+      if (items[i].Main_Progress100 <= v) items[i].Progress100 = v;
+    });
+    this.setState({
+      ...this.state,
+      jobItems: items,
+      groupPercent: v,
+    });
+  }
+  groupSliderValue() {
+    return Math.round(
+      this.state.jobItems.map((e) => e.Progress100).reduce((a, b) => a + b) /
+        this.state.jobItems.length
+    );
+  }
   render() {
     function valuetext(value) {
       return `${value}%`;
@@ -184,6 +205,95 @@ class JobItems extends React.Component {
           <CardContent>
             <Table aria-label="customized table">
               <TableBody>
+                {this.state.jobItems && this.state.jobItems.length > 1 && (
+                  <TableRow
+                    hover="true"
+                    m={10}
+                    style={{
+                      backgroundColor: "#eee",
+                    }}
+                  >
+                    <TableCell
+                      style={{ width: "100%", marginButtm: "40px!important" }}
+                    >
+                      <Grid container spacing={2}>
+                        <Grid item xs={12} sm={12} lg={1}>
+                          All Items
+                        </Grid>
+                        <Grid item xs={12} sm={12} lg={6}>
+                          <AirbnbSlider
+                            ThumbComponent={AirbnbThumbComponent}
+                            aria-label="ios slider"
+                            value={this.state.groupPercent}
+                            getAriaValueText={valuetext}
+                            aria-labelledby="discrete-slider"
+                            valueLabelDisplay="on"
+                            step={5}
+                            marks
+                            min={0}
+                            max={100}
+                            // onChangeCommitted={(e, val) =>
+                            //   this.handleGroupedChanged(val)
+                            // }
+                            onChange={(e, val) =>
+                              this.handleGroupedChanged(val)
+                            }
+                          />
+                        </Grid>
+                        <Grid item xs={12} sm={12} lg={2}>
+                          <OutlinedInput
+                            value={this.state.groupPercent}
+                            onChange={(event) =>
+                              this.handleGroupedChanged(event.target.value)
+                            }
+                            type="number"
+                            name={`pgs-kir`}
+                            key={1}
+                            fullWidth
+                          />
+                        </Grid>
+                        <Grid item xs={4} sm={4} lg={1}>
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            onClick={() =>
+                              this.handleGroupedChanged(
+                                this.state.groupPercent - 5
+                              )
+                            }
+                            startIcon={<RemoveIcon />}
+                          ></Button>
+                        </Grid>
+                        <Grid item xs={4} sm={4} lg={1}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={() =>
+                              this.handleGroupedChanged(
+                                this.state.groupPercent + 5
+                              )
+                            }
+                            startIcon={<AddIcon />}
+                          ></Button>
+                        </Grid>
+                        <Grid item xs={4} sm={4} lg={1}>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            style={{ backgroundColor: "#009688" }}
+                            onClick={() => this.handleGroupedChanged(100)}
+                          >
+                            100%
+                          </Button>
+                        </Grid>
+                      </Grid>
+                      <br />
+                      <hr />
+                      <br />
+                      <br />
+                    </TableCell>
+                  </TableRow>
+                )}
                 {this.state.jobItems &&
                   this.state.jobItems.map((e, inx) => (
                     <TableRow hover="true">

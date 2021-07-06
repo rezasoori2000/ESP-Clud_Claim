@@ -22,7 +22,7 @@ export default function Worktypes(props) {
                     <Button
                         variant="outlined"
                         size="large"
-                        onClick={() => { this.props.handleBack(1) }}
+                        onClick={() => { props.handleBack(1) }}
                         startIcon={<ArrowBack />}>
                         Back
                         </Button>
