@@ -33,7 +33,7 @@ class HelperLogic extends React.Component {
       });
       return response;
     } catch (err) {
-      alert(`Error in calling ESP (${errorName}) API- ${err}`);
+      alert(` ${err.response.data}`);
     }
   };
 

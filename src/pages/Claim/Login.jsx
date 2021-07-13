@@ -37,12 +37,17 @@ export default function Login(props) {
               className={classes.bolding}
             >
               <Box
+                style={{
+                  backgroundColor: "transparent",
+                  boxShadow: "none",
+                }}
+                overlayStyle={{ backgroundColor: "transparent" }}
                 p={4}
                 key={e.OId}
                 boxShadow={4}
                 color="black"
                 bgcolor={
-                  e.IsOnLeave ? "#9e9e9e" : e.IsLoggedIn ? "#3F51B5" : "white"
+                  e.IsOnLeave ? "#9e9e9e" : e.IsLoggedIn ? "#3F51B5" : "#dadabc"
                 }
                 spacing={3}
                 style={{

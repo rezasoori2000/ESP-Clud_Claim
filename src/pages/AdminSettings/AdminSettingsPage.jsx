@@ -213,7 +213,7 @@ const AdminSettingsPage = (props) => {
               </Grid>
               <ESPCheckbox
                 name="HidePreProductionJobs"
-                label="Hide Pre-production jobs at job claim step"
+                label="Hide PreProduction Jobs"
                 checked={props.adminSettings.HidePreProductionJobs}
                 onPropertyChange={props.onPropertyChange}
               />

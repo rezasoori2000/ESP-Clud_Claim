@@ -28,6 +28,7 @@ class CalimContainer extends React.Component {
       loading: false,
       worktypeId: 0,
       jobId: 0,
+      isAdminJob: false,
       adminWorkType: null,
       jobItems: [],
       mainJobItems: [],
@@ -38,6 +39,10 @@ class CalimContainer extends React.Component {
       dialogHeader: "",
       dialogText: "",
       dialogSave: null,
+      totalClaiminMinutes: 0,
+      LabelText: [],
+      isFullJob: false,
+      logoutClicked: false,
     };
   }
 
@@ -48,22 +53,29 @@ class CalimContainer extends React.Component {
     });
 
     Loginlogics.getListOfWorkersFromApi().then((response) =>
-      this.setState({
-        ...this.state,
-        workersList: response,
-        mainWorkersList: response,
-        loading: false,
-        settings: this.props.settings,
-      })
+      this.setState(
+        {
+          ...this.state,
+          workersList: response,
+          mainWorkersList: response,
+          loading: false,
+          settings: this.props.settings,
+          LabelText: [],
+        },
+        () => {
+          this.props.changeStep(2, []);
+        }
+      )
     );
-    this.props.changeStep(1);
   }
   componentDidMount() {}
 
   /* #region  Login Methods */
-  onCommentSave = (text) => {
+  onCommentSave = (text, login = true) => {
     this.setState({ dialogOpen: false });
-    if (text) this.saveLoginInAPI(this.state.claimingOId, text);
+    if (text)
+      if (login) this.saveLoginInAPI(this.state.claimingOId, text);
+      else this.saveLogoutAPI(this.state.claimingOId, text);
   };
   handleLogin = (sid, isOnLeave) => {
     if (isOnLeave) {
@@ -80,17 +92,27 @@ class CalimContainer extends React.Component {
       return false;
     }
     const id = parseInt(sid);
-
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
 
     if (worker.IsLoggedIn) {
       const page = 1;
-
-      this.goToJobsPage(page, id);
+      const labelText = [];
+      labelText.push(worker.Name);
+      this.setState(
+        {
+          ...this.state,
+          LabelText: labelText,
+          claimingUser: worker.Name,
+          claimingOId: worker.OId,
+        },
+        () => {
+          this.props.changeStep(3, labelText);
+          this.goToJobsPage(page, id);
+        }
+      );
     } else {
       let comment = "";
-
       if (
         Loginlogics.checkWorkerLateLogin(
           worker,
@@ -101,11 +123,14 @@ class CalimContainer extends React.Component {
         this.setState({
           ...this.state,
           claimingOId: id,
+          claimingUser: worker.Name,
           dialogOpen: true,
+          logoutClicked: false,
           dialogHeader: "Late Login",
           dialogText: "Please, specify the reason to late log in.",
           dialogSave: this.onCommentSave,
           alert: false,
+          LabelText: [worker.Name],
         });
       } else {
         this.saveLoginInAPI(id, comment);
@@ -113,6 +138,9 @@ class CalimContainer extends React.Component {
     }
   };
   saveLoginInAPI = (id, comment) => {
+    const workersList = this.state.workersList;
+    const worker = workersList.filter((x) => x.OId === id)[0];
+    var labelText = [];
     Loginlogics.saveLoginInAPI(id, comment)
       .then((r) => {
         if (!JSON.parse(r.data).Successful) {
@@ -120,32 +148,62 @@ class CalimContainer extends React.Component {
           return;
         }
 
-        const workersList = this.state.workersList;
-        const worker = workersList.filter((x) => x.OId === id)[0];
         worker.IsLoggedIn = true;
         var inx = workersList.findIndex((x) => x.OId === id);
+
         if (inx !== -1) {
           workersList[inx] = worker;
         }
 
-        this.setState({
-          ...this.state,
-          claimingOId: id,
-          claimingUser: worker.Name,
-          workersList,
-        });
+        labelText.push(worker.Name);
+        this.setState(
+          {
+            ...this.state,
+            claimingOId: id,
+            claimingUser: worker.Name,
+            workersList,
+            LabelText: labelText,
+          },
+          () => {
+            this.props.changeStep(3, labelText);
+          }
+        );
       })
       .catch((err) => {
         alert(err);
       });
-
-    this.props.changeStep(2);
   };
-  handleLogOut = () => {
-    const id = this.state.claimingOId;
+  handleLogOut = (id, comment) => {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
-    const comment = "NOT impelemented yet";
+    if (
+      Loginlogics.checkWorkerEarlyLeave(
+        worker,
+        this.state.settings.TrackEarlyLeave,
+        this.state.settings.EarlyLeaveAllowance
+      )
+    ) {
+      this.setState({
+        ...this.state,
+        claimingOId: id,
+        claimingUser: worker.Name,
+        dialogOpen: true,
+        logoutClicked: true,
+        dialogHeader: "Early Leave",
+        dialogText: "Please, specify the reason to early leaving.",
+        dialogSave: this.onCommentSave,
+        alert: false,
+        LabelText: [worker.Name],
+      });
+    } else {
+      this.saveLogoutAPI(id, comment);
+    }
+  };
+
+  saveLogoutAPI = (id, comment) => {
+    const workersList = this.state.workersList;
+    const worker = workersList.filter((x) => x.OId === id)[0];
+
     var response = Loginlogics.saveLogoutAPI(id, comment);
     response
       .then((r) => {
@@ -158,18 +216,21 @@ class CalimContainer extends React.Component {
         if (inx !== -1) {
           workersList[inx] = worker;
         }
-        this.setState({
-          ...this.state,
-          page: 0,
-          workersList,
-        });
-        this.props.changeStep(1);
+        this.setState(
+          {
+            ...this.state,
+            page: 0,
+            workersList,
+          },
+          () => {
+            this.props.changeStep(2, []);
+          }
+        );
       })
       .catch((err) => {
         alert(err);
       });
   };
-
   searchNames = (event) => {
     this.setState({
       ...this.state,
@@ -199,24 +260,32 @@ class CalimContainer extends React.Component {
       ...this.state,
       loading: true,
     });
-    const response = ClaimLogic.getJobItemsFromApi(
+    const workType = this.state.mainWorkTypes.find((x) => x.OId == worktypeId);
+    var labelText = this.state.LabelText;
+    ClaimLogic.getJobItemsFromApi(
       this.state.jobId,
-      worktypeId
-    );
-    response.then((r) => {
+      worktypeId,
+      this.state.claimingOId
+    ).then((r) => {
       var data = JSON.parse(r.data);
-      this.setState({
-        ...this.state,
-        jobItems: data.jobItems,
-        mainJobItems: data.jobItems,
-        canClaimWholeJob: data.canClaimWholeJob,
-        page: 3,
-        loading: false,
-        worktypeId: worktypeId,
-      });
+      labelText.push(workType.Name);
+      this.setState(
+        {
+          ...this.state,
+          jobItems: data.jobItems,
+          mainJobItems: data.jobItems,
+          canClaimWholeJob: data.canClaimWholeJob,
+          totalClaiminMinutes: data.totalPhyCalimMinutes,
+          page: 3,
+          loading: false,
+          worktypeId: worktypeId,
+          LabelText: labelText,
+        },
+        () => {
+          this.props.changeStep(5, labelText);
+        }
+      );
     });
-
-    this.props.changeStep(4);
   };
 
   searchJobs = (event) => {
@@ -243,6 +312,22 @@ class CalimContainer extends React.Component {
       adminJobs,
     });
   };
+
+  handleFullJob = () => {
+    var labelText = this.state.LabelText;
+    labelText.push("Full Job");
+    this.setState(
+      {
+        ...this.state,
+        page: 4,
+        isFullJob: true,
+        LabelText: labelText,
+      },
+      () => {
+        this.props.changeStep(6, labelText);
+      }
+    );
+  };
   /* #endregion */
 
   /*#region Job*/
@@ -268,32 +353,74 @@ class CalimContainer extends React.Component {
     });
   };
   handleBack = (pageId) => {
-    this.setState({
-      page: pageId,
-    });
-    this.props.changeStep(pageId + 1);
+    var labelText = this.state.LabelText;
+    switch (pageId) {
+      case 0:
+        labelText = [];
+        break;
+      case 1:
+        labelText = labelText.slice(0, 1);
+        break;
+      case 2:
+        labelText = labelText.slice(0, 2);
+        break;
+    }
+
+    this.setState(
+      {
+        ...this.state,
+        page: pageId,
+        LabelText: labelText,
+        jobs: this.state.mainJobs,
+        jobItems: this.state.mainJobItems,
+        adminJobs: this.state.mainAdminJobs,
+        workersList: this.state.mainWorkersList,
+        workTypes: this.state.mainWorkTypes,
+      },
+      () => {
+        this.props.changeStep(pageId + 2, this.state.LabelText);
+      }
+    );
   };
   handleJobClick = (jobId, isAdmin = false) => {
     if (isAdmin) {
       const selectedAdminJob = this.state.adminJobs.find(
         (x) => x.OId === jobId
       );
-      this.setState({
-        ...this.state,
-        adminWorkType: selectedAdminJob,
-        page: 4,
-      });
-      this.props.changeStep(5);
+      var labelText = this.state.LabelText;
+
+      labelText.push(selectedAdminJob.Name);
+      labelText[2] = "";
+      this.setState(
+        {
+          ...this.state,
+          adminWorkType: selectedAdminJob,
+          page: 4,
+          isAdminJob: isAdmin,
+          LabelText: labelText,
+        },
+        () => {
+          this.props.changeStep(6, labelText);
+        }
+      );
     } else {
       const selectedJob = this.state.jobs.find((x) => x.OId === jobId);
-      this.setState({
-        ...this.state,
-        jobId,
-        workTypes: selectedJob.WorkTypes,
-        mainWorkTypes: selectedJob.WorkTypes,
-        page: 2,
-      });
-      this.props.changeStep(3);
+      var labelText = this.state.LabelText;
+      labelText.push(selectedJob.Code);
+
+      this.setState(
+        {
+          ...this.state,
+          jobId,
+          workTypes: selectedJob.WorkTypes,
+          mainWorkTypes: selectedJob.WorkTypes,
+          page: 2,
+          LabelText: labelText,
+        },
+        () => {
+          this.props.changeStep(4, labelText);
+        }
+      );
     }
   };
   /* #endregion */
@@ -308,37 +435,43 @@ class CalimContainer extends React.Component {
         page: 4,
       });
     } else {
-      this.setState({
-        ...this.state,
-        changedClaimingItems,
-        page: 4,
-      });
+      this.setState(
+        {
+          ...this.state,
+          changedClaimingItems,
+          page: 4,
+        },
+        () => {
+          this.props.changeStep(5, this.state.LabelText);
+        }
+      );
     }
-    this.props.changeStep(5);
   };
 
-  handleSubmitClaim = (comment, isAdmin = false) => {
+  handleSubmitClaim = (comment, isAdmin = false, logout = false) => {
     this.setState({
       ...this.state,
       loading: true,
     });
 
     if (!isAdmin) {
-      if (this.state.claimingFullJob) {
-        const response = ClaimLogic.submitFullJobClaimInAPI(
+      if (this.state.isFullJob) {
+        ClaimLogic.submitFullJobClaimInAPI(
           this.state.claimingOId,
           this.state.jobId,
-          this.state.worktypeId,
           comment
-        );
-
-        response.then((e) => {
-          this.setState({
-            ...this.state,
-            loading: false,
-            page: 0,
-          });
-          this.props.changeStep(1);
+        ).then((e) => {
+          this.setState(
+            {
+              ...this.state,
+              loading: false,
+              page: 0,
+              LabelText: [],
+            },
+            () => {
+              this.props.changeStep(1, []);
+            }
+          );
         });
       } else {
         const response = ClaimLogic.submitClaimInAPI(
@@ -351,12 +484,17 @@ class CalimContainer extends React.Component {
         );
 
         response.then((e) => {
-          this.setState({
-            ...this.state,
-            loading: false,
-            page: 0,
-          });
-          this.props.changeStep(1);
+          this.setState(
+            {
+              ...this.state,
+              loading: false,
+              page: 0,
+              LabelText: [],
+            },
+            () => {
+              this.props.changeStep(1, []);
+            }
+          );
         });
       }
     } else {
@@ -367,18 +505,25 @@ class CalimContainer extends React.Component {
       );
 
       response.then((e) => {
-        this.setState({
-          ...this.state,
-          loading: false,
-          page: 0,
-        });
-        this.props.changeStep(1);
+        this.setState(
+          {
+            ...this.state,
+            loading: false,
+            page: 0,
+            LabelText: [],
+          },
+          () => {
+            this.props.changeStep(1, []);
+          }
+        );
       });
     }
+    if (logout) this.handleLogOut(this.state.claimingOId, "logout from Claim");
   };
 
   handleFullSubmitClaim = (comment, isAdmin = false) => {};
   /* #endregion */
+
   render() {
     const renderConditionaly = () => {
       if (this.state.loading) {
@@ -416,6 +561,7 @@ class CalimContainer extends React.Component {
               workTypes={this.state.workTypes}
               handleBack={this.handleBack}
               handleWorkTypeClick={this.handleWorkTypeClick}
+              handleFullJob={this.handleFullJob}
             />
           );
         }
@@ -436,13 +582,16 @@ class CalimContainer extends React.Component {
           return (
             <Summary
               claimingOId={this.state.claimingOId}
+              totalClaiminMinutes={this.state.totalClaiminMinutes}
               claimingName={
                 this.state.mainWorkersList.find(
                   (x) => x.OId === this.state.claimingOId
                 ).Name
               }
               worktypeName={
-                this.state.adminWorkType
+                this.state.isFullJob
+                  ? "Full Job"
+                  : this.state.adminWorkType
                   ? "Admin Work"
                   : this.state.mainWorkTypes.find(
                       (x) => x.OId === this.state.worktypeId
@@ -455,9 +604,9 @@ class CalimContainer extends React.Component {
                       .Title
               }
               claimingItems={this.state.changedClaimingItems}
-              isFullJobClaim={this.state.claimingFullJob}
               isAdimJob={this.state.adminWorkType !== null}
               handleBack={this.handleBack}
+              isFullJob={this.state.isFullJob}
               handleSubmit={this.handleSubmitClaim}
             />
           );
@@ -469,6 +618,7 @@ class CalimContainer extends React.Component {
     return (
       <Fragment>
         <FormDialog
+          logout={this.state.logoutClicked}
           header={this.state.dialogHeader}
           text={this.state.dialogText}
           placeholer="Please describe"
@@ -476,7 +626,7 @@ class CalimContainer extends React.Component {
           onCommentSave={this.state.dialogSave}
           alert={this.state.alert}
         />
-        ;{renderConditionaly()}
+        {renderConditionaly()}
       </Fragment>
     );
   }

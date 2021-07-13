@@ -14,12 +14,13 @@ import SaveIcon from "@material-ui/icons/Save";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import DoneAllIcon from "@material-ui/icons/DoneAll";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import InputBase from "@material-ui/core/InputBase";
+import SearchIcon from "@material-ui/icons/Search";
+import { withStyles, fade } from "@material-ui/core/styles";
 
 const AirbnbSlider = withStyles({
   root: {
-    color: "#ff0000",
+    color: "#990303",
     height: 3,
     padding: "13px 0",
   },
@@ -66,6 +67,49 @@ function AirbnbThumbComponent(props) {
     </span>
   );
 }
+
+const styles = (theme) => ({
+  search: {
+    position: "relative",
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: fade(theme.palette.common.black, 0.15),
+    "&:hover": {
+      backgroundColor: fade(theme.palette.common.white, 0.25),
+    },
+    marginLeft: 0,
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      marginLeft: theme.spacing(1),
+      width: "auto",
+    },
+  },
+  searchIcon: {
+    padding: theme.spacing(0, 2),
+    height: "100%",
+    position: "absolute",
+    pointerEvents: "none",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputRoot: {
+    color: "inherit",
+  },
+  inputInput: {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    [theme.breakpoints.up("sm")]: {
+      width: "12ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+});
 class JobItems extends React.Component {
   constructor(props) {
     super();
@@ -76,11 +120,12 @@ class JobItems extends React.Component {
       groupPercent: 0,
     };
   }
-
+  mainJobItems = () => [];
   componentWillMount() {
     this.setState({
       groupPercent: this.groupSliderValue(),
     });
+    this.mainJobItems = this.state.jobItems;
   }
   componentDidMount() {}
   checkChange = (item) => {
@@ -133,24 +178,48 @@ class JobItems extends React.Component {
       changed,
     });
   };
+  searchJobItem = (e) => {
+    console.log(e.target.value);
+
+    var jItems =
+      e.target.value.length > 0
+        ? this.mainJobItems.filter((t) =>
+            t.Name.toLowerCase().includes(e.target.value.toLowerCase())
+          )
+        : this.mainJobItems;
+
+    this.setState({
+      ...this.state,
+      jobItems: jItems,
+    });
+  };
   handleGroupedChanged(v) {
+    if (v > 100 || v < 0) return false;
     const items = this.state.jobItems;
     this.state.jobItems.map((e, i) => {
       if (items[i].Main_Progress100 <= v) items[i].Progress100 = v;
     });
+    var changed = items.some((e) => e.Progress100 !== e.Main_Progress100);
     this.setState({
       ...this.state,
       jobItems: items,
       groupPercent: v,
+      changed,
     });
   }
   groupSliderValue() {
-    return Math.round(
-      this.state.jobItems.map((e) => e.Progress100).reduce((a, b) => a + b) /
-        this.state.jobItems.length
-    );
+    var val =
+      this.state.jobItems.length > 0
+        ? Math.round(
+            this.state.jobItems
+              .map((e) => e.Progress100)
+              .reduce((a, b) => a + b) / this.state.jobItems.length
+          )
+        : 0;
+    return val;
   }
   render() {
+    const { classes } = this.props;
     function valuetext(value) {
       return `${value}%`;
     }
@@ -176,6 +245,22 @@ class JobItems extends React.Component {
               Back
             </Button>
           </Grid>
+          <Grid item lg={12} sm={12} xs={12}>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+                onChange={this.searchJobItem}
+              />
+            </div>
+          </Grid>
         </Grid>
 
         <Card>
@@ -190,17 +275,6 @@ class JobItems extends React.Component {
             >
               Save
             </Button>
-            {this.props.canClaimWholeJob && (
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "#009688" }}
-                size="large"
-                onClick={() => this.props.handleSave(null, true)}
-                startIcon={<DoneAllIcon />}
-              >
-                Full&nbsp;job
-              </Button>
-            )}
           </CardActions>
           <CardContent>
             <Table aria-label="customized table">
@@ -376,7 +450,7 @@ class JobItems extends React.Component {
             >
               Save
             </Button>
-            {this.props.canClaimWholeJob && (
+            {/* {this.props.canClaimWholeJob && (
               <Button
                 variant="contained"
                 style={{ backgroundColor: "#009688" }}
@@ -386,11 +460,12 @@ class JobItems extends React.Component {
               >
                 Full&nbsp;job
               </Button>
-            )}
+            )} */}
           </CardActions>
         </Card>
       </Fragment>
     );
   }
 }
-export default JobItems;
+//export default JobItems;
+export default withStyles(styles, { withTheme: true })(JobItems);

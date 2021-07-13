@@ -15,6 +15,7 @@ class App extends React.Component {
     this.state = {
       step: 0,
       settings: null,
+      texts: [],
     };
   }
   componentDidMount() {
@@ -29,17 +30,18 @@ class App extends React.Component {
         })
     );
   };
-  changeStep = (j) => {
+  changeStep = (j, texts) => {
     this.setState({
       ...this.state,
       step: j,
+      texts,
     });
   };
 
   render() {
     return (
       <div style={{ display: "flex" }}>
-        <DrawerContainer step={this.state.step} />
+        <DrawerContainer step={this.state.step} texts={this.state.texts} />
         <main
           style={{
             flexGrow: 1,
@@ -49,7 +51,7 @@ class App extends React.Component {
           }}
         >
           <div style={{ drawerPaper: { width: 240 } }} />
-          <Route exact path="/" component={Welcome} />
+          <Route path="/" component={Welcome} />
           <Route
             path="/claim"
             render={(props) => (

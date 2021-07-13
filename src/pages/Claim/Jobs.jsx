@@ -37,7 +37,7 @@ export default function Jobs(props) {
           <Button
             variant="outlined"
             size="large"
-            onClick={props.handleLogOut}
+            onClick={() => props.handleLogOut(props.claimingOId)}
             startIcon={<MeetingRoomIcon />}
           >
             logout
@@ -73,44 +73,50 @@ export default function Jobs(props) {
         <AccordionDetails></AccordionDetails>
         <Grid container spacing={1}>
           {props.jobs &&
-            props.jobs.map((e) => (
-              <Grid
-                item
-                lg={2}
-                sm={6}
-                xs={12}
-                key={e.OId}
-                className={classes.bolding}
-              >
-                <Box
-                  p={4}
+            props.jobs
+              .sort(function (a, b) {
+                return a.JobStageOrder - b.JobStageOrder;
+              })
+              .map((e) => (
+                <Grid
+                  item
+                  lg={2}
+                  sm={6}
+                  xs={12}
                   key={e.OId}
-                  boxShadow={4}
-                  color="black"
-                  bgcolor={e.IsLoggedIn ? "#757de8" : "white"}
-                  spacing={3}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    fontSize: "1.3rem",
-                    textAlign: "center",
-                  }}
-                  onClick={() => {
-                    props.handleJobClick(e.OId);
-                  }}
+                  className={classes.bolding}
                 >
-                  <div style={{ backgroundColor: "#eee" }}>
-                    {e.Code === e.V6Code
-                      ? `Code: ${e.Code}`
-                      : e.V6Code == null
-                      ? `Code: ${e.Code}`
-                      : `ESP#:${e.Code}   -   V6#: ${e.V6Code}`}
-                  </div>
-                  <hr />
-                  <div>{e.Title}</div>
-                </Box>
-              </Grid>
-            ))}
+                  <Box
+                    p={4}
+                    key={e.OId}
+                    boxShadow={4}
+                    color="black"
+                    bgcolor={
+                      e.JobStageName == "production"
+                        ? "#548c63"
+                        : e.JobStageName == "preproduction"
+                        ? "#b3b31b"
+                        : e.JobStageName == "postproduction"
+                        ? "#adadad"
+                        : "white"
+                    }
+                    spacing={3}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      fontSize: "1.3rem",
+                      textAlign: "center",
+                    }}
+                    onClick={() => {
+                      props.handleJobClick(e.OId);
+                    }}
+                  >
+                    <div style={{ backgroundColor: "#eee" }}>{e.Code}</div>
+                    <hr />
+                    <div>{e.Title}</div>
+                  </Box>
+                </Grid>
+              ))}
         </Grid>
       </Accordion>
       <Accordion defaultExpanded="true">
@@ -121,7 +127,6 @@ export default function Jobs(props) {
         >
           <Typography>Admin</Typography>
         </AccordionSummary>
-
         <AccordionDetails></AccordionDetails>
         <Grid container spacing={1}>
           {props.jobs &&
@@ -139,13 +144,13 @@ export default function Jobs(props) {
                   key={e.OId}
                   boxShadow={4}
                   color="black"
-                  bgcolor={e.IsLoggedIn ? "#757de8" : "white"}
                   spacing={3}
                   style={{
                     width: "100%",
                     height: "100%",
                     fontSize: "1.3rem",
                     textAlign: "center",
+                    backgroundColor: "#c2c2c2",
                   }}
                   onClick={() => {
                     props.handleJobClick(e.OId, true);
