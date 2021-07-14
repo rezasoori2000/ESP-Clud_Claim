@@ -90,7 +90,7 @@ export default function Jobs(props) {
                     p={4}
                     key={e.OId}
                     boxShadow={4}
-                    color="black"
+                    color="white"
                     bgcolor={
                       e.JobStageName == "production"
                         ? "#548c63"
@@ -111,7 +111,7 @@ export default function Jobs(props) {
                       props.handleJobClick(e.OId);
                     }}
                   >
-                    <div style={{ backgroundColor: "#eee" }}>{e.Code}</div>
+                    <div style={{ color: "black" }}>{e.Code}</div>
                     <hr />
                     <div>{e.Title}</div>
                   </Box>

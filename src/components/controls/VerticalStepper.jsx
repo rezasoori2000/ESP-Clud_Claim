@@ -79,7 +79,10 @@ const VerticalStepper = (props) => {
                 <Typography>
                   {label}
                   <br />
-                  {getLabels(props, label, index)}
+                  <span style={{ color: "#b86704" }}>
+                    {" "}
+                    {getLabels(props, label, index)}
+                  </span>
                 </Typography>
               </StepLabel>
               <StepContent>

@@ -43,6 +43,7 @@ class CalimContainer extends React.Component {
       LabelText: [],
       isFullJob: false,
       logoutClicked: false,
+      totalProgress: 0,
     };
   }
 
@@ -276,6 +277,7 @@ class CalimContainer extends React.Component {
           mainJobItems: data.jobItems,
           canClaimWholeJob: data.canClaimWholeJob,
           totalClaiminMinutes: data.totalPhyCalimMinutes,
+          totalProgress: data.totalProgress,
           page: 3,
           loading: false,
           worktypeId: worktypeId,
@@ -412,8 +414,8 @@ class CalimContainer extends React.Component {
         {
           ...this.state,
           jobId,
-          workTypes: selectedJob.WorkTypes,
-          mainWorkTypes: selectedJob.WorkTypes,
+          workTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
+          mainWorkTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
           page: 2,
           LabelText: labelText,
         },
@@ -572,6 +574,7 @@ class CalimContainer extends React.Component {
               claimingOId={this.state.claimingOId}
               searchJobs={this.searchJobs}
               items={this.state.mainJobItems}
+              totalProgress={this.state.totalProgress}
               handleBack={this.handleBack}
               handleSave={this.handleSaveClaim}
               canClaimWholeJob={this.state.canClaimWholeJob}

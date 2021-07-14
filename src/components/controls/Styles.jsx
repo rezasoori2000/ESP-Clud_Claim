@@ -60,6 +60,10 @@ const gridSearchStyles = makeStyles((theme) => ({
       transform: "scale(1.05) translate(-17px, -10px)",
       zIndex: "1000",
       backgroundColor: "#ddd",
+      backgroundImage: 'url("/work1.png")',
+      backgroundRepeat: "no-repeat",
+
+      backgroundPosition: "top",
     },
   },
 }));

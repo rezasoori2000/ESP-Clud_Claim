@@ -6,6 +6,7 @@ import Box from "@material-ui/core/Box";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import gridSearchStyles from "../../components/controls/Styles";
+import { BlurCircular } from "@material-ui/icons";
 
 export default function Login(props) {
   const classes = gridSearchStyles();
@@ -47,7 +48,7 @@ export default function Login(props) {
                 boxShadow={4}
                 color="black"
                 bgcolor={
-                  e.IsOnLeave ? "#9e9e9e" : e.IsLoggedIn ? "#3F51B5" : "#dadabc"
+                  e.IsOnLeave ? "#6f4141" : e.IsLoggedIn ? "#3F51B5" : "#bdc2c7"
                 }
                 spacing={3}
                 style={{

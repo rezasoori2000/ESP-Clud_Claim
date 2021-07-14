@@ -151,12 +151,16 @@ class JobItems extends React.Component {
   };
   handleBtn = (val, inx) => {
     let items = this.state.jobItems;
+
     if (!items[inx].Progress100) items[inx].Progress100 = 0;
     if (items[inx].Progress100 + val >= items[inx].Main_Progress100) {
       if (items[inx].Progress100 + val > 100) {
         items[inx].Progress100 = 100;
       } else {
-        items[inx].Progress100 = items[inx].Progress100 + val;
+        items[inx].Progress100 = this.roundNumber(
+          items[inx].Progress100 + val,
+          items[inx].Progress100
+        );
       }
       var changed = this.checkChange(items);
       this.setState({
@@ -193,18 +197,56 @@ class JobItems extends React.Component {
       jobItems: jItems,
     });
   };
-  handleGroupedChanged(v) {
+  roundNumber(v, g) {
+    return v > g
+      ? v % 5 == 0
+        ? v
+        : Math.ceil((v - 4) / 5) * 5
+      : v % 5 == 0
+      ? v
+      : Math.floor((v + 4) / 5) * 5;
+  }
+  handleGroupedChanged(v, btn = false) {
     if (v > 100 || v < 0) return false;
     const items = this.state.jobItems;
-    this.state.jobItems.map((e, i) => {
-      if (items[i].Main_Progress100 <= v) items[i].Progress100 = v;
-    });
+    v = btn ? this.roundNumber(v, this.state.groupPercent) : v;
+
+    this.state.jobItems
+      .filter((x) => x.Main_Progress100 <= v)
+      .map((e, i) => {
+        //if (items[i].Main_Progress100 <= v) {
+        items.find((x) => x.OId == e.OId).Progress100 = v;
+        //}
+      });
+    this.state.jobItems
+      .filter((x) => x.Main_Progress100 > v)
+      .map((e, i) => {
+        //if (items[i].Main_Progress100 <= v) {
+        items.find((x) => x.OId == e.OId).Progress100 = e.Main_Progress100;
+        //}
+      });
+
     var changed = items.some((e) => e.Progress100 !== e.Main_Progress100);
     this.setState({
       ...this.state,
       jobItems: items,
       groupPercent: v,
       changed,
+    });
+  }
+  handleChanged(v) {
+    if (v > 100 || v < 0) return false;
+
+    //const items = this.state.jobItems;
+    // this.state.jobItems.map((e, i) => {
+    //   if (items[i].Main_Progress100 <= v) items[i].Progress100 = v;
+    // });
+    //  var changed = items.some((e) => e.Progress100 !== e.Main_Progress100);
+    this.setState({
+      ...this.state,
+      //    jobItems: items,
+      groupPercent: v,
+      //   changed,
     });
   }
   groupSliderValue() {
@@ -279,6 +321,25 @@ class JobItems extends React.Component {
           <CardContent>
             <Table aria-label="customized table">
               <TableBody>
+                <TableRow
+                  hover="true"
+                  m={10}
+                  style={{
+                    backgroundColor: "#999",
+                  }}
+                >
+                  <TableCell
+                    style={{ width: "100%", marginButtm: "40px!important" }}
+                  >
+                    <h3>
+                      Total Progress:{" "}
+                      {this.state.groupPercent > this.props.totalProgress
+                        ? this.state.groupPercent
+                        : this.props.totalProgress}
+                      %
+                    </h3>
+                  </TableCell>
+                </TableRow>
                 {this.state.jobItems && this.state.jobItems.length > 1 && (
                   <TableRow
                     hover="true"
@@ -306,12 +367,10 @@ class JobItems extends React.Component {
                             marks
                             min={0}
                             max={100}
-                            // onChangeCommitted={(e, val) =>
-                            //   this.handleGroupedChanged(val)
-                            // }
-                            onChange={(e, val) =>
+                            onChangeCommitted={(e, val) =>
                               this.handleGroupedChanged(val)
                             }
+                            onChange={(e, val) => this.handleChanged(val)}
                           />
                         </Grid>
                         <Grid item xs={12} sm={12} lg={2}>
@@ -321,7 +380,7 @@ class JobItems extends React.Component {
                               this.handleGroupedChanged(event.target.value)
                             }
                             type="number"
-                            name={`pgs-kir`}
+                            name={`pgs`}
                             key={1}
                             fullWidth
                           />
@@ -332,7 +391,8 @@ class JobItems extends React.Component {
                             color="secondary"
                             onClick={() =>
                               this.handleGroupedChanged(
-                                this.state.groupPercent - 5
+                                parseInt(this.state.groupPercent) - 5,
+                                true
                               )
                             }
                             startIcon={<RemoveIcon />}
@@ -344,7 +404,8 @@ class JobItems extends React.Component {
                             color="primary"
                             onClick={() =>
                               this.handleGroupedChanged(
-                                this.state.groupPercent + 5
+                                parseInt(this.state.groupPercent) + 5,
+                                true
                               )
                             }
                             startIcon={<AddIcon />}
