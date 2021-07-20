@@ -123,7 +123,7 @@ class JobItems extends React.Component {
   mainJobItems = () => [];
   componentWillMount() {
     this.setState({
-      groupPercent: this.groupSliderValue(),
+      // groupPercent: this.groupSliderValue(),
     });
     this.mainJobItems = this.state.jobItems;
   }
@@ -331,13 +331,7 @@ class JobItems extends React.Component {
                   <TableCell
                     style={{ width: "100%", marginButtm: "40px!important" }}
                   >
-                    <h3>
-                      Total Progress:{" "}
-                      {this.state.groupPercent > this.props.totalProgress
-                        ? this.state.groupPercent
-                        : this.props.totalProgress}
-                      %
-                    </h3>
+                    <h3>Previously Claimed: {this.props.totalProgress}%</h3>
                   </TableCell>
                 </TableRow>
                 {this.state.jobItems && this.state.jobItems.length > 1 && (

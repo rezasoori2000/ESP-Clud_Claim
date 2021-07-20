@@ -59,7 +59,7 @@ export default function Summary(props) {
           variant="outlined"
           size="large"
           onClick={() => {
-            props.handleBack(props.isFullJob ? 2 : props.isAdimJob ? 1 : 3);
+            props.handleBack(props.isFullJob ? 2 : props.isAdminJob ? 1 : 3);
           }}
           startIcon={<ArrowBack />}
         >
@@ -74,7 +74,7 @@ export default function Summary(props) {
             size="large"
             className={classes.btn}
             startIcon={<SaveIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdimJob)}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
             Submit
           </Button>
@@ -84,7 +84,7 @@ export default function Summary(props) {
             size="large"
             className={classes.btn}
             startIcon={<MeetingRoomIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdimJob, true)}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob, true)}
           >
             Submit/Logout
           </Button>
@@ -151,6 +151,13 @@ export default function Summary(props) {
                     secondary={
                       <Typography style={{ fontSize: "1.5rem" }}>
                         {props.jobName}
+                        {props.isAdminJob && (
+                          <div>
+                            <span>(</span>
+                            {timeConvert(props.totalClaiminMinutes)}
+                            <span>)</span>
+                          </div>
+                        )}
                       </Typography>
                     }
                   />
@@ -167,12 +174,19 @@ export default function Summary(props) {
                       primary={
                         <Typography variant="h6" style={{ fontSize: "2rem" }}>
                           Claiming Full Job
+                          {
+                            <div>
+                              <span>(</span>
+                              {timeConvert(props.totalClaiminMinutes)}
+                              <span>)</span>
+                            </div>
+                          }
                         </Typography>
                       }
                     />
                   </ListItem>
                 )}
-                {!(props.isAdimJob || props.isFullJob) && (
+                {!(props.isAdminJob || props.isFullJob) && (
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar>
@@ -225,7 +239,7 @@ export default function Summary(props) {
             size="large"
             className={classes.btn}
             startIcon={<SaveIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdimJob)}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
             Submit
           </Button>
@@ -235,7 +249,7 @@ export default function Summary(props) {
             size="large"
             className={classes.btn}
             startIcon={<MeetingRoomIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdimJob)}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
             Submit/Logout
           </Button>

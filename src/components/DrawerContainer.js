@@ -140,7 +140,11 @@ const DrawerContainer = (props) => {
         </Link>
       </List>
       <Divider />
-      <VerticalStepper step={props.step} texts={props.texts} />
+      <VerticalStepper
+        step={props.step}
+        texts={props.texts}
+        isAdmin={props.isAdmin}
+      />
     </div>
   );
 

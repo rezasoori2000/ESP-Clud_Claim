@@ -16,6 +16,7 @@ class App extends React.Component {
       step: 0,
       settings: null,
       texts: [],
+      isAdmin: false,
     };
   }
   componentDidMount() {
@@ -30,18 +31,23 @@ class App extends React.Component {
         })
     );
   };
-  changeStep = (j, texts) => {
+  changeStep = (j, texts, isAdmin = false) => {
     this.setState({
       ...this.state,
       step: j,
       texts,
+      isAdmin,
     });
   };
 
   render() {
     return (
       <div style={{ display: "flex" }}>
-        <DrawerContainer step={this.state.step} texts={this.state.texts} />
+        <DrawerContainer
+          step={this.state.step}
+          texts={this.state.texts}
+          isAdmin={this.state.isAdmin}
+        />
         <main
           style={{
             flexGrow: 1,

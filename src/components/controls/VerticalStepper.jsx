@@ -51,7 +51,7 @@ function getLabel(label, text) {
   if (text && text.length > 1) return `(${text})`;
   //return label;
 }
-function getLabels(p, label, index) {
+function getLabels(p, label, index, adminJon) {
   switch (index) {
     case 1:
       return getLabel(label, p.texts[0]);
@@ -73,26 +73,29 @@ const VerticalStepper = (props) => {
     props.step > 0 && (
       <div className={classes.root}>
         <Stepper activeStep={props.step - 1} orientation="vertical">
-          {steps.map((label, index) => (
-            <Step key={label}>
-              <StepLabel>
-                <Typography>
-                  {label}
-                  <br />
-                  <span style={{ color: "#b86704" }}>
-                    {" "}
-                    {getLabels(props, label, index)}
-                  </span>
-                </Typography>
-              </StepLabel>
-              <StepContent>
-                <Typography></Typography>
-                <div className={classes.actionsContainer}>
-                  <div></div>
-                </div>
-              </StepContent>
-            </Step>
-          ))}
+          {steps.map(
+            (label, index) =>
+              !(props.isAdmin && index === 3) && (
+                <Step key={label}>
+                  <StepLabel>
+                    <Typography>
+                      {label}
+                      <br />
+                      <span style={{ color: "#b86704" }}>
+                        {" "}
+                        {getLabels(props, label, index)}
+                      </span>
+                    </Typography>
+                  </StepLabel>
+                  <StepContent>
+                    <Typography></Typography>
+                    <div className={classes.actionsContainer}>
+                      <div></div>
+                    </div>
+                  </StepContent>
+                </Step>
+              )
+          )}
         </Stepper>
         {props.step - 1 === steps.length && (
           <Paper square elevation={0} className={classes.resetContainer}>

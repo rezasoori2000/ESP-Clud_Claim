@@ -64,7 +64,7 @@ class CalimContainer extends React.Component {
           LabelText: [],
         },
         () => {
-          this.props.changeStep(2, []);
+          this.props.changeStep(2, [], this.state.isAdminJob);
         }
       )
     );
@@ -108,7 +108,7 @@ class CalimContainer extends React.Component {
           claimingOId: worker.OId,
         },
         () => {
-          this.props.changeStep(3, labelText);
+          this.props.changeStep(3, labelText, this.state.isAdminJob);
           this.goToJobsPage(page, id);
         }
       );
@@ -166,7 +166,7 @@ class CalimContainer extends React.Component {
             LabelText: labelText,
           },
           () => {
-            this.props.changeStep(3, labelText);
+            this.props.changeStep(3, labelText, this.state.isAdminJob);
           }
         );
       })
@@ -224,7 +224,7 @@ class CalimContainer extends React.Component {
             workersList,
           },
           () => {
-            this.props.changeStep(2, []);
+            this.props.changeStep(2, [], this.state.isAdminJob);
           }
         );
       })
@@ -284,7 +284,7 @@ class CalimContainer extends React.Component {
           LabelText: labelText,
         },
         () => {
-          this.props.changeStep(5, labelText);
+          this.props.changeStep(5, labelText, this.state.isAdminJob);
         }
       );
     });
@@ -326,7 +326,7 @@ class CalimContainer extends React.Component {
         LabelText: labelText,
       },
       () => {
-        this.props.changeStep(6, labelText);
+        this.props.changeStep(6, labelText, this.state.isAdminJob);
       }
     );
   };
@@ -344,7 +344,14 @@ class CalimContainer extends React.Component {
       const values = JSON.parse(r.data);
       this.setState({
         ...this.state,
+        // jobs: values.Item1.filter((x) =>
+        //   x.WorkTypes.some((x) => x.HasJobItems)
+        // ),
+        // mainJobs: values.Item1.filter((x) =>
+        //   x.WorkTypes.some((x) => x.HasJobItems)
+        // ),
         jobs: values.Item1,
+
         mainJobs: values.Item1,
         adminJobs: values.Item2,
         mainAdminJobs: values.Item2,
@@ -380,7 +387,11 @@ class CalimContainer extends React.Component {
         workTypes: this.state.mainWorkTypes,
       },
       () => {
-        this.props.changeStep(pageId + 2, this.state.LabelText);
+        this.props.changeStep(
+          pageId + 2,
+          this.state.LabelText,
+          this.state.isAdminJob
+        );
       }
     );
   };
@@ -402,7 +413,7 @@ class CalimContainer extends React.Component {
           LabelText: labelText,
         },
         () => {
-          this.props.changeStep(6, labelText);
+          this.props.changeStep(6, labelText, this.state.isAdminJob);
         }
       );
     } else {
@@ -414,13 +425,17 @@ class CalimContainer extends React.Component {
         {
           ...this.state,
           jobId,
-          workTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
-          mainWorkTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
+          // workTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
+          // mainWorkTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
+          workTypes: selectedJob.WorkTypes,
+          mainWorkTypes: selectedJob.WorkTypes,
+
           page: 2,
+          isAdminJob: false,
           LabelText: labelText,
         },
         () => {
-          this.props.changeStep(4, labelText);
+          this.props.changeStep(4, labelText, this.state.isAdminJob);
         }
       );
     }
@@ -444,7 +459,7 @@ class CalimContainer extends React.Component {
           page: 4,
         },
         () => {
-          this.props.changeStep(5, this.state.LabelText);
+          this.props.changeStep(5, this.state.LabelText, this.state.isAdminJob);
         }
       );
     }
@@ -471,7 +486,7 @@ class CalimContainer extends React.Component {
               LabelText: [],
             },
             () => {
-              this.props.changeStep(1, []);
+              this.props.changeStep(1, [], this.state.isAdminJob);
             }
           );
         });
@@ -494,7 +509,7 @@ class CalimContainer extends React.Component {
               LabelText: [],
             },
             () => {
-              this.props.changeStep(1, []);
+              this.props.changeStep(1, [], this.state.isAdminJob);
             }
           );
         });
@@ -515,7 +530,7 @@ class CalimContainer extends React.Component {
             LabelText: [],
           },
           () => {
-            this.props.changeStep(1, []);
+            this.props.changeStep(1, [], this.state.isAdminJob);
           }
         );
       });
@@ -607,7 +622,7 @@ class CalimContainer extends React.Component {
                       .Title
               }
               claimingItems={this.state.changedClaimingItems}
-              isAdimJob={this.state.adminWorkType !== null}
+              isAdminJob={this.state.isAdminJob}
               handleBack={this.handleBack}
               isFullJob={this.state.isFullJob}
               handleSubmit={this.handleSubmitClaim}
