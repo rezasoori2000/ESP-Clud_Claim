@@ -4,9 +4,9 @@ import config from "../../config";
 import Helper from "./Helper";
 
 class LoginLogic extends React.Component {
-  getListOfWorkersFromApi = async () => {
+  getListOfWorkersFromApi = async (workerId) => {
     return Helper.apiPost(
-      "Workers/GetListOfWorkers",
+      "Workers/GetListOfWorkers?workerId=" + workerId,
       {},
       "Error in calling ESP (Get Workers List)"
     );

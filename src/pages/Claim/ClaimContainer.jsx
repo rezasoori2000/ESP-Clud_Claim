@@ -54,7 +54,7 @@ class CalimContainer extends React.Component {
     });
 
     try {
-      Loginlogics.getListOfWorkersFromApi()
+      Loginlogics.getListOfWorkersFromApi(this.props.workerId)
         .then((r) => {
           const response = JSON.parse(r.data);
           this.setState(

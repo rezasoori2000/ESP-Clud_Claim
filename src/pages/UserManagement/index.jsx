@@ -17,12 +17,14 @@ import {
   TableCell,
   TableContainer,
   TableBody,
+  Hidden,
 } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
 import Helper from "../../components/logics/Helper";
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
+import { Fragment } from "react";
 class UserManagement extends React.Component {
   constructor() {
     super();
@@ -30,6 +32,7 @@ class UserManagement extends React.Component {
       loginUsers: [],
       model: {},
       changes: [],
+      changePassword: false,
     };
   }
   componentDidMount() {
@@ -50,6 +53,7 @@ class UserManagement extends React.Component {
             IsPublic: false,
             IsDisabled: false,
             EspUserId: "",
+            LoginId: "",
           },
         });
       })
@@ -58,23 +62,81 @@ class UserManagement extends React.Component {
       });
   };
   onSave = () => {
-    Helper.apiPost("Account/Register", {
-      Email: this.state.model.Email,
-      Password: this.state.model.Password,
-      ConfirmPassword: this.state.model.Password,
-      IsAdmin: this.state.model.IsAdmin,
-      IsPublic: this.state.model.IsPublic,
-      UserId: this.state.model.EspUserId,
-    })
-      .then((r) => {
-        alert("Successfuly added");
-        window.location.reload(false);
+    if (!this.state.changePassword) {
+      Helper.apiPost("Account/Register", {
+        Email: this.state.model.Email,
+        Password: this.state.model.Password,
+        ConfirmPassword: this.state.model.Password,
+        IsAdmin: this.state.model.IsAdmin,
+        IsPublic: this.state.model.IsPublic,
+        UserId: this.state.model.EspUserId,
       })
-      .catch((err) => {
-        alert("Error in adding user" + err);
-      });
+        .then((r) => {
+          alert("Successfuly added");
+          window.location.reload(false);
+        })
+        .catch((err) => {
+          alert("Error in adding user" + err);
+        });
+    } else {
+      Helper.apiPost("Account/SetPassword", {
+        Id: this.state.model.LoginId,
+        NewPassword: this.state.model.Password,
+        ConfirmPassword: this.state.model.Password,
+      })
+        .then((r) => {
+          alert("Successfuly Save");
+          const model = this.state.model;
+
+          model.Email = "";
+          model.Password = "";
+          model.IsAdmin = false;
+          model.IsPublic = false;
+          model.IsDisabled = false;
+          model.EspUserId = "";
+          model.LoginId = "";
+          model.EspUsers.map((e) => {
+            e.Selected = false;
+          });
+          this.setState({
+            ...this.state,
+            model,
+            changePassword: false,
+          });
+        })
+        .catch((err) => {
+          alert("Error in saving new password" + err);
+        });
+    }
   };
-  onChangePassword = (id) => {};
+  onChangePassword = (id) => {
+    const user = this.state.loginUsers.find((x) => x.Id == id);
+    const EspUsers = this.state.model.EspUsers;
+    const espUser = EspUsers.find((x) => x.Value == user.WorkerId);
+    const espInx = EspUsers.indexOf(espUser);
+    espUser.Selected = true;
+
+    EspUsers.splice(espInx, 1, espUser);
+
+    const model = {
+      Email: user.Email,
+      IsAdmin: user.IsAdmin,
+      IsPublic: user.IsPublic,
+      EspUserId: user.WorkerId,
+      LoginId: id,
+      EspUsers,
+    };
+    this.setState(
+      {
+        ...this.state,
+        changePassword: true,
+        model,
+      },
+      () => {
+        console.log(user.Email + " " + user.Name);
+      }
+    );
+  };
 
   onPropertyChange = (event) => {
     var model = this.state.model;
@@ -132,7 +194,7 @@ class UserManagement extends React.Component {
           />
           <CardContent>
             <Grid container spacing={3}>
-              <Grid item lg={4}>
+              <Grid item lg={4} xs={12}>
                 <ESPTextField
                   name="Email"
                   label="Email"
@@ -142,7 +204,7 @@ class UserManagement extends React.Component {
                   value={this.state.model.Email}
                 />
               </Grid>
-              <Grid item lg={4}>
+              <Grid item lg={4} xs={12}>
                 <ESPTextField
                   name="Password"
                   label="Password"
@@ -152,7 +214,7 @@ class UserManagement extends React.Component {
                   value={this.state.model.Password}
                 />
               </Grid>
-              <Grid item lg={4}>
+              <Grid item lg={4} xs={12}>
                 <ESPSelect
                   name="EspUsers"
                   label="User Id in ESP"
@@ -161,7 +223,7 @@ class UserManagement extends React.Component {
                   onPropertyChange={this.onSelectChange}
                 />
               </Grid>
-              <Grid item lg={4}>
+              <Grid item lg={4} xs={6}>
                 <ESPCheckbox
                   name="IsAdmin"
                   label="Is admin user"
@@ -169,25 +231,15 @@ class UserManagement extends React.Component {
                   onPropertyChange={this.onPropertyChange}
                 />
               </Grid>
-              <Grid item lg={4}>
+              <Grid item lg={4} xs={6}>
                 <ESPCheckbox
                   name="IsPublic"
                   label="Is Public User"
                   checked={this.state.model.IsPublic}
-                  onPropertyChange={this.onSelectChange}
-                />
-              </Grid>
-              <Grid item lg={4}>
-                <ESPCheckbox
-                  name="IsDisabled"
-                  label="Suspend User"
-                  checked={this.state.model.IsDisabled}
                   onPropertyChange={this.onPropertyChange}
                 />
               </Grid>
-              <Grid item lg={10}></Grid>
-
-              <Grid item lg={1} mx="auto">
+              <Grid item lg={4} xs={12} mx="auto">
                 <Button
                   variant="contained"
                   color="primary"
@@ -199,58 +251,78 @@ class UserManagement extends React.Component {
                     !(
                       this.state.model.Email &&
                       this.state.model.Password &&
-                      this.state.model.EspUserId
+                      (this.state.model.EspUserId || this.state.model.IsPublic)
                     )
                   }
                 >
-                  Add User
+                  {this.state.changePassword ? "Save Password" : "Add User"}
                 </Button>
               </Grid>
               <Grid item lg={12}>
                 <hr />
-                <TableContainer component={Paper}>
-                  <Table
-                    //className={classes.table}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Email</TableCell>
-                        <TableCell>ESP User</TableCell>
-                        <TableCell>Is Admin</TableCell>
-                        <TableCell>Is Public User</TableCell>
-                        <TableCell>Change Password</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {this.state.loginUsers.map((row) => (
-                        <TableRow key={row.OId}>
-                          <TableCell>{row.Email}</TableCell>
-                          <TableCell>{row.Name}</TableCell>
-                          <TableCell>
-                            {row.IsAdmin ? <CheckIcon /> : <CloseIcon />}
-                          </TableCell>
-                          <TableCell>
-                            {row.IsPublic ? <CheckIcon /> : <CloseIcon />}
-                          </TableCell>
-                          <TableCell>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              // className={classes.saveBtn}
-                              size="large"
-                              onClick={() => this.onChangePassword(row.OId)}
-                              startIcon={<SaveIcon />}
-                            >
-                              Change Password
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
               </Grid>
+            </Grid>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+            >
+              <Hidden only={["xs"]}>
+                <Grid item lg={3} xs={12}>
+                  Email
+                </Grid>
+                <Grid item lg={3} xs={12}>
+                  ESP User
+                </Grid>
+                <Grid item lg={1} xs={12}>
+                  Admin
+                </Grid>
+                <Grid item lg={1} xs={12}>
+                  Public User
+                </Grid>
+                <Grid item lg={4} xs={12}>
+                  Change Password
+                </Grid>
+              </Hidden>
+              <Grid item lg={12} xs={12}>
+                <hr />
+              </Grid>
+              {this.state.loginUsers.map((row) => (
+                <Fragment>
+                  <Grid item lg={3} xs={12}>
+                    <Hidden only={["sm", "lg", "xl", "md"]}>Email: </Hidden>
+                    {row.Email}
+                  </Grid>
+                  <Grid item lg={3} xs={12}>
+                    <Hidden only={["sm", "lg", "xl", "md"]}>Name: </Hidden>
+                    {row.Name}
+                  </Grid>
+                  <Grid item lg={1} xs={12}>
+                    <Hidden only={["sm", "lg", "xl", "md"]}>Admin:</Hidden>
+                    {row.IsAdmin ? <CheckIcon /> : <CloseIcon />}
+                  </Grid>
+                  <Grid item lg={1} xs={12}>
+                    <Hidden only={["sm", "lg", "xl", "md"]}>Public:</Hidden>
+                    {row.IsPublic ? <CheckIcon /> : <CloseIcon />}
+                  </Grid>
+                  <Grid item lg={4} xs={12}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      // className={classes.saveBtn}
+                      size="large"
+                      onClick={() => this.onChangePassword(row.Id)}
+                      startIcon={<SaveIcon />}
+                    >
+                      Change Password
+                    </Button>
+                  </Grid>
+                  <Grid lg={12} xs={12}>
+                    <hr />
+                  </Grid>
+                </Fragment>
+              ))}
             </Grid>
           </CardContent>
         </Card>

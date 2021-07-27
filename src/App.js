@@ -33,6 +33,7 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
+    //localStorage.setItem("_claim", "");
     const token = Helper.getLocalToken();
     if (localStorage.getItem("_claim")) this.getServerSettings();
   }
@@ -125,6 +126,8 @@ class App extends React.Component {
             >
               <ClaimContainer
                 public={isPublic}
+                isUser={true}
+                workerId={w}
                 settings={this.state.settings}
                 changeStep={this.changeStep}
               />
@@ -156,6 +159,8 @@ class App extends React.Component {
                     public={false}
                     settings={this.state.settings}
                     changeStep={this.changeStep}
+                    isUser={false}
+                    workerId="0"
                     {...props}
                   />
                 )}
