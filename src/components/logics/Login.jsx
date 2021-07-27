@@ -1,17 +1,15 @@
 import React from "react";
 import axios from "axios";
 import config from "../../config";
+import Helper from "./Helper";
 
 class LoginLogic extends React.Component {
   getListOfWorkersFromApi = async () => {
-    var response = {};
-    try {
-      var data = await axios.get(`${config.apiUrl}/Workers/GetListOfWorkers`);
-      response = JSON.parse(data.data);
-      return response;
-    } catch (err) {
-      alert(`Error in calling ESP (Get Workers List) API- ${err}`);
-    }
+    return Helper.apiPost(
+      "Workers/GetListOfWorkers",
+      {},
+      "Error in calling ESP (Get Workers List)"
+    );
   };
 
   searchNames = (event, mainWorkersList) => {
@@ -26,42 +24,24 @@ class LoginLogic extends React.Component {
   saveLoginInAPI = async (id, comment) => {
     var response = {};
     var value = { OId: id, Code: comment };
-    var data = JSON.stringify(value);
-    try {
-      const headers = {
-        "Content-Type": "application/json",
-      };
 
-      response = await axios.post(
-        `${config.apiUrl}Workers/PostLoginWorker`,
-        data,
-        {
-          headers: headers,
-        }
-      );
-      return response;
-    } catch (err) {
-      alert(`Error in calling ESP (Login) API- ${err}`);
-    }
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    return Helper.apiPost("Workers/PostLoginWorker", value, "");
   };
 
   saveLogoutAPI = async (id, comment) => {
     var response = {};
     var value = { OId: id, Code: comment };
-    var data = JSON.stringify(value);
+
     try {
       const headers = {
         "Content-Type": "application/json",
       };
 
-      response = await axios.post(
-        `${config.apiUrl}Workers/PostLogoutWorker`,
-        data,
-        {
-          headers: headers,
-        }
-      );
-      return response;
+      return Helper.apiPost("Workers/PostLogoutWorker", value);
     } catch (err) {
       alert(`Error in calling ESP (Logout) API- ${err}`);
     }
@@ -90,6 +70,22 @@ class LoginLogic extends React.Component {
     }
     return false;
   }
+
+  getAsyncSettingsApi = async (url, value, errorName) => {
+    const authStr = "bearer " + this.getLocalToken();
+    try {
+      axios.defaults.headers.post["Authorization"] = authStr;
+      axios.defaults.headers.post["Content-type"] = "application/json";
+      const response = await axios.post(
+        `${config.apiUrl}AdminSettings/GetInfo`,
+        null
+      );
+
+      return response;
+    } catch (err) {
+      alert(`Error in calling ESP (${errorName}) API- ${err}`);
+    }
+  };
 
   render() {
     return <din></din>;

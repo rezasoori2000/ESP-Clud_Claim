@@ -283,6 +283,7 @@ class JobItems extends React.Component {
                 this.props.handleBack(2);
               }}
               startIcon={<ArrowBack />}
+              style={{ backgroundColor: "#85858880" }}
             >
               Back
             </Button>

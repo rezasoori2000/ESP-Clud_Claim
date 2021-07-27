@@ -2,6 +2,7 @@ import React from "react";
 import AdminSettingsPage from "./AdminSettingsPage";
 import config from "../../config";
 import axios from "axios";
+import Helper from "../../components/logics/Helper";
 
 class AdminSettingsContainer extends React.Component {
   constructor() {
@@ -99,16 +100,19 @@ class AdminSettingsContainer extends React.Component {
     var response = {};
     var oldAdminSettings = this.state.adminSettings;
     try {
-      const res = await axios.get(
-        `${config.apiUrl}adminSettings/GetGroup?oid=` + oid
-      );
-      response = JSON.parse(res.data);
-      oldAdminSettings.Groups = response;
+      Helper.apiPost(`adminSettings/GetGroup?oid=` + oid, {}, "")
+        .then((res) => {
+          response = JSON.parse(res.data);
+          oldAdminSettings.Groups = response;
 
-      this.setState({
-        ...this.state,
-        adminSettings: oldAdminSettings,
-      });
+          this.setState({
+            ...this.state,
+            adminSettings: oldAdminSettings,
+          });
+        })
+        .catch((err) => {
+          alert("Error in get Groups data");
+        });
     } catch (err) {
       alert(`Error in calling ESP API- ${err}`);
     }
@@ -117,12 +121,17 @@ class AdminSettingsContainer extends React.Component {
   getAdminSettingsByAPI = async () => {
     var response = {};
     try {
-      const res = await axios.get(`${config.apiUrl}adminSettings`);
-      response = JSON.parse(res.data);
-      this.setState({
-        ...this.state,
-        adminSettings: response,
-      });
+      Helper.apiPost(`adminSettings/GetInfo`, {}, "")
+        .then((res) => {
+          response = JSON.parse(res.data);
+          this.setState({
+            ...this.state,
+            adminSettings: response,
+          });
+        })
+        .catch((err) => {
+          alert("Error in get Groups data");
+        });
     } catch (err) {
       alert(`Error in calling ESP API- ${err}`);
     }
@@ -131,22 +140,15 @@ class AdminSettingsContainer extends React.Component {
   saveAdminSettingsByAPI = async () => {
     let state = this.state.adminSettings;
 
-    var data = JSON.stringify(state);
+    //var data = JSON.stringify(state);
     try {
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
-      axios
-        .post(`${config.apiUrl}adminSettings`, data, {
-          headers: headers,
-        })
+      Helper.apiPost(`adminSettings/PostData`, state, "")
         .then((res) => {
           this.props.history.push("/");
-          this.props.onChangeSettings();
+          // this.props.onChangeSettings();
         })
-        .catch((error) => {
-          alert(`Error in saving data- ${error}`);
+        .catch((err) => {
+          alert("Error in get Groups data");
         });
     } catch (err) {
       alert(`Error in calling ESP API- ${err}`);

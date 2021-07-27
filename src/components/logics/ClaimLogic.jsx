@@ -6,19 +6,25 @@ class ClaimLogic extends React.Component {
   getJobItemsFromApi = async (jobId, worktypeId, workerId) => {
     var response = {};
     try {
-      response = await axios.get(`${config.apiUrl}Claim/GetJobItems`, {
-        params: { jobId, worktypeId, workerId },
-      });
-      return response;
+      return Helper.apiPost(
+        "Claim/GetJobItems",
+        {
+          jobId: jobId,
+          WorkTypeId: worktypeId,
+          workerId: workerId,
+        },
+        ""
+      );
     } catch (err) {
       alert(`Error in calling ESP (Claim / Get Job items) API- ${err}`);
     }
   };
 
   getJobsOfWorkerFromApi = async (workerId) => {
-    return await axios.get(
-      `${config.apiUrl}/Claim/GetJobsOfWorker?id=${workerId}`
-    );
+    var data = {
+      id: workerId,
+    };
+    return Helper.apiPost(`Claim/GetJobsOfWorker?id=${workerId}`, data, "");
   };
 
   submitClaimInAPI = async (workerId, jobId, jobItems, comment) => {

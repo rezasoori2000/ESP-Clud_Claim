@@ -25,6 +25,7 @@ export default function Jobs(props) {
           <Button
             variant="outlined"
             size="large"
+            style={{ backgroundColor: "#85858880" }}
             onClick={() => {
               props.handleBack(0);
             }}
@@ -39,6 +40,7 @@ export default function Jobs(props) {
             size="large"
             onClick={() => props.handleLogOut(props.claimingOId)}
             startIcon={<MeetingRoomIcon />}
+            style={{ backgroundColor: "#85858880" }}
           >
             logout
           </Button>

@@ -94,50 +94,75 @@ const DrawerContainer = (props) => {
       <Divider />
       <List className="mt-5" style={{ backgroundColor: "#2d292a" }}>
         <div style={{ textAlign: "center", background: "#000" }}>
-          {/* <img src='/favicon.png' /> */}
+          <img src="/favicon.png" />
         </div>
+        <br />
+        <br />
+        <br />
+        {props.isSystemAdmin && (
+          <div>
+            <Link
+              to="/claim"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <ListItem button key="1">
+                <ListItemIcon style={{ color: "white" }}>
+                  <InboxIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="Claim" />
+              </ListItem>
+            </Link>
+            <hr />
+            <Link
+              to="/settings"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <ListItem button key="2">
+                <ListItemIcon style={{ color: "white" }}>
+                  <SettingsIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="Admin Settings" />
+              </ListItem>
+            </Link>
+            <hr />
+            <Link
+              to="/users"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <ListItem button key="2">
+                <ListItemIcon style={{ color: "white" }}>
+                  <SettingsIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="User Management" />
+              </ListItem>
+            </Link>
+            <hr />
 
-        <br />
-        <br />
-        <br />
-        <Link to="/claim" style={{ textDecoration: "none", color: "white" }}>
-          <ListItem button key="1">
-            <ListItemIcon style={{ color: "white" }}>
-              <InboxIcon />{" "}
-            </ListItemIcon>
-            <ListItemText primary="Claim" />
-          </ListItem>
-        </Link>
-        <hr />
-        <Link to="/settings" style={{ textDecoration: "none", color: "white" }}>
-          <ListItem button key="2">
-            <ListItemIcon style={{ color: "white" }}>
-              <SettingsIcon />{" "}
-            </ListItemIcon>
-            <ListItemText primary="Admin Settings" />
-          </ListItem>
-        </Link>
-        <hr />
-        <Link
-          to="/performanceState"
-          style={{ textDecoration: "none", color: "white" }}
-        >
-          <ListItem button key="3">
-            <ListItemIcon style={{ color: "white" }}>
-              <BarChartIcon />{" "}
-            </ListItemIcon>
-            <ListItemText primary="Statistics" />
-          </ListItem>
-        </Link>
-        <hr />
-        <Link to="/board" style={{ textDecoration: "none", color: "white" }}>
-          <ListItem button key="3">
-            <ListItemIcon style={{ color: "white" }}>
-              <BusinessIcon />{" "}
-            </ListItemIcon>
-            <ListItemText primary="Production Board" />
-          </ListItem>
-        </Link>
+            <Link
+              to="/performanceState"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <ListItem button key="3">
+                <ListItemIcon style={{ color: "white" }}>
+                  <BarChartIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="Statistics" />
+              </ListItem>
+            </Link>
+            <hr />
+            <Link
+              to="/board"
+              style={{ textDecoration: "none", color: "white" }}
+            >
+              <ListItem button key="3">
+                <ListItemIcon style={{ color: "white" }}>
+                  <BusinessIcon />{" "}
+                </ListItemIcon>
+                <ListItemText primary="Production Board" />
+              </ListItem>
+            </Link>
+          </div>
+        )}
       </List>
       <Divider />
       <VerticalStepper

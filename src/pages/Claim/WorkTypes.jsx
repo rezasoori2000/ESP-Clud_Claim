@@ -37,6 +37,7 @@ export default function Worktypes(props) {
               props.handleBack(1);
             }}
             startIcon={<ArrowBack />}
+            style={{ backgroundColor: "#85858880" }}
           >
             Back
           </Button>

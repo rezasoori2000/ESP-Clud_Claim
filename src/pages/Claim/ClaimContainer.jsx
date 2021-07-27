@@ -53,22 +53,33 @@ class CalimContainer extends React.Component {
       loading: true,
     });
 
-    Loginlogics.getListOfWorkersFromApi().then((response) =>
-      this.setState(
-        {
-          ...this.state,
-          workersList: response,
-          mainWorkersList: response,
-          loading: false,
-          settings: this.props.settings,
-          LabelText: [],
-        },
-        () => {
-          this.props.changeStep(2, [], this.state.isAdminJob);
-        }
-      )
-    );
+    try {
+      Loginlogics.getListOfWorkersFromApi()
+        .then((r) => {
+          const response = JSON.parse(r.data);
+          this.setState(
+            {
+              ...this.state,
+              workersList: response,
+              mainWorkersList: response,
+              loading: false,
+              settings: this.props.settings,
+              LabelText: [],
+            },
+            () => {
+              this.props.changeStep(2, [], this.state.isAdminJob);
+            }
+          );
+        })
+        .catch((err) => {
+          alert("Error in getting Workers list 1");
+        });
+    } catch (err) {
+      console.log(err);
+      alert("Error in getting Workers list 2");
+    }
   }
+
   componentDidMount() {}
 
   /* #region  Login Methods */
@@ -205,8 +216,7 @@ class CalimContainer extends React.Component {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
 
-    var response = Loginlogics.saveLogoutAPI(id, comment);
-    response
+    var response = Loginlogics.saveLogoutAPI(id, comment)
       .then((r) => {
         if (!JSON.parse(r.data).Successful) {
           alert(r.Message);
@@ -339,27 +349,30 @@ class CalimContainer extends React.Component {
       loading: true,
     });
 
-    const response = ClaimLogic.getJobsOfWorkerFromApi(claimingOId);
-    response.then((r) => {
-      const values = JSON.parse(r.data);
-      this.setState({
-        ...this.state,
-        // jobs: values.Item1.filter((x) =>
-        //   x.WorkTypes.some((x) => x.HasJobItems)
-        // ),
-        // mainJobs: values.Item1.filter((x) =>
-        //   x.WorkTypes.some((x) => x.HasJobItems)
-        // ),
-        jobs: values.Item1,
+    ClaimLogic.getJobsOfWorkerFromApi(claimingOId)
+      .then((r) => {
+        const values = JSON.parse(r.data);
+        this.setState({
+          ...this.state,
+          // jobs: values.Item1.filter((x) =>
+          //   x.WorkTypes.some((x) => x.HasJobItems)
+          // ),
+          // mainJobs: values.Item1.filter((x) =>
+          //   x.WorkTypes.some((x) => x.HasJobItems)
+          // ),
+          jobs: values.Item1,
 
-        mainJobs: values.Item1,
-        adminJobs: values.Item2,
-        mainAdminJobs: values.Item2,
-        loading: false,
-        claimingOId,
-        page,
+          mainJobs: values.Item1,
+          adminJobs: values.Item2,
+          mainAdminJobs: values.Item2,
+          loading: false,
+          claimingOId,
+          page,
+        });
+      })
+      .catch((err) => {
+        alert("Error in retrieve Jobs list");
       });
-    });
   };
   handleBack = (pageId) => {
     var labelText = this.state.LabelText;

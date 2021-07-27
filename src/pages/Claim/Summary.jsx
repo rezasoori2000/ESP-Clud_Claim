@@ -62,6 +62,7 @@ export default function Summary(props) {
             props.handleBack(props.isFullJob ? 2 : props.isAdminJob ? 1 : 3);
           }}
           startIcon={<ArrowBack />}
+          style={{ backgroundColor: "#85858880" }}
         >
           Back
         </Button>
