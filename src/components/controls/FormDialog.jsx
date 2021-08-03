@@ -14,13 +14,18 @@ export default function FormDialog(props) {
   const handleommentChange = (e) => {
     setComment(e.target.value);
     setAllow(e.target.value.length < 5);
+
     setComment(e.target.value);
   };
   const handleSave = () => {
     props.onCommentSave(comment, !props.logout);
     setAllow(true);
   };
-
+  const handleKeyDown = (event) => {
+    if (event.target.value.length > 5 && event.key === "Enter") {
+      handleSave();
+    }
+  };
   return (
     <div>
       <Dialog
@@ -40,6 +45,7 @@ export default function FormDialog(props) {
               type="text"
               fullWidth
               onChange={handleommentChange}
+              onKeyDown={handleKeyDown}
             />
           )}
         </DialogContent>

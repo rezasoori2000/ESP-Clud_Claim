@@ -137,7 +137,7 @@ const DrawerContainer = (props) => {
               </ListItem>
             </Link>
             <hr />
-
+            {/*
             <Link
               to="/performanceState"
               style={{ textDecoration: "none", color: "white" }}
@@ -160,7 +160,7 @@ const DrawerContainer = (props) => {
                 </ListItemIcon>
                 <ListItemText primary="Production Board" />
               </ListItem>
-            </Link>
+            </Link> */}
           </div>
         )}
       </List>

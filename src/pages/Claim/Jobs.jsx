@@ -12,8 +12,9 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-import Link from "@material-ui/core/Link";
+import CommentIcon from "@material-ui/icons/Comment";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 
 export default function Jobs(props) {
   const classes = gridSearchStyles();
@@ -109,13 +110,56 @@ export default function Jobs(props) {
                       fontSize: "1.3rem",
                       textAlign: "center",
                     }}
-                    onClick={() => {
-                      props.handleJobClick(e.OId);
-                    }}
                   >
-                    <div style={{ color: "black" }}>{e.Code}</div>
+                    <Grid container style={{ color: "black" }}>
+                      <Grid item lg={4} xs={4} sm={4} md={4}>
+                        {e.Note !== "" && (
+                          <IconButton
+                            color="primary"
+                            aria-label="add to shopping cart"
+                          >
+                            <CommentIcon
+                              onClick={() => {
+                                alert(e.Note);
+                              }}
+                            />
+                          </IconButton>
+                        )}
+                      </Grid>
+                      <Grid
+                        item
+                        lg={4}
+                        xs={4}
+                        sm={4}
+                        md={4}
+                        onClick={() => {
+                          props.handleJobClick(e.OId);
+                        }}
+                      >
+                        {e.Code}
+                      </Grid>
+                      <Grid
+                        item
+                        lg={4}
+                        xs={4}
+                        sm={4}
+                        md={4}
+                        onClick={() => {
+                          props.handleJobClick(e.OId);
+                        }}
+                      >
+                        <CircularProgressWithLabel value={e.Progress} />
+                      </Grid>
+                    </Grid>
                     <hr />
-                    <div>{e.Title}</div>
+                    <div
+                      style={{ fontSize: "smaller" }}
+                      onClick={() => {
+                        props.handleJobClick(e.OId);
+                      }}
+                    >
+                      {e.Title}
+                    </div>
                   </Box>
                 </Grid>
               ))}

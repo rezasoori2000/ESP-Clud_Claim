@@ -17,6 +17,7 @@ import CardContent from "@material-ui/core/CardContent";
 import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { withStyles, fade } from "@material-ui/core/styles";
+import Helper from "../../components/logics/Helper";
 
 const AirbnbSlider = withStyles({
   root: {
@@ -262,6 +263,12 @@ class JobItems extends React.Component {
   }
   render() {
     const { classes } = this.props;
+
+    var allItemsV6 = this.state.jobItems
+      .map((e) => e.StdTime)
+      .reduce(function (a, b) {
+        return a + b;
+      }, 0);
     function valuetext(value) {
       return `${value}%`;
     }
@@ -332,6 +339,13 @@ class JobItems extends React.Component {
                   <TableCell
                     style={{ width: "100%", marginButtm: "40px!important" }}
                   >
+                    {this.props.finishedItems !== "" && (
+                      <div>
+                        <b>Completed Items: </b>
+                        {this.props.finishedItems}
+                        <hr />
+                      </div>
+                    )}
                     <h3>Previously Claimed: {this.props.totalProgress}%</h3>
                   </TableCell>
                 </TableRow>
@@ -347,10 +361,13 @@ class JobItems extends React.Component {
                       style={{ width: "100%", marginButtm: "40px!important" }}
                     >
                       <Grid container spacing={2}>
-                        <Grid item xs={12} sm={12} lg={1}>
-                          All Items
+                        <Grid item xs={12} sm={12} lg={2}>
+                          All Items{" "}
+                          {" (" +
+                            Helper.timeConvert(Math.round(allItemsV6 / 60))}
+                          )
                         </Grid>
-                        <Grid item xs={12} sm={12} lg={6}>
+                        <Grid item xs={12} sm={12} lg={5}>
                           <AirbnbSlider
                             ThumbComponent={AirbnbThumbComponent}
                             aria-label="ios slider"
@@ -429,10 +446,12 @@ class JobItems extends React.Component {
                     <TableRow hover="true">
                       <TableCell style={{ width: "100%" }}>
                         <Grid container spacing={2}>
-                          <Grid item xs={12} sm={12} lg={1}>
-                            {e.Name}
+                          <Grid item xs={12} sm={12} lg={2}>
+                            {e.ItemNumber}-{e.Name}
+                            {" ("}
+                            {Helper.timeConvert(Math.round(e.StdTime / 60))})
                           </Grid>
-                          <Grid item xs={12} sm={12} lg={6}>
+                          <Grid item xs={12} sm={12} lg={5}>
                             <AirbnbSlider
                               ThumbComponent={AirbnbThumbComponent}
                               aria-label="ios slider"

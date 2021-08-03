@@ -110,6 +110,19 @@ class HelperLogic extends React.Component {
       alert(` ${err.response.data}`);
     }
   };
+  timeConvert = (n) => {
+    var num = n;
+    var hours = num / 60;
+    var rhours = Math.floor(hours).toString();
+    var minutes = (hours - rhours) * 60;
+    var rminutes = Math.round(minutes).toString();
+    return (
+      (rhours.length == 1 ? "0" + rhours : rhours) +
+      ":" +
+      (rminutes.length == 1 ? "0" + rminutes : rminutes)
+    );
+  };
+
   render() {
     return <din></din>;
   }

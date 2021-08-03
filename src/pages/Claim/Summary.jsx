@@ -21,6 +21,7 @@ import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 import { makeStyles } from "@material-ui/core/styles";
 import { Fragment } from "react";
 import Button from "@material-ui/core/Button";
+import Helper from "../../components/logics/Helper";
 
 const useStyles = makeStyles({
   btn: {
@@ -40,18 +41,7 @@ const useStyles = makeStyles({
 export default function Summary(props) {
   const [comment, setComment] = useState("");
   const classes = useStyles();
-  const timeConvert = (n) => {
-    var num = n;
-    var hours = num / 60;
-    var rhours = Math.floor(hours).toString();
-    var minutes = (hours - rhours) * 60;
-    var rminutes = Math.round(minutes).toString();
-    return (
-      (rhours.length == 1 ? "0" + rhours : rhours) +
-      ":" +
-      (rminutes.length == 1 ? "0" + rminutes : rminutes)
-    );
-  };
+
   return (
     <Fragment>
       <div style={{ textAlign: "right" }}>
@@ -155,7 +145,7 @@ export default function Summary(props) {
                         {props.isAdminJob && (
                           <div>
                             <span>(</span>
-                            {timeConvert(props.totalClaiminMinutes)}
+                            {Helper.timeConvert(props.totalClaiminMinutes)}
                             <span>)</span>
                           </div>
                         )}
@@ -178,7 +168,7 @@ export default function Summary(props) {
                           {
                             <div>
                               <span>(</span>
-                              {timeConvert(props.totalClaiminMinutes)}
+                              {Helper.timeConvert(props.totalClaiminMinutes)}
                               <span>)</span>
                             </div>
                           }
@@ -206,7 +196,7 @@ export default function Summary(props) {
                           <Typography style={{ fontSize: "1.5rem" }}>
                             {e.Name}: ({e.Main_Progress100}% to:
                             {e.Progress100}% {")  ("}
-                            {timeConvert(
+                            {Helper.timeConvert(
                               props.totalClaiminMinutes /
                                 props.claimingItems.filter(
                                   (x) => x.Progress100 !== x.Main_Progress100

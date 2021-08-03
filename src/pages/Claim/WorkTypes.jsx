@@ -9,6 +9,8 @@ import gridSearchStyles from "../../components/controls/Styles";
 import { Button } from "@material-ui/core";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
+import Slider from "@material-ui/core/Slider";
+import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 export default function Worktypes(props) {
   const classes = gridSearchStyles();
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function Worktypes(props) {
       <Grid container>
         {props.workTypes &&
           props.workTypes
+            .filter((x) => x.Progress < 100)
             .sort(function (a, b) {
               return a.CategoryOrder - b.CategoryOrder;
             })
@@ -101,6 +104,8 @@ export default function Worktypes(props) {
                       clickable
                     >
                       {e.Name}
+                      <hr />
+                      <CircularProgressWithLabel value={e.Progress} />
                     </CardContent>
                   </Card>
                 </Box>

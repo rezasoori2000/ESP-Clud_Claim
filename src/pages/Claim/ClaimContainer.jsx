@@ -44,6 +44,7 @@ class CalimContainer extends React.Component {
       isFullJob: false,
       logoutClicked: false,
       totalProgress: 0,
+      finishedItems: "",
     };
   }
 
@@ -68,6 +69,12 @@ class CalimContainer extends React.Component {
             },
             () => {
               this.props.changeStep(2, [], this.state.isAdminJob);
+              if (this.props.workerId !== 0) {
+                var worker = response.find((x) => x.OId == this.props.workerId);
+                if (worker && worker.IsLoggedIn) {
+                  this.loggedInWorkerClick(worker);
+                }
+              }
             }
           );
         })
@@ -89,6 +96,24 @@ class CalimContainer extends React.Component {
       if (login) this.saveLoginInAPI(this.state.claimingOId, text);
       else this.saveLogoutAPI(this.state.claimingOId, text);
   };
+
+  loggedInWorkerClick = (worker) => {
+    const page = 1;
+    const labelText = [];
+    labelText.push(worker.Name);
+    this.setState(
+      {
+        ...this.state,
+        LabelText: labelText,
+        claimingUser: worker.Name,
+        claimingOId: worker.OId,
+      },
+      () => {
+        this.props.changeStep(3, labelText, this.state.isAdminJob);
+        this.goToJobsPage(page, worker.OId);
+      }
+    );
+  };
   handleLogin = (sid, isOnLeave) => {
     if (isOnLeave) {
       this.setState({
@@ -108,21 +133,7 @@ class CalimContainer extends React.Component {
     const worker = workersList.filter((x) => x.OId === id)[0];
 
     if (worker.IsLoggedIn) {
-      const page = 1;
-      const labelText = [];
-      labelText.push(worker.Name);
-      this.setState(
-        {
-          ...this.state,
-          LabelText: labelText,
-          claimingUser: worker.Name,
-          claimingOId: worker.OId,
-        },
-        () => {
-          this.props.changeStep(3, labelText, this.state.isAdminJob);
-          this.goToJobsPage(page, id);
-        }
-      );
+      this.loggedInWorkerClick(worker);
     } else {
       let comment = "";
       if (
@@ -285,6 +296,7 @@ class CalimContainer extends React.Component {
           ...this.state,
           jobItems: data.jobItems,
           mainJobItems: data.jobItems,
+          finishedItems: data.finishedItems,
           canClaimWholeJob: data.canClaimWholeJob,
           totalClaiminMinutes: data.totalPhyCalimMinutes,
           totalProgress: data.totalProgress,
@@ -602,6 +614,7 @@ class CalimContainer extends React.Component {
               claimingOId={this.state.claimingOId}
               searchJobs={this.searchJobs}
               items={this.state.mainJobItems}
+              finishedItems={this.state.finishedItems}
               totalProgress={this.state.totalProgress}
               handleBack={this.handleBack}
               handleSave={this.handleSaveClaim}

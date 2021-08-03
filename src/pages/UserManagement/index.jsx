@@ -112,12 +112,13 @@ class UserManagement extends React.Component {
   onChangePassword = (id) => {
     const user = this.state.loginUsers.find((x) => x.Id == id);
     const EspUsers = this.state.model.EspUsers;
-    const espUser = EspUsers.find((x) => x.Value == user.WorkerId);
-    const espInx = EspUsers.indexOf(espUser);
-    espUser.Selected = true;
+    if (!user.IsPublic) {
+      const espUser = EspUsers.find((x) => x.Value == user.WorkerId);
+      const espInx = EspUsers.indexOf(espUser);
+      espUser.Selected = true;
 
-    EspUsers.splice(espInx, 1, espUser);
-
+      EspUsers.splice(espInx, 1, espUser);
+    }
     const model = {
       Email: user.Email,
       IsAdmin: user.IsAdmin,
@@ -269,32 +270,33 @@ class UserManagement extends React.Component {
               alignItems="center"
             >
               <Hidden only={["xs"]}>
-                <Grid item lg={3} xs={12}>
-                  Email
+                <Grid item lg={4} xs={12} style={{ backgroundColor: "#eee" }}>
+                  <h2>Email</h2>
                 </Grid>
-                <Grid item lg={3} xs={12}>
-                  ESP User
+                <Grid item lg={4} xs={12} style={{ backgroundColor: "#eee" }}>
+                  <h2>ESP User</h2>
                 </Grid>
-                <Grid item lg={1} xs={12}>
-                  Admin
+                <Grid item lg={1} xs={12} style={{ backgroundColor: "#eee" }}>
+                  <h2>Admin</h2>
                 </Grid>
-                <Grid item lg={1} xs={12}>
-                  Public User
+                <Grid item lg={1} xs={12} style={{ backgroundColor: "#eee" }}>
+                  <h2>Public User</h2>
                 </Grid>
-                <Grid item lg={4} xs={12}>
-                  Change Password
+                <Grid item lg={2} xs={12} style={{ backgroundColor: "#eee" }}>
+                  <h2>Change Password</h2>
                 </Grid>
               </Hidden>
+
               <Grid item lg={12} xs={12}>
                 <hr />
               </Grid>
               {this.state.loginUsers.map((row) => (
                 <Fragment>
-                  <Grid item lg={3} xs={12}>
+                  <Grid item lg={4} xs={12}>
                     <Hidden only={["sm", "lg", "xl", "md"]}>Email: </Hidden>
                     {row.Email}
                   </Grid>
-                  <Grid item lg={3} xs={12}>
+                  <Grid item lg={4} xs={12}>
                     <Hidden only={["sm", "lg", "xl", "md"]}>Name: </Hidden>
                     {row.Name}
                   </Grid>
@@ -306,7 +308,7 @@ class UserManagement extends React.Component {
                     <Hidden only={["sm", "lg", "xl", "md"]}>Public:</Hidden>
                     {row.IsPublic ? <CheckIcon /> : <CloseIcon />}
                   </Grid>
-                  <Grid item lg={4} xs={12}>
+                  <Grid item lg={2} xs={12}>
                     <Button
                       variant="contained"
                       color="primary"
