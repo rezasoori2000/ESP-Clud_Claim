@@ -144,7 +144,8 @@ class AdminSettingsContainer extends React.Component {
     try {
       Helper.apiPost(`adminSettings/PostData`, state, "")
         .then((res) => {
-          this.props.history.push("/");
+          //this.props.history.push("/");
+          window.location.reload(false);
           // this.props.onChangeSettings();
         })
         .catch((err) => {

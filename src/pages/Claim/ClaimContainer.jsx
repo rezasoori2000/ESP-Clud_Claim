@@ -600,6 +600,7 @@ class CalimContainer extends React.Component {
             <WorkTypes
               claimingOId={this.state.claimingOId}
               searchWorkTypes={this.searchWorkTypes}
+              settings={this.props.settings}
               workTypes={this.state.workTypes}
               handleBack={this.handleBack}
               handleWorkTypeClick={this.handleWorkTypeClick}
@@ -618,6 +619,7 @@ class CalimContainer extends React.Component {
               totalProgress={this.state.totalProgress}
               handleBack={this.handleBack}
               handleSave={this.handleSaveClaim}
+              settings={this.props.settings}
               canClaimWholeJob={this.state.canClaimWholeJob}
             />
           );

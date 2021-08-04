@@ -22,32 +22,7 @@ export default function Jobs(props) {
   return (
     <Fragment>
       <Grid container spacing={2}>
-        <Grid ml={0} item lg={11} sm={10} xs={8} style={{ textAlign: "right" }}>
-          <Button
-            variant="outlined"
-            size="large"
-            style={{ backgroundColor: "#85858880" }}
-            onClick={() => {
-              props.handleBack(0);
-            }}
-            startIcon={<ArrowBack />}
-          >
-            Back
-          </Button>
-        </Grid>
-        <Grid ml={0} item lg={1} sm={2} xs={4} style={{ textAlign: "right" }}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => props.handleLogOut(props.claimingOId)}
-            startIcon={<MeetingRoomIcon />}
-            style={{ backgroundColor: "#85858880" }}
-          >
-            logout
-          </Button>
-          {/* <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<MeetingRoomIcon />} onClick={props.handleLogOut}>Logout</Button> */}
-        </Grid>
-        <Grid item lg={12} sm={12} xs={12}>
+        <Grid item lg={10} sm={10} xs={12}>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -62,6 +37,31 @@ export default function Jobs(props) {
               onChange={props.searchJobs}
             />
           </div>
+        </Grid>
+        <Grid ml={0} item lg={1} sm={1} xs={8} style={{ textAlign: "right" }}>
+          <Button
+            variant="outlined"
+            size="large"
+            style={{ backgroundColor: "#85858880" }}
+            onClick={() => {
+              props.handleBack(0);
+            }}
+            startIcon={<ArrowBack />}
+          >
+            Back
+          </Button>
+        </Grid>
+        <Grid ml={0} item lg={1} sm={1} xs={4} style={{ textAlign: "right" }}>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => props.handleLogOut(props.claimingOId)}
+            startIcon={<MeetingRoomIcon />}
+            style={{ backgroundColor: "#85858880" }}
+          >
+            logout
+          </Button>
+          {/* <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<MeetingRoomIcon />} onClick={props.handleLogOut}>Logout</Button> */}
         </Grid>
       </Grid>
       <Accordion defaultExpanded="true">
@@ -110,56 +110,36 @@ export default function Jobs(props) {
                       fontSize: "1.3rem",
                       textAlign: "center",
                     }}
+                    onClick={() => {
+                      props.handleJobClick(e.OId);
+                    }}
                   >
                     <Grid container style={{ color: "black" }}>
-                      <Grid item lg={4} xs={4} sm={4} md={4}>
+                      <Grid item lg={12} xs={12} sm={12} md={12}>
+                        {e.Code}
+                      </Grid>
+                      <Grid item lg={6} xs={6} sm={6} md={6}>
                         {e.Note !== "" && (
                           <IconButton
-                            color="primary"
+                            color="inherit"
                             aria-label="add to shopping cart"
                           >
                             <CommentIcon
-                              onClick={() => {
+                              onClick={(w) => {
                                 alert(e.Note);
+                                w.stopPropagation();
                               }}
                             />
                           </IconButton>
                         )}
                       </Grid>
-                      <Grid
-                        item
-                        lg={4}
-                        xs={4}
-                        sm={4}
-                        md={4}
-                        onClick={() => {
-                          props.handleJobClick(e.OId);
-                        }}
-                      >
-                        {e.Code}
-                      </Grid>
-                      <Grid
-                        item
-                        lg={4}
-                        xs={4}
-                        sm={4}
-                        md={4}
-                        onClick={() => {
-                          props.handleJobClick(e.OId);
-                        }}
-                      >
+
+                      <Grid item lg={6} xs={6} sm={6} md={6}>
                         <CircularProgressWithLabel value={e.Progress} />
                       </Grid>
                     </Grid>
                     <hr />
-                    <div
-                      style={{ fontSize: "smaller" }}
-                      onClick={() => {
-                        props.handleJobClick(e.OId);
-                      }}
-                    >
-                      {e.Title}
-                    </div>
+                    <div style={{ fontSize: "smaller" }}>{e.Title}</div>
                   </Box>
                 </Grid>
               ))}

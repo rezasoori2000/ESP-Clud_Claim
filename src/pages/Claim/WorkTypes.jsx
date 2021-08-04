@@ -19,32 +19,7 @@ export default function Worktypes(props) {
   return (
     <Fragment>
       <Grid container>
-        <Grid ml={0} item lg={11} sm={9} xs={8} style={{ textAlign: "right" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={props.handleFullJob}
-            startIcon={<PlaylistAddCheckIcon />}
-          >
-            Claim Full Job
-          </Button>
-        </Grid>
-
-        <Grid ml={0} item lg={1} sm={3} xs={4} style={{ textAlign: "right" }}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => {
-              props.handleBack(1);
-            }}
-            startIcon={<ArrowBack />}
-            style={{ backgroundColor: "#85858880" }}
-          >
-            Back
-          </Button>
-        </Grid>
-        <Grid item lg={12} sm={8} xs={12}>
+        <Grid ml={0} item lg={9} sm={6} xs={12} style={{ textAlign: "left" }}>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
               <SearchIcon />
@@ -60,6 +35,34 @@ export default function Worktypes(props) {
             />
           </div>
         </Grid>
+        <Grid ml={0} item lg={2} sm={3} xs={4} style={{ textAlign: "right" }}>
+          {props.settings.CanFinishWholeJob && (
+            <Button
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={props.handleFullJob}
+              startIcon={<PlaylistAddCheckIcon />}
+            >
+              ClaimFullJob
+            </Button>
+          )}
+        </Grid>
+
+        <Grid ml={0} item lg={1} sm={3} xs={4} style={{ textAlign: "right" }}>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => {
+              props.handleBack(1);
+            }}
+            startIcon={<ArrowBack />}
+            style={{ backgroundColor: "#85858880" }}
+          >
+            Back
+          </Button>
+        </Grid>
+        <Grid item lg={12} sm={8} xs={12}></Grid>
       </Grid>
       <hr />
       <Grid container>

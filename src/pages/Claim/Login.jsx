@@ -26,7 +26,7 @@ export default function Login(props) {
           onChange={props.searchNames}
         />
       </div>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} style={{ marginTop: 10 }}>
         {props.items &&
           props.items.map((e) => (
             <Grid

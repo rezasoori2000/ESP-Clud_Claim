@@ -274,64 +274,55 @@ class JobItems extends React.Component {
     }
     return (
       <Fragment>
-        <Grid container spacing={2}>
-          <Grid
-            ml={0}
-            item
-            lg={12}
-            sm={12}
-            xs={12}
-            style={{ textAlign: "right" }}
-          >
-            <Button
-              variant="outlined"
-              size="large"
-              onClick={() => {
-                this.props.handleBack(2);
-              }}
-              startIcon={<ArrowBack />}
-              style={{ backgroundColor: "#85858880" }}
-            >
-              Back
-            </Button>
-          </Grid>
-          <Grid item lg={12} sm={12} xs={12}>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-                onChange={this.searchJobItem}
-              />
-            </div>
-          </Grid>
-        </Grid>
-
         <Card>
-          <CardActions style={{ justifyContent: "flex-end" }}>
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              disabled={!this.state.changed}
-              startIcon={<SaveIcon />}
-              onClick={() => this.props.handleSave(this.state.jobItems)}
-            >
-              Save
-            </Button>
-          </CardActions>
           <CardContent>
             <Table aria-label="customized table">
               <TableBody>
+                <TableRow>
+                  <TableCell colSpan="2">
+                    <Grid container spacing={2}>
+                      <Grid item lg={11} sm={11} xs={12}>
+                        <div className={classes.search}>
+                          <div className={classes.searchIcon}>
+                            <SearchIcon />
+                          </div>
+                          <InputBase
+                            placeholder="Search…"
+                            classes={{
+                              root: classes.inputRoot,
+                              input: classes.inputInput,
+                            }}
+                            inputProps={{ "aria-label": "search" }}
+                            onChange={this.searchJobItem}
+                          />
+                        </div>
+                      </Grid>
+                      <Grid
+                        ml={0}
+                        item
+                        lg={1}
+                        sm={1}
+                        xs={12}
+                        style={{ textAlign: "right" }}
+                      >
+                        <Button
+                          variant="outlined"
+                          size="large"
+                          onClick={() => {
+                            this.props.handleBack(2);
+                          }}
+                          startIcon={<ArrowBack />}
+                          style={{ backgroundColor: "#85858880" }}
+                        >
+                          Back
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </TableCell>
+                </TableRow>
                 <TableRow
                   hover="true"
-                  m={10}
+                  m={1}
                   style={{
                     backgroundColor: "#999",
                   }}
@@ -348,24 +339,38 @@ class JobItems extends React.Component {
                     )}
                     <h3>Previously Claimed: {this.props.totalProgress}%</h3>
                   </TableCell>
+                  <TableCell style={{ justifyContent: "flex-end" }}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      size="large"
+                      disabled={!this.state.changed}
+                      startIcon={<SaveIcon />}
+                      onClick={() => this.props.handleSave(this.state.jobItems)}
+                    >
+                      Save
+                    </Button>
+                  </TableCell>
                 </TableRow>
                 {this.state.jobItems && this.state.jobItems.length > 1 && (
                   <TableRow
                     hover="true"
-                    m={10}
+                    m={1}
                     style={{
                       backgroundColor: "#eee",
                     }}
                   >
                     <TableCell
-                      style={{ width: "100%", marginButtm: "40px!important" }}
+                      style={{ width: "100%", marginButtom: "40px!important" }}
+                      colSpan="2"
                     >
                       <Grid container spacing={2}>
                         <Grid item xs={12} sm={12} lg={2}>
                           All Items{" "}
-                          {" (" +
-                            Helper.timeConvert(Math.round(allItemsV6 / 60))}
-                          )
+                          {this.props.settings.ShowStandardTime &&
+                            " (" +
+                              Helper.timeConvert(Math.round(allItemsV6 / 60)) +
+                              ")"}
                         </Grid>
                         <Grid item xs={12} sm={12} lg={5}>
                           <AirbnbSlider
@@ -434,22 +439,20 @@ class JobItems extends React.Component {
                           </Button>
                         </Grid>
                       </Grid>
-                      <br />
-                      <hr />
-                      <br />
-                      <br />
                     </TableCell>
                   </TableRow>
                 )}
                 {this.state.jobItems &&
                   this.state.jobItems.map((e, inx) => (
                     <TableRow hover="true">
-                      <TableCell style={{ width: "100%" }}>
+                      <TableCell style={{ width: "100%" }} colSpan="2">
                         <Grid container spacing={2}>
                           <Grid item xs={12} sm={12} lg={2}>
                             {e.ItemNumber}-{e.Name}
-                            {" ("}
-                            {Helper.timeConvert(Math.round(e.StdTime / 60))})
+                            {this.props.settings.ShowStandardTime &&
+                              "(" +
+                                Helper.timeConvert(Math.round(e.StdTime / 60)) +
+                                ")"}
                           </Grid>
                           <Grid item xs={12} sm={12} lg={5}>
                             <AirbnbSlider

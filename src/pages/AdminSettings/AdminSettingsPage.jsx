@@ -272,6 +272,22 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
+                <Grid item lg={4}>
+                  <ESPCheckbox
+                    name="ShowStandardTime"
+                    label="Show Standard Time"
+                    checked={props.adminSettings.ShowStandardTime}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={5}>
+                  <ESPCheckbox
+                    name="ShowRework"
+                    label="Show Rework"
+                    checked={props.adminSettings.ShowRework}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
