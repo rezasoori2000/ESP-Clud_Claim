@@ -93,13 +93,12 @@ class App extends React.Component {
         }
       })
       .catch(function (response) {
-        if (response.response.status === 400)
+        if (response && response.response && response.response.status === 400)
           alert("Username and password are not match");
         else alert("Error in get security code" + response);
         return null;
       });
   };
-
   render() {
     const role = this.state.claims.a ? "a" : "u";
     const isPublic = this.state.claims.p;
@@ -185,5 +184,4 @@ class App extends React.Component {
     );
   }
 }
-
 export default App;

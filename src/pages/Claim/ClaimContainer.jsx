@@ -294,6 +294,7 @@ class CalimContainer extends React.Component {
       this.setState(
         {
           ...this.state,
+          jobLevel: workType.JobLevel,
           jobItems: data.jobItems,
           mainJobItems: data.jobItems,
           finishedItems: data.finishedItems,
@@ -621,6 +622,7 @@ class CalimContainer extends React.Component {
               handleSave={this.handleSaveClaim}
               settings={this.props.settings}
               canClaimWholeJob={this.state.canClaimWholeJob}
+              jobLevel={this.state.jobLevel}
             />
           );
         }
