@@ -27,6 +27,8 @@ const useStyles = makeStyles({
   btn: {
     marginRight: "20px",
     marginLeft: "20px",
+    backgroundColor: "white",
+    color: "#196dc4",
   },
   textarea: {
     display: "block",
@@ -36,6 +38,7 @@ const useStyles = makeStyles({
     minHight: "40px",
     lineHeight: "20px",
   },
+  root: { backgroundColor: "#ebedf1" },
 });
 
 export default function Summary(props) {
@@ -44,41 +47,40 @@ export default function Summary(props) {
 
   return (
     <Fragment>
-      <div style={{ textAlign: "right" }}>
-        <Button
-          variant="outlined"
-          size="large"
-          onClick={() => {
-            props.handleBack(props.isFullJob ? 2 : props.isAdminJob ? 1 : 3);
-          }}
-          startIcon={<ArrowBack />}
-          style={{ backgroundColor: "#85858880" }}
-        >
-          Back
-        </Button>
-      </div>
+      <Grid container spacing={3}>
+        <Grid item lg={1} sm={2} xs={4}>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={() => {
+              props.handleBack(props.isFullJob ? 2 : props.isAdminJob ? 1 : 3);
+            }}
+            startIcon={<ArrowBack />}
+          ></Button>
+        </Grid>
+        <Grid item lg={10} sm={10} xs={8}>
+          <span style={{ fontSize: "24px", fontWeight: "bold" }}>
+            <b>Claim</b>
+          </span>
+        </Grid>
+      </Grid>
+
       <Card className={classes.root}>
-        <CardActions style={{ justifyContent: "flex-end" }}>
-          <Button
-            variant="contained"
-            color="primary"
-            size="large"
-            className={classes.btn}
-            startIcon={<SaveIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdminJob)}
+        <CardActions>
+          <div
+            style={{
+              backgroundColor: "white",
+
+              fontSize: "20px",
+              width: "91%",
+              marginTop: "20px",
+              padding: "10px",
+            }}
           >
-            Submit
-          </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            size="large"
-            className={classes.btn}
-            startIcon={<MeetingRoomIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdminJob, true)}
-          >
-            Submit/Logout
-          </Button>
+            {" "}
+            <DirectionsWalkIcon />
+            <b>Job: </b> {props.jobName}
+          </div>
         </CardActions>
         <CardContent>
           <Grid container spacing={3}>
@@ -92,12 +94,12 @@ export default function Summary(props) {
                   </ListItemAvatar>
                   <ListItemText
                     primary={
-                      <Typography variant="h6" style={{ fontSize: "1.5rem" }}>
+                      <Typography variant="h6" style={{ fontSize: "1rem" }}>
                         Worker
                       </Typography>
                     }
                     secondary={
-                      <Typography style={{ fontSize: "1.5rem" }}>
+                      <Typography style={{ fontSize: "1rem" }}>
                         {props.claimingName}
                       </Typography>
                     }
@@ -114,45 +116,19 @@ export default function Summary(props) {
 
                     <ListItemText
                       primary={
-                        <Typography variant="h6" style={{ fontSize: "1.5rem" }}>
+                        <Typography variant="h6" style={{ fontSize: "1rem" }}>
                           Work Type
                         </Typography>
                       }
                       secondary={
-                        <Typography style={{ fontSize: "1.5rem" }}>
+                        <Typography style={{ fontSize: "1rem" }}>
                           {props.worktypeName}
                         </Typography>
                       }
                     />
                   </ListItem>
                 )}
-                <Divider variant="inset" component="li" />
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <DirectionsWalkIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <Typography variant="h6" style={{ fontSize: "1.5rem" }}>
-                        JOB
-                      </Typography>
-                    }
-                    secondary={
-                      <Typography style={{ fontSize: "1.5rem" }}>
-                        {props.jobName}
-                        {props.isAdminJob && (
-                          <div>
-                            <span>(</span>
-                            {Helper.timeConvert(props.totalClaiminMinutes)}
-                            <span>)</span>
-                          </div>
-                        )}
-                      </Typography>
-                    }
-                  />
-                </ListItem>
+
                 <Divider variant="inset" component="li" />
                 {props.isFullJob && (
                   <ListItem>
@@ -163,7 +139,7 @@ export default function Summary(props) {
                     </ListItemAvatar>
                     <ListItemText
                       primary={
-                        <Typography variant="h6" style={{ fontSize: "2rem" }}>
+                        <Typography variant="h6" style={{ fontSize: "1rem" }}>
                           Claiming Full Job
                           {
                             <div>
@@ -186,14 +162,14 @@ export default function Summary(props) {
                     </ListItemAvatar>
                     <ListItemText
                       primary={
-                        <Typography variant="h6" style={{ fontSize: "1.5rem" }}>
+                        <Typography variant="h6" style={{ fontSize: "1rem" }}>
                           Claiming
                         </Typography>
                       }
                       secondary={props.claimingItems
                         .filter((x) => x.Progress100 !== x.Main_Progress100)
                         .map((e) => (
-                          <Typography style={{ fontSize: "1.5rem" }}>
+                          <Typography style={{ fontSize: "1rem" }}>
                             {e.Name}: ({e.Main_Progress100}% to:
                             {e.Progress100}% {")  ("}
                             {Helper.timeConvert(
@@ -213,11 +189,11 @@ export default function Summary(props) {
             <Grid item lg={5} sm={12} xs={12}>
               <TextareaAutosize
                 aria-label="minimum height"
-                style={{ fontSize: "30px" }}
+                style={{ fontSize: "20px" }}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
                 className={classes.textarea}
-                rowsMin={30}
+                rowsMin={20}
                 placeholder="Comment"
               />
             </Grid>
@@ -226,23 +202,22 @@ export default function Summary(props) {
         <CardActions style={{ justifyContent: "flex-end" }}>
           <Button
             variant="contained"
-            color="primary"
             size="large"
             className={classes.btn}
             startIcon={<SaveIcon />}
             onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
-            Submit
+            Claim
           </Button>
           <Button
             variant="contained"
-            color="secondary"
             size="large"
             className={classes.btn}
+            style={{ color: "white", backgroundColor: "#196dc4" }}
             startIcon={<MeetingRoomIcon />}
             onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
-            Submit/Logout
+            Claim & Logout
           </Button>
         </CardActions>
       </Card>
