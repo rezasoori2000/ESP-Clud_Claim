@@ -10,6 +10,8 @@ import Typography from "@material-ui/core/Typography";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
+    backgroundColor: "#3a3d57",
+    color: "#fff!important",
   },
   button: {
     marginTop: theme.spacing(1),
@@ -72,19 +74,20 @@ const VerticalStepper = (props) => {
   return (
     props.step > 0 && (
       <div className={classes.root}>
-        <Stepper activeStep={props.step - 1} orientation="vertical">
+        <Stepper
+          activeStep={props.step - 1}
+          orientation="vertical"
+          className={classes.root}
+        >
           {steps.map(
             (label, index) =>
               !(props.isAdmin && index === 3) && (
                 <Step key={label}>
                   <StepLabel>
-                    <Typography>
+                    <Typography style={{ color: "white" }}>
                       {label}
                       <br />
-                      <span style={{ color: "#b86704" }}>
-                        {" "}
-                        {getLabels(props, label, index)}
-                      </span>
+                      <span> {getLabels(props, label, index)}</span>
                     </Typography>
                   </StepLabel>
                   <StepContent>

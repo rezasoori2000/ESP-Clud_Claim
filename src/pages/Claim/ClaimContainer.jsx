@@ -44,7 +44,7 @@ class CalimContainer extends React.Component {
       isFullJob: false,
       logoutClicked: false,
       totalProgress: 0,
-      finishedItems: "",
+      finishedItems: [],
     };
   }
 
@@ -674,7 +674,9 @@ class CalimContainer extends React.Component {
           onCommentSave={this.state.dialogSave}
           alert={this.state.alert}
         />
-        {renderConditionaly()}
+        <div style={{ backgroundColor: "#ebedf1", paddingRight: "10px" }}>
+          {renderConditionaly()}
+        </div>
       </Fragment>
     );
   }

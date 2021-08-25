@@ -55,15 +55,26 @@ const gridSearchStyles = makeStyles((theme) => ({
     "&:hover": {
       //textShadow: '3px 3px 0px #ffd324',
       cursor: "pointer",
-      opacity: 2,
-      transformOrigin: "-100px -100px",
-      transform: "scale(1.05) translate(-17px, -10px)",
-      zIndex: "1000",
-      backgroundColor: "#ddd",
-      backgroundImage: 'url("/work1.png")',
-      backgroundRepeat: "no-repeat",
 
-      backgroundPosition: "top",
+      //    transformOrigin: "-100px -100px",
+      //   transform: "scale(1.05) translate(-17px, -10px)",
+      zIndex: "1000",
+      // backgroundColor: "#ddd",
+      // backgroundImage: 'url("/work1.png")',
+      //  backgroundRepeat: "no-repeat",
+      //  backgroundSize: "90%",
+
+      //    backgroundPosition: "top",
+    },
+  },
+  boxBolding: {
+    "&:hover": {
+      boxSizing: "border-box",
+      boxShadow: "3px 3px #eee",
+      borderBottom: "2px  solid #5584c0",
+      borderRight: "2px  solid #5584c0",
+      marginLeft: "-2px",
+      marginTop: "-2px",
     },
   },
 }));

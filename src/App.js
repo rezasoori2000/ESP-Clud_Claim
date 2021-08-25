@@ -118,9 +118,10 @@ class App extends React.Component {
             <main
               style={{
                 flexGrow: 1,
-                paddingLeft: "10px",
-                paddingRight: "10px",
+                paddingLeft: "0px",
+                paddingRight: "0px",
                 paddingTop: "80px",
+                overflow: "hidden",
               }}
             >
               <ClaimContainer
@@ -144,12 +145,16 @@ class App extends React.Component {
             <main
               style={{
                 flexGrow: 1,
-                paddingLeft: "10px",
-                paddingRight: "10px",
+                paddingLeft: "0px",
+                paddingRight: "0px",
                 paddingTop: "80px",
               }}
             >
-              <div style={{ drawerPaper: { width: 240 } }} />
+              <div
+                style={{
+                  drawerPaper: { width: 240 },
+                }}
+              />
               <Route path="/" component={Welcome} />
               <Route
                 path="/claim"

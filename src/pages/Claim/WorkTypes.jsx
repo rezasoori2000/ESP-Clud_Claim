@@ -11,6 +11,11 @@ import ArrowBack from "@material-ui/icons/ArrowBack";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import Slider from "@material-ui/core/Slider";
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Hidden from "@material-ui/core/Hidden";
+
 export default function Worktypes(props) {
   const classes = gridSearchStyles();
   useEffect(() => {
@@ -18,54 +23,63 @@ export default function Worktypes(props) {
   });
   return (
     <Fragment>
-      <Grid container>
-        <Grid ml={0} item lg={9} sm={6} xs={12} style={{ textAlign: "left" }}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              onChange={props.searchWorkTypes}
-            />
-          </div>
-        </Grid>
-        <Grid ml={0} item lg={2} sm={3} xs={4} style={{ textAlign: "right" }}>
-          {props.settings.CanFinishWholeJob && (
-            <Button
-              variant="contained"
-              color="primary"
-              size="large"
-              onClick={props.handleFullJob}
-              startIcon={<PlaylistAddCheckIcon />}
-            >
-              ClaimFullJob
-            </Button>
-          )}
-        </Grid>
-
-        <Grid ml={0} item lg={1} sm={3} xs={4} style={{ textAlign: "right" }}>
+      <Grid container spacing={2}>
+        <Grid ml={0} item lg={1} sm={4} xs={4}>
           <Button
             variant="outlined"
             size="large"
+            style={{ textAlign: "right" }}
             onClick={() => {
               props.handleBack(1);
             }}
             startIcon={<ArrowBack />}
-            style={{ backgroundColor: "#85858880" }}
-          >
-            Back
-          </Button>
+          ></Button>
         </Grid>
-        <Grid item lg={12} sm={8} xs={12}></Grid>
+        <Grid item lg={7} sm={4} xs={4}>
+          <span style={{ fontSize: "24px", marginTop: "30px" }}>
+            <b>Work&nbsp;Type</b>
+          </span>
+        </Grid>
+        <Hidden only={["xl", "lg", "md"]}>
+          <Grid ml={0} item lg={1} sm={4} xs={4} style={{ textAlign: "right" }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={props.handleFullJob}
+              startIcon={<PlaylistAddCheckIcon />}
+            >
+              FullJob
+            </Button>
+          </Grid>
+        </Hidden>
+        <Grid item lg={3} sm={12} xs={12}>
+          <InputLabel htmlFor="input-with-icon-adornment">Search</InputLabel>
+          <Input
+            id="input-with-icon-adornment"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
+            onChange={props.searchWorkTypes}
+          />
+        </Grid>
+        <Hidden only={["sm", "xs"]}>
+          <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={props.handleFullJob}
+              startIcon={<PlaylistAddCheckIcon />}
+            >
+              FullJob
+            </Button>
+          </Grid>
+        </Hidden>
       </Grid>
+
       <hr />
-      <Grid container>
+      <Grid container spacing={1}>
         {props.workTypes &&
           props.workTypes
             .filter((x) => x.Progress < 100)
@@ -81,36 +95,35 @@ export default function Worktypes(props) {
                 key={e.OId}
                 className={classes.bolding}
               >
-                <Box p={2} key={e.OId}>
-                  <Card>
-                    <CardContent
-                      key={e.OId}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        fontSize: "1.3rem",
-                        textAlign: "center",
-                        backgroundColor:
-                          e.CategoryName == "production"
-                            ? "#548c63"
-                            : e.CategoryName == "preproduction"
-                            ? "#b3b31b"
-                            : e.CategoryName == "postproduction"
-                            ? "#adadad"
-                            : "white",
-                      }}
-                      onClick={() => {
-                        props.handleWorkTypeClick(e.OId);
-                      }}
-                      // onDelete={()=>{}}
+                <Box
+                  p={4}
+                  borderRadius="5%"
+                  key={e.OId}
+                  className={classes.boxBolding}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    fontSize: "1.3rem",
+                    textAlign: "center",
+                    backgroundColor:
+                      e.CategoryName == "production"
+                        ? "#9abf47"
+                        : e.CategoryName == "preproduction"
+                        ? "#b3b31b"
+                        : e.CategoryName == "postproduction"
+                        ? "#adadad"
+                        : "white",
+                  }}
+                  onClick={() => {
+                    props.handleWorkTypeClick(e.OId);
+                  }}
+                  // onDelete={()=>{}}
 
-                      clickable
-                    >
-                      {e.Name}
-                      <hr />
-                      <CircularProgressWithLabel value={e.Progress} />
-                    </CardContent>
-                  </Card>
+                  clickable
+                >
+                  {e.Name}
+                  <hr />
+                  <CircularProgressWithLabel value={e.Progress} />
                 </Box>
               </Grid>
             ))}

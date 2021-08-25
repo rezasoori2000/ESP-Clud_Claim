@@ -25,6 +25,10 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    listItemText: {
+      fontSize: "1.3em",
+    },
+
     root: {
       display: "flex",
     },
@@ -38,8 +42,8 @@ const useStyles = makeStyles((theme: Theme) =>
       [theme.breakpoints.up("sm")]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
-        background: "black",
-        color: "white",
+        background: "#ebedf1",
+        color: "Black",
       },
     },
     menuButton: {
@@ -67,13 +71,6 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-// interface Props {
-//   /**
-//    * Injected by the documentation to work in an iframe.
-//    * You won't need it on your project.
-//    */
-//   window?: () => Window;
-// }
 const DrawerContainer = (props) => {
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -89,10 +86,10 @@ const DrawerContainer = (props) => {
   // };
 
   const drawer = (
-    <div>
+    <div style={{ backgroundColor: "#242845", height: "100%" }}>
       <div className="theme.mixins.toolbar, drawerPaper: 240" />
       <Divider />
-      <List className="mt-5" style={{ backgroundColor: "#2d292a" }}>
+      <List className="mt-5">
         <div style={{ textAlign: "center", background: "#000" }}>
           <img src="/favicon.png" />
         </div>
@@ -109,10 +106,19 @@ const DrawerContainer = (props) => {
                 <ListItemIcon style={{ color: "white" }}>
                   <InboxIcon />{" "}
                 </ListItemIcon>
-                <ListItemText primary="Claim" />
+                <ListItemText
+                  primary="Claim"
+                  classes={{ primary: classes.listItemText }}
+                >
+                  <h4>Claim</h4>
+                </ListItemText>
               </ListItem>
             </Link>
-            <hr />
+            <VerticalStepper
+              step={props.step}
+              texts={props.texts}
+              isAdmin={props.isAdmin}
+            />
             <Link
               to="/settings"
               style={{ textDecoration: "none", color: "white" }}
@@ -121,10 +127,13 @@ const DrawerContainer = (props) => {
                 <ListItemIcon style={{ color: "white" }}>
                   <SettingsIcon />{" "}
                 </ListItemIcon>
-                <ListItemText primary="Admin Settings" />
+                <ListItemText
+                  primary="Admin Settings"
+                  classes={{ primary: classes.listItemText }}
+                />
               </ListItem>
             </Link>
-            <hr />
+
             <Link
               to="/users"
               style={{ textDecoration: "none", color: "white" }}
@@ -133,10 +142,13 @@ const DrawerContainer = (props) => {
                 <ListItemIcon style={{ color: "white" }}>
                   <SettingsIcon />{" "}
                 </ListItemIcon>
-                <ListItemText primary="User Management" />
+                <ListItemText
+                  primary="User&nbsp;Management"
+                  classes={{ primary: classes.listItemText }}
+                />
               </ListItem>
             </Link>
-            <hr />
+
             {/*
             <Link
               to="/performanceState"
@@ -165,11 +177,6 @@ const DrawerContainer = (props) => {
         )}
       </List>
       <Divider />
-      <VerticalStepper
-        step={props.step}
-        texts={props.texts}
-        isAdmin={props.isAdmin}
-      />
     </div>
   );
 
@@ -180,7 +187,7 @@ const DrawerContainer = (props) => {
       {/* {setStep(props.step)} */}
       <CssBaseline />
       <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
+        <Toolbar style={{ backgroundColor: "#fff", color: "black" }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"

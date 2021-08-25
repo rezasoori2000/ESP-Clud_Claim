@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import InputBase from "@material-ui/core/InputBase";
+import Hidden from "@material-ui/core/Hidden";
 import SearchIcon from "@material-ui/icons/Search";
 import gridSearchStyles from "../../components/controls/Styles";
 import { Button, IconButton } from "@material-ui/core";
@@ -15,6 +15,9 @@ import Typography from "@material-ui/core/Typography";
 import CommentIcon from "@material-ui/icons/Comment";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 export default function Jobs(props) {
   const classes = gridSearchStyles();
@@ -22,48 +25,60 @@ export default function Jobs(props) {
   return (
     <Fragment>
       <Grid container spacing={2}>
-        <Grid item lg={10} sm={10} xs={12}>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-              onChange={props.searchJobs}
-            />
-          </div>
-        </Grid>
-        <Grid ml={0} item lg={1} sm={1} xs={8} style={{ textAlign: "right" }}>
+        <Grid ml={0} item lg={1} sm={4} xs={3}>
           <Button
             variant="outlined"
             size="large"
-            style={{ backgroundColor: "#85858880" }}
+            style={{ textAlign: "right" }}
             onClick={() => {
               props.handleBack(0);
             }}
             startIcon={<ArrowBack />}
-          >
-            Back
-          </Button>
+          ></Button>
         </Grid>
-        <Grid ml={0} item lg={1} sm={1} xs={4} style={{ textAlign: "right" }}>
-          <Button
-            variant="outlined"
-            size="large"
-            onClick={() => props.handleLogOut(props.claimingOId)}
-            startIcon={<MeetingRoomIcon />}
-            style={{ backgroundColor: "#85858880" }}
-          >
-            logout
-          </Button>
-          {/* <Button variant="contained" color="primary" style={{ marginLeft: '10px' }} startIcon={<MeetingRoomIcon />} onClick={props.handleLogOut}>Logout</Button> */}
+        <Grid item lg={7} sm={4} xs={5}>
+          <span style={{ fontSize: "24px", marginTop: "30px" }}>
+            <b>Job&nbsp;Selection</b>
+          </span>
         </Grid>
+        <Hidden only={["xl", "lg", "md"]}>
+          <Grid ml={0} item lg={1} sm={4} xs={4} style={{ textAlign: "right" }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => props.handleLogOut(props.claimingOId)}
+              startIcon={<MeetingRoomIcon />}
+            >
+              Logout
+            </Button>
+          </Grid>
+        </Hidden>
+        <Grid item lg={3} sm={12} xs={12}>
+          <InputLabel htmlFor="input-with-icon-adornment">Search</InputLabel>
+          <Input
+            id="input-with-icon-adornment"
+            startAdornment={
+              <InputAdornment position="start">
+                <SearchIcon />
+              </InputAdornment>
+            }
+            onChange={props.searchWorkTypes}
+          />
+        </Grid>
+        <Hidden only={["sm", "xs"]}>
+          <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
+            <Button
+              variant="outlined"
+              size="large"
+              onClick={() => props.handleLogOut(props.claimingOId)}
+              startIcon={<MeetingRoomIcon />}
+            >
+              Logout
+            </Button>
+          </Grid>
+        </Hidden>
       </Grid>
+
       <Accordion defaultExpanded="true">
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -90,17 +105,19 @@ export default function Jobs(props) {
                   className={classes.bolding}
                 >
                   <Box
+                    borderRadius="5%"
                     p={4}
                     key={e.OId}
                     boxShadow={4}
                     color="white"
+                    className={classes.boxBolding}
                     bgcolor={
                       e.JobStageName == "production"
-                        ? "#548c63"
+                        ? "#9abf47"
                         : e.JobStageName == "preproduction"
                         ? "#b3b31b"
                         : e.JobStageName == "postproduction"
-                        ? "#adadad"
+                        ? "#b4bebf"
                         : "white"
                     }
                     spacing={3}
@@ -166,6 +183,7 @@ export default function Jobs(props) {
                 className={classes.bolding}
               >
                 <Box
+                  borderRadius="5%"
                   p={4}
                   key={e.OId}
                   boxShadow={4}
@@ -176,7 +194,7 @@ export default function Jobs(props) {
                     height: "100%",
                     fontSize: "1.3rem",
                     textAlign: "center",
-                    backgroundColor: "#c2c2c2",
+                    backgroundColor: "#efefef",
                   }}
                   onClick={() => {
                     props.handleJobClick(e.OId, true);

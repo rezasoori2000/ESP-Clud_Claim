@@ -18,10 +18,20 @@ import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { withStyles, fade } from "@material-ui/core/styles";
 import Helper from "../../components/logics/Helper";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import IconButton from "@material-ui/core/IconButton";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Typography from "@material-ui/core/Typography";
+import ReactHtmlParser from "react-html-parser";
 
 const AirbnbSlider = withStyles({
   root: {
-    color: "#990303",
+    color: "#196dc4",
     height: 3,
     padding: "13px 0",
   },
@@ -34,7 +44,7 @@ const AirbnbSlider = withStyles({
     marginLeft: -13,
     boxShadow: "#ebebeb 0 2px 2px",
     "&:focus, &:hover, &$active": {
-      boxShadow: "#ccc 0 2px 3px 1px",
+      boxShadow: "#eee 0 2px 3px 1px",
     },
     "& .bar": {
       // display: inline-block !important;
@@ -53,7 +63,7 @@ const AirbnbSlider = withStyles({
     left: "calc(-50% + 8px)",
   },
   rail: {
-    color: "#d8d8d8",
+    color: "#eee",
     opacity: 1,
     height: 3,
   },
@@ -275,84 +285,74 @@ class JobItems extends React.Component {
     }
     return (
       <Fragment>
-        <Card>
+        <Card style={{ backgroundColor: "#ebedf1" }}>
           <CardContent>
             <Table aria-label="customized table">
               <TableBody>
                 <TableRow>
                   <TableCell colSpan="2">
                     <Grid container spacing={2}>
-                      <Grid item lg={11} sm={11} xs={12}>
-                        <div className={classes.search}>
-                          <div className={classes.searchIcon}>
-                            <SearchIcon />
-                          </div>
-                          <InputBase
-                            placeholder="Search…"
-                            classes={{
-                              root: classes.inputRoot,
-                              input: classes.inputInput,
-                            }}
-                            inputProps={{ "aria-label": "search" }}
-                            onChange={this.searchJobItem}
-                          />
-                        </div>
-                      </Grid>
-                      <Grid
-                        ml={0}
-                        item
-                        lg={1}
-                        sm={1}
-                        xs={12}
-                        style={{ textAlign: "right" }}
-                      >
+                      <Grid ml={0} item lg={1} sm={4} xs={3}>
                         <Button
                           variant="outlined"
                           size="large"
+                          style={{ textAlign: "right" }}
                           onClick={() => {
                             this.props.handleBack(2);
                           }}
                           startIcon={<ArrowBack />}
-                          style={{ backgroundColor: "#85858880" }}
-                        >
-                          Back
-                        </Button>
+                        ></Button>
+                      </Grid>
+                      <Grid item lg={7} sm={4} xs={5}>
+                        <span style={{ fontSize: "24px", marginTop: "30px" }}>
+                          <b>Job&nbsp;Items</b>
+                        </span>
+                      </Grid>
+
+                      <Grid item lg={3} sm={12} xs={12}>
+                        <InputLabel htmlFor="input-with-icon-adornment">
+                          Search
+                        </InputLabel>
+                        <Input
+                          id="input-with-icon-adornment"
+                          startAdornment={
+                            <InputAdornment position="start">
+                              <SearchIcon />
+                            </InputAdornment>
+                          }
+                          onChange={this.props.searchJobItem}
+                        />
                       </Grid>
                     </Grid>
                   </TableCell>
                 </TableRow>
-                <TableRow
-                  hover="true"
-                  m={1}
-                  style={{
-                    backgroundColor: "#999",
-                  }}
-                >
-                  <TableCell
-                    style={{ width: "100%", marginButtm: "40px!important" }}
+
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
                   >
-                    {this.props.finishedItems !== "" && (
-                      <div>
-                        <b>Completed Items: </b>
-                        {this.props.finishedItems}
-                        <hr />
-                      </div>
-                    )}
-                    {/* <h3>Previously Claimed: {this.props.totalProgress}%</h3> */}
-                  </TableCell>
-                  <TableCell style={{ justifyContent: "flex-end" }}>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      disabled={!this.state.changed}
-                      startIcon={<SaveIcon />}
-                      onClick={() => this.props.handleSave(this.state.jobItems)}
-                    >
-                      Save
-                    </Button>
-                  </TableCell>
-                </TableRow>
+                    <Typography>
+                      <b>Completed Items</b>
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <TableRow hover="true" m={1}>
+                      <TableCell
+                        style={{ width: "100%", marginButtm: "40px!important" }}
+                      >
+                        <ul>
+                          {this.props.finishedItems &&
+                            this.props.finishedItems.map((e, inx) => (
+                              <li>{e}</li>
+                            ))}
+                        </ul>
+                      </TableCell>
+                    </TableRow>
+                  </AccordionDetails>
+                </Accordion>
+
                 {this.state.jobItems && this.state.jobItems.length > 1 && (
                   <TableRow
                     hover="true"
@@ -407,7 +407,13 @@ class JobItems extends React.Component {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={4} sm={4} lg={1}>
+                          <Grid
+                            item
+                            xs={4}
+                            sm={4}
+                            lg={1}
+                            style={{ textAlign: "right" }}
+                          >
                             <Button
                               variant="contained"
                               color="secondary"
@@ -436,8 +442,9 @@ class JobItems extends React.Component {
                           <Grid item xs={4} sm={4} lg={1}>
                             <Button
                               variant="contained"
-                              color="primary"
-                              style={{ backgroundColor: "#009688" }}
+                              color="#196dc4"
+                              border="#196dc4"
+                              backgroundColor="#fff"
                               onClick={() => this.handleGroupedChanged(100)}
                             >
                               100%
@@ -454,14 +461,26 @@ class JobItems extends React.Component {
                     <TableRow hover="true">
                       <TableCell style={{ width: "100%" }} colSpan="2">
                         <Grid container spacing={2}>
-                          <Grid item xs={12} sm={12} lg={2}>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            lg={2}
+                            style={{ marginTop: "20px" }}
+                          >
                             {e.ItemNumber}-{e.Name}
                             {this.props.settings.ShowStandardTime &&
                               "(" +
                                 Helper.timeConvert(Math.round(e.StdTime / 60)) +
                                 ")"}
                           </Grid>
-                          <Grid item xs={12} sm={12} lg={5}>
+                          <Grid
+                            item
+                            xs={12}
+                            sm={12}
+                            lg={5}
+                            style={{ marginTop: "20px" }}
+                          >
                             <AirbnbSlider
                               ThumbComponent={AirbnbThumbComponent}
                               aria-label="ios slider"
@@ -491,27 +510,38 @@ class JobItems extends React.Component {
                               fullWidth
                             />
                           </Grid>
-                          <Grid item xs={4} sm={4} lg={1}>
-                            <Button
-                              variant="contained"
-                              color="secondary"
+                          <Grid
+                            item
+                            xs={4}
+                            sm={4}
+                            lg={1}
+                            style={{ textAlign: "right" }}
+                          >
+                            <IconButton
+                              aria-label="remove"
                               onClick={() => this.handleBtn(-5, inx)}
-                              startIcon={<RemoveIcon />}
-                            ></Button>
+                            >
+                              <RemoveIcon />
+                            </IconButton>
                           </Grid>
                           <Grid item xs={4} sm={4} lg={1}>
-                            <Button
-                              variant="contained"
-                              color="primary"
+                            <IconButton
+                              aria-label="add"
                               onClick={() => this.handleBtn(5, inx)}
-                              startIcon={<AddIcon />}
-                            ></Button>
+                            >
+                              <AddIcon />
+                            </IconButton>
                           </Grid>
                           <Grid item xs={4} sm={4} lg={1}>
                             <Button
+                              borderRadius="5%"
                               variant="contained"
-                              color="primary"
-                              style={{ backgroundColor: "#009688" }}
+                              style={{
+                                backgroundColor: "white",
+                                color: "#196dc4",
+                                borderRadius: "5%",
+                                border: "1px solid #196dc4",
+                              }}
                               onClick={() => this.handleComplete(inx)}
                             >
                               100%
@@ -527,25 +557,14 @@ class JobItems extends React.Component {
           <CardActions style={{ justifyContent: "flex-end" }}>
             <Button
               variant="contained"
-              color="primary"
               size="large"
               disabled={!this.state.changed}
+              backgroundColor="#fff"
               startIcon={<SaveIcon />}
               onClick={() => this.props.handleSave(this.state.jobItems)}
             >
               Save
             </Button>
-            {/* {this.props.canClaimWholeJob && (
-              <Button
-                variant="contained"
-                style={{ backgroundColor: "#009688" }}
-                size="large"
-                onClick={() => this.props.handleSave(null, true)}
-                startIcon={<DoneAllIcon />}
-              >
-                Full&nbsp;job
-              </Button>
-            )} */}
           </CardActions>
         </Card>
       </Fragment>
