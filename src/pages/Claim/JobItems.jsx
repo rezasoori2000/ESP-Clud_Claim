@@ -27,7 +27,6 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-import ReactHtmlParser from "react-html-parser";
 
 const AirbnbSlider = withStyles({
   root: {
