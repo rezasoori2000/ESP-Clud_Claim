@@ -124,7 +124,7 @@ export default function Jobs(props) {
                     style={{
                       width: "100%",
                       height: "100%",
-                      fontSize: "1.3rem",
+                      fontSize: "0.9rem",
                       textAlign: "center",
                     }}
                     onClick={() => {
@@ -192,7 +192,7 @@ export default function Jobs(props) {
                   style={{
                     width: "100%",
                     height: "100%",
-                    fontSize: "1.3rem",
+                    fontSize: "0.9rem",
                     textAlign: "center",
                     backgroundColor: "#efefef",
                   }}
