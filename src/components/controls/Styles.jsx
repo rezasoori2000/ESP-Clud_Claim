@@ -52,6 +52,7 @@ const gridSearchStyles = makeStyles((theme) => ({
   },
 
   bolding: {
+    fontSize: "0.9rem",
     "&:hover": {
       //textShadow: '3px 3px 0px #ffd324',
       cursor: "pointer",

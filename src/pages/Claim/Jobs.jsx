@@ -28,7 +28,7 @@ export default function Jobs(props) {
         <Grid ml={0} item lg={1} sm={4} xs={3}>
           <Button
             variant="outlined"
-            size="large"
+            size="medium"
             style={{ textAlign: "right" }}
             onClick={() => {
               props.handleBack(0);
@@ -37,7 +37,7 @@ export default function Jobs(props) {
           ></Button>
         </Grid>
         <Grid item lg={7} sm={4} xs={5}>
-          <span style={{ fontSize: "24px", marginTop: "30px" }}>
+          <span style={{ fontSize: "18px", marginTop: "30px" }}>
             <b>Job&nbsp;Selection</b>
           </span>
         </Grid>
@@ -45,7 +45,7 @@ export default function Jobs(props) {
           <Grid ml={0} item lg={1} sm={4} xs={4} style={{ textAlign: "right" }}>
             <Button
               variant="outlined"
-              size="large"
+              size="medium"
               onClick={() => props.handleLogOut(props.claimingOId)}
               startIcon={<MeetingRoomIcon />}
             >
@@ -69,7 +69,7 @@ export default function Jobs(props) {
           <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
             <Button
               variant="outlined"
-              size="large"
+              size="medium"
               onClick={() => props.handleLogOut(props.claimingOId)}
               startIcon={<MeetingRoomIcon />}
             >
