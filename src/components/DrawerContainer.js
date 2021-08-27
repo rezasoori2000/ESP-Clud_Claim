@@ -14,12 +14,13 @@ import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import BusinessIcon from "@material-ui/icons/Business";
-import BarChartIcon from "@material-ui/icons/BarChart";
+import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import VerticalStepper from "./controls/VerticalStepper";
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 
 const drawerWidth = 240;
 
@@ -148,7 +149,20 @@ const DrawerContainer = (props) => {
                 />
               </ListItem>
             </Link>
-
+            <Divider />
+            <Button
+              variant="outlined"
+              size="large"
+              color="white"
+              style={{ color: "#fff", marginTop: "30px" }}
+              onClick={() => {
+                localStorage.removeItem("_claim");
+                window.location.reload(false);
+              }}
+              startIcon={<MeetingRoomIcon />}
+            >
+              Logout
+            </Button>
             {/*
             <Link
               to="/performanceState"
