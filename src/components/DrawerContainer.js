@@ -167,6 +167,13 @@ const DrawerContainer = (props) => {
             </Button>
           </div>
         )}
+        {!props.isSystemAdmin && (
+          <VerticalStepper
+            step={props.step}
+            texts={props.texts}
+            isAdmin={props.isAdmin}
+          />
+        )}
       </List>
       <Divider />
     </div>
