@@ -27,7 +27,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     listItemText: {
-      fontSize: "1.3em",
+      fontSize: "1.1em",
     },
 
     root: {
@@ -87,7 +87,9 @@ const DrawerContainer = (props) => {
   // };
 
   const drawer = (
-    <div style={{ backgroundColor: "#242845", height: "100%" }}>
+    <div
+      style={{ backgroundColor: "#242845", height: "100%", fontSize: "0.9rem" }}
+    >
       <div className="theme.mixins.toolbar, drawerPaper: 240" />
       <Divider />
       <List className="mt-5">
@@ -163,30 +165,6 @@ const DrawerContainer = (props) => {
             >
               Logout
             </Button>
-            {/*
-            <Link
-              to="/performanceState"
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              <ListItem button key="3">
-                <ListItemIcon style={{ color: "white" }}>
-                  <BarChartIcon />{" "}
-                </ListItemIcon>
-                <ListItemText primary="Statistics" />
-              </ListItem>
-            </Link>
-            <hr />
-            <Link
-              to="/board"
-              style={{ textDecoration: "none", color: "white" }}
-            >
-              <ListItem button key="3">
-                <ListItemIcon style={{ color: "white" }}>
-                  <BusinessIcon />{" "}
-                </ListItemIcon>
-                <ListItemText primary="Production Board" />
-              </ListItem>
-            </Link> */}
           </div>
         )}
       </List>

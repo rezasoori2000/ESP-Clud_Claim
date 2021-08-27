@@ -46,7 +46,7 @@ export default function Login(props) {
       </div>
       <Grid
         container
-        spacing={1}
+        spacing={0}
         style={{ marginTop: 10, backgroundColor: "#ebedf1" }}
       >
         {props.items &&
@@ -73,7 +73,7 @@ export default function Login(props) {
                 style={{
                   width: "100%",
                   height: "100%",
-                  fontSize: "1rem",
+                  fontSize: "0.8rem",
                   textAlign: "center",
                 }}
                 onClick={() => {
