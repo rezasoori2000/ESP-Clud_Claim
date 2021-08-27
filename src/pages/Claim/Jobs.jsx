@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
@@ -18,9 +18,12 @@ import CircularProgressWithLabel from "../../components/controls/CircularProgres
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import FullScreenDialog from "../../components/controls/FullScreenDialog";
 
 export default function Jobs(props) {
   const classes = gridSearchStyles();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [note, setNote] = useState("");
 
   return (
     <Fragment>
@@ -78,7 +81,6 @@ export default function Jobs(props) {
           </Grid>
         </Hidden>
       </Grid>
-
       <Accordion defaultExpanded="true">
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -143,7 +145,9 @@ export default function Jobs(props) {
                           >
                             <CommentIcon
                               onClick={(w) => {
-                                alert(e.Note);
+                                // alert(e.Note);
+                                setNote(e.Note);
+                                setOpenDialog(true);
                                 w.stopPropagation();
                               }}
                             />
@@ -206,6 +210,13 @@ export default function Jobs(props) {
             ))}
         </Grid>
       </Accordion>
+      <FullScreenDialog
+        header="Job Notes"
+        text={note}
+        open={openDialog}
+        handleClose={() => setOpenDialog(false)}
+      />
+      ;
     </Fragment>
   );
 }
