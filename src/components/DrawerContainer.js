@@ -168,11 +168,26 @@ const DrawerContainer = (props) => {
           </div>
         )}
         {!props.isSystemAdmin && (
-          <VerticalStepper
-            step={props.step}
-            texts={props.texts}
-            isAdmin={props.isAdmin}
-          />
+          <div>
+            <VerticalStepper
+              step={props.step}
+              texts={props.texts}
+              isAdmin={props.isAdmin}
+            />
+            <Button
+              variant="outlined"
+              size="large"
+              color="white"
+              style={{ color: "#fff", marginTop: "30px" }}
+              onClick={() => {
+                localStorage.removeItem("_claim");
+                window.location.reload(false);
+              }}
+              startIcon={<MeetingRoomIcon />}
+            >
+              Logout
+            </Button>
+          </div>
         )}
       </List>
       <Divider />
