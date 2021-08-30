@@ -23,112 +23,124 @@ export default function Worktypes(props) {
   });
   return (
     <Fragment>
-      <Grid container spacing={2}>
-        <Grid ml={0} item lg={1} sm={4} xs={4}>
-          <Button
-            variant="outlined"
-            size="small"
-            style={{ textAlign: "right" }}
-            onClick={() => {
-              props.handleBack(1);
-            }}
-            startIcon={<ArrowBack />}
-          ></Button>
-        </Grid>
-        <Grid item lg={7} sm={4} xs={4}>
-          <span style={{ fontSize: "22px", marginTop: "30px" }}>
-            <b>Work&nbsp;Type</b>
-          </span>
-        </Grid>
-        <Hidden only={["xl", "lg", "md"]}>
-          <Grid ml={0} item lg={1} sm={4} xs={4} style={{ textAlign: "right" }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={props.handleFullJob}
-              startIcon={<PlaylistAddCheckIcon />}
-            >
-              FullJob
-            </Button>
-          </Grid>
-        </Hidden>
-        <Grid item lg={3} sm={12} xs={12}>
-          <InputLabel htmlFor="input-with-icon-adornment">Search</InputLabel>
-          <Input
-            id="input-with-icon-adornment"
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-            onChange={props.searchWorkTypes}
-          />
-        </Grid>
-        <Hidden only={["sm", "xs"]}>
-          <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={props.handleFullJob}
-              startIcon={<PlaylistAddCheckIcon />}
-            >
-              FullJob
-            </Button>
-          </Grid>
-        </Hidden>
-      </Grid>
-
-      <hr />
-      <Grid container spacing={1}>
-        {props.workTypes &&
-          props.workTypes
-            .filter((x) => x.Progress < 100)
-            .sort(function (a, b) {
-              return a.CategoryOrder - b.CategoryOrder;
-            })
-            .map((e) => (
+      <Card style={{ backgroundColor: "#ebedf1" }}>
+        <CardContent>
+          <Grid container spacing={2}>
+            <Grid ml={0} item lg={1} sm={4} xs={4}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textAlign: "right" }}
+                onClick={() => {
+                  props.handleBack(1);
+                }}
+                startIcon={<ArrowBack />}
+              ></Button>
+            </Grid>
+            <Grid item lg={7} sm={4} xs={4}>
+              <span style={{ fontSize: "22px", marginTop: "30px" }}>
+                <b>Work&nbsp;Type</b>
+              </span>
+            </Grid>
+            <Hidden only={["xl", "lg", "md"]}>
               <Grid
+                ml={0}
                 item
-                lg={2}
-                sm={6}
-                xs={12}
-                key={e.OId}
-                className={classes.bolding}
+                lg={1}
+                sm={4}
+                xs={4}
+                style={{ textAlign: "right" }}
               >
-                <Box
-                  p={4}
-                  borderRadius="5%"
-                  key={e.OId}
-                  className={classes.boxBolding}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    fontSize: "1.3rem",
-                    textAlign: "center",
-                    backgroundColor:
-                      e.CategoryName == "production"
-                        ? "#9abf47"
-                        : e.CategoryName == "preproduction"
-                        ? "#b3b31b"
-                        : e.CategoryName == "postproduction"
-                        ? "#adadad"
-                        : "white",
-                  }}
-                  onClick={() => {
-                    props.handleWorkTypeClick(e.OId);
-                  }}
-                  // onDelete={()=>{}}
-
-                  clickable
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={props.handleFullJob}
+                  startIcon={<PlaylistAddCheckIcon />}
                 >
-                  {e.Name}
-                  <hr />
-                  <CircularProgressWithLabel value={e.Progress} />
-                </Box>
+                  FullJob
+                </Button>
               </Grid>
-            ))}
-      </Grid>
-      <hr />
+            </Hidden>
+            <Grid item lg={3} sm={12} xs={12}>
+              <InputLabel htmlFor="input-with-icon-adornment">
+                Search
+              </InputLabel>
+              <Input
+                id="input-with-icon-adornment"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                }
+                onChange={props.searchWorkTypes}
+              />
+            </Grid>
+            <Hidden only={["sm", "xs"]}>
+              <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={props.handleFullJob}
+                  startIcon={<PlaylistAddCheckIcon />}
+                >
+                  FullJob
+                </Button>
+              </Grid>
+            </Hidden>
+          </Grid>
+
+          <hr />
+          <Grid container spacing={1}>
+            {props.workTypes &&
+              props.workTypes
+                .filter((x) => x.Progress < 100)
+                .sort(function (a, b) {
+                  return a.CategoryOrder - b.CategoryOrder;
+                })
+                .map((e) => (
+                  <Grid
+                    item
+                    lg={2}
+                    sm={6}
+                    xs={12}
+                    key={e.OId}
+                    className={classes.bolding}
+                  >
+                    <Box
+                      p={4}
+                      borderRadius="5%"
+                      key={e.OId}
+                      className={classes.boxBolding}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        fontSize: "1.3rem",
+                        textAlign: "center",
+                        backgroundColor:
+                          e.CategoryName == "production"
+                            ? "#9abf47"
+                            : e.CategoryName == "preproduction"
+                            ? "#b3b31b"
+                            : e.CategoryName == "postproduction"
+                            ? "#adadad"
+                            : "white",
+                      }}
+                      onClick={() => {
+                        props.handleWorkTypeClick(e.OId);
+                      }}
+                      // onDelete={()=>{}}
+
+                      clickable
+                    >
+                      {e.Name}
+                      <hr />
+                      <CircularProgressWithLabel value={e.Progress} />
+                    </Box>
+                  </Grid>
+                ))}
+          </Grid>
+        </CardContent>
+      </Card>
     </Fragment>
   );
 }
