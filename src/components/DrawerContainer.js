@@ -27,7 +27,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     listItemText: {
-      fontSize: "1rem",
+      fontSize: "0.8rem",
     },
 
     root: {
@@ -88,7 +88,7 @@ const DrawerContainer = (props) => {
 
   const drawer = (
     <div
-      style={{ backgroundColor: "#242845", height: "100%", fontSize: "0.9rem" }}
+      style={{ backgroundColor: "#242845", height: "100%", fontSize: "0.8rem" }}
     >
       <div className="theme.mixins.toolbar, drawerPaper: 240" />
       <Divider />
@@ -213,7 +213,7 @@ const DrawerContainer = (props) => {
           </IconButton>
           <Grid container spacing={3}>
             <Grid item lg={11}>
-              <Typography variant="h6" noWrap>
+              <Typography variant="h7" noWrap>
                 ESP-Cloud Claim
               </Typography>
             </Grid>
