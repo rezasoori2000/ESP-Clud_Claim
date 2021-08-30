@@ -36,7 +36,7 @@ export default function Worktypes(props) {
           ></Button>
         </Grid>
         <Grid item lg={7} sm={4} xs={4}>
-          <span style={{ fontSize: "24px", marginTop: "30px" }}>
+          <span style={{ fontSize: "22px", marginTop: "30px" }}>
             <b>Work&nbsp;Type</b>
           </span>
         </Grid>
@@ -44,7 +44,7 @@ export default function Worktypes(props) {
           <Grid ml={0} item lg={1} sm={4} xs={4} style={{ textAlign: "right" }}>
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               onClick={props.handleFullJob}
               startIcon={<PlaylistAddCheckIcon />}
             >
