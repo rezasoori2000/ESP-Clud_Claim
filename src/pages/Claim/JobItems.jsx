@@ -294,7 +294,7 @@ class JobItems extends React.Component {
                       <Grid ml={0} item lg={1} sm={4} xs={3}>
                         <Button
                           variant="outlined"
-                          size="large"
+                          size="small"
                           style={{ textAlign: "right" }}
                           onClick={() => {
                             this.props.handleBack(2);
@@ -560,7 +560,7 @@ class JobItems extends React.Component {
           <CardActions style={{ justifyContent: "flex-end" }}>
             <Button
               variant="contained"
-              size="large"
+              size="small"
               disabled={!this.state.changed}
               backgroundColor="#fff"
               startIcon={<SaveIcon />}

@@ -154,7 +154,7 @@ const DrawerContainer = (props) => {
             <Divider />
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               color="white"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
@@ -176,7 +176,7 @@ const DrawerContainer = (props) => {
             />
             <Button
               variant="outlined"
-              size="large"
+              size="small"
               color="white"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {

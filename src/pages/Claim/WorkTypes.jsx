@@ -27,7 +27,7 @@ export default function Worktypes(props) {
         <Grid ml={0} item lg={1} sm={4} xs={4}>
           <Button
             variant="outlined"
-            size="large"
+            size="small"
             style={{ textAlign: "right" }}
             onClick={() => {
               props.handleBack(1);

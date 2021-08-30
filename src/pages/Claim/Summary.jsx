@@ -51,7 +51,7 @@ export default function Summary(props) {
         <Grid item lg={1} sm={2} xs={4}>
           <Button
             variant="outlined"
-            size="large"
+            size="small"
             onClick={() => {
               props.handleBack(props.isFullJob ? 2 : props.isAdminJob ? 1 : 3);
             }}
@@ -202,7 +202,7 @@ export default function Summary(props) {
         <CardActions style={{ justifyContent: "flex-end" }}>
           <Button
             variant="contained"
-            size="large"
+            size="small"
             className={classes.btn}
             startIcon={<SaveIcon />}
             onClick={() => props.handleSubmit(comment, props.isAdminJob)}
@@ -211,7 +211,7 @@ export default function Summary(props) {
           </Button>
           <Button
             variant="contained"
-            size="large"
+            size="small"
             className={classes.btn}
             style={{ color: "white", backgroundColor: "#196dc4" }}
             startIcon={<MeetingRoomIcon />}
