@@ -19,6 +19,9 @@ import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
+import Card from "@material-ui/core/Card";
+
+import CardContent from "@material-ui/core/CardContent";
 
 export default function Jobs(props) {
   const classes = gridSearchStyles();
@@ -27,196 +30,208 @@ export default function Jobs(props) {
 
   return (
     <Fragment>
-      <Grid container spacing={2}>
-        <Grid ml={0} item lg={1} sm={4} xs={3}>
-          <Button
-            variant="outlined"
-            size="small"
-            style={{ textAlign: "right" }}
-            onClick={() => {
-              props.handleBack(0);
-            }}
-            startIcon={<ArrowBack />}
-          ></Button>
-        </Grid>
-        <Grid item lg={7} sm={4} xs={5}>
-          <span style={{ fontSize: "18px", marginTop: "30px" }}>
-            <b>Job&nbsp;Selection</b>
-          </span>
-        </Grid>
-        <Hidden only={["xl", "lg", "md"]}>
-          <Grid ml={0} item lg={1} sm={4} xs={4} style={{ textAlign: "right" }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => props.handleLogOut(props.claimingOId)}
-              startIcon={<MeetingRoomIcon />}
-            >
-              Logout
-            </Button>
-          </Grid>
-        </Hidden>
-        <Grid item lg={3} sm={12} xs={12}>
-          <InputLabel htmlFor="input-with-icon-adornment">Search</InputLabel>
-          <Input
-            id="input-with-icon-adornment"
-            startAdornment={
-              <InputAdornment position="start">
-                <SearchIcon />
-              </InputAdornment>
-            }
-            onChange={props.searchJobs}
-          />
-        </Grid>
-        <Hidden only={["sm", "xs"]}>
-          <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
-            <Button
-              variant="outlined"
-              size="small"
-              onClick={() => props.handleLogOut(props.claimingOId)}
-              startIcon={<MeetingRoomIcon />}
-            >
-              Logout
-            </Button>
-          </Grid>
-        </Hidden>
-      </Grid>
-      <Accordion defaultExpanded="true">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Production</Typography>
-        </AccordionSummary>
-
-        <AccordionDetails></AccordionDetails>
-        <Grid container spacing={1}>
-          {props.jobs &&
-            props.jobs
-              .sort(function (a, b) {
-                return a.JobStageOrder - b.JobStageOrder;
-              })
-              .map((e) => (
-                <Grid
-                  item
-                  lg={2}
-                  sm={6}
-                  xs={12}
-                  key={e.OId}
-                  className={classes.bolding}
-                >
-                  <Box
-                    borderRadius="5%"
-                    p={4}
-                    key={e.OId}
-                    boxShadow={4}
-                    color="white"
-                    className={classes.boxBolding}
-                    bgcolor={
-                      e.JobStageName == "production"
-                        ? "#9abf47"
-                        : e.JobStageName == "preproduction"
-                        ? "#b3b31b"
-                        : e.JobStageName == "postproduction"
-                        ? "#b4bebf"
-                        : "white"
-                    }
-                    spacing={3}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      fontSize: "0.9rem",
-                      textAlign: "center",
-                    }}
-                    onClick={() => {
-                      props.handleJobClick(e.OId);
-                    }}
-                  >
-                    <Grid container style={{ color: "black" }}>
-                      <Grid item lg={12} xs={12} sm={12} md={12}>
-                        {e.Code}
-                      </Grid>
-                      <Grid item lg={6} xs={6} sm={6} md={6}>
-                        {e.Note !== "" && (
-                          <IconButton
-                            color="inherit"
-                            aria-label="add to shopping cart"
-                          >
-                            <CommentIcon
-                              onClick={(w) => {
-                                // alert(e.Note);
-                                setNote(e.Note);
-                                setOpenDialog(true);
-                                w.stopPropagation();
-                              }}
-                            />
-                          </IconButton>
-                        )}
-                      </Grid>
-
-                      <Grid item lg={6} xs={6} sm={6} md={6}>
-                        <CircularProgressWithLabel value={e.Progress} />
-                      </Grid>
-                    </Grid>
-                    <hr />
-                    <div style={{ fontSize: "smaller" }}>{e.Title}</div>
-                  </Box>
-                </Grid>
-              ))}
-        </Grid>
-      </Accordion>
-      <Accordion defaultExpanded="true">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Admin</Typography>
-        </AccordionSummary>
-        <AccordionDetails></AccordionDetails>
-        <Grid container spacing={1}>
-          {props.jobs &&
-            props.adminJobs.map((e) => (
+      <Card style={{ backgroundColor: "#ebedf1" }}>
+        <CardContent>
+          <Grid container spacing={2}>
+            <Grid ml={0} item lg={1} sm={4} xs={3}>
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textAlign: "right" }}
+                onClick={() => {
+                  props.handleBack(0);
+                }}
+                startIcon={<ArrowBack />}
+              ></Button>
+            </Grid>
+            <Grid item lg={7} sm={4} xs={5}>
+              <span style={{ fontSize: "18px", marginTop: "30px" }}>
+                <b>Job&nbsp;Selection</b>
+              </span>
+            </Grid>
+            <Hidden only={["xl", "lg", "md"]}>
               <Grid
+                ml={0}
                 item
-                lg={2}
-                sm={6}
-                xs={12}
-                key={e.OId}
-                className={classes.bolding}
+                lg={1}
+                sm={4}
+                xs={4}
+                style={{ textAlign: "right" }}
               >
-                <Box
-                  borderRadius="5%"
-                  p={4}
-                  key={e.OId}
-                  boxShadow={4}
-                  color="black"
-                  spacing={3}
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    fontSize: "0.9rem",
-                    textAlign: "center",
-                    backgroundColor: "#efefef",
-                  }}
-                  onClick={() => {
-                    props.handleJobClick(e.OId, true);
-                  }}
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => props.handleLogOut(props.claimingOId)}
+                  startIcon={<MeetingRoomIcon />}
                 >
-                  <div>{e.Name}</div>
-                </Box>
+                  Logout
+                </Button>
               </Grid>
-            ))}
-        </Grid>
-      </Accordion>
-      <FullScreenDialog
-        header="Job Notes"
-        text={note}
-        open={openDialog}
-        handleClose={() => setOpenDialog(false)}
-      />
-      ;
+            </Hidden>
+            <Grid item lg={3} sm={12} xs={12}>
+              <InputLabel htmlFor="input-with-icon-adornment">
+                Search
+              </InputLabel>
+              <Input
+                id="input-with-icon-adornment"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                }
+                onChange={props.searchJobs}
+              />
+            </Grid>
+            <Hidden only={["sm", "xs"]}>
+              <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => props.handleLogOut(props.claimingOId)}
+                  startIcon={<MeetingRoomIcon />}
+                >
+                  Logout
+                </Button>
+              </Grid>
+            </Hidden>
+          </Grid>
+          <Accordion defaultExpanded="true">
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Production</Typography>
+            </AccordionSummary>
+
+            <AccordionDetails></AccordionDetails>
+            <Grid container spacing={1}>
+              {props.jobs &&
+                props.jobs
+                  .sort(function (a, b) {
+                    return a.JobStageOrder - b.JobStageOrder;
+                  })
+                  .map((e) => (
+                    <Grid
+                      item
+                      lg={2}
+                      sm={6}
+                      xs={12}
+                      key={e.OId}
+                      className={classes.bolding}
+                    >
+                      <Box
+                        borderRadius="5%"
+                        p={4}
+                        key={e.OId}
+                        boxShadow={4}
+                        color="white"
+                        className={classes.boxBolding}
+                        bgcolor={
+                          e.JobStageName == "production"
+                            ? "#9abf47"
+                            : e.JobStageName == "preproduction"
+                            ? "#b3b31b"
+                            : e.JobStageName == "postproduction"
+                            ? "#b4bebf"
+                            : "white"
+                        }
+                        spacing={3}
+                        style={{
+                          width: "100%",
+                          height: "100%",
+                          fontSize: "0.9rem",
+                          textAlign: "center",
+                        }}
+                        onClick={() => {
+                          props.handleJobClick(e.OId);
+                        }}
+                      >
+                        <Grid container style={{ color: "black" }}>
+                          <Grid item lg={12} xs={12} sm={12} md={12}>
+                            {e.Code}
+                          </Grid>
+                          <Grid item lg={6} xs={6} sm={6} md={6}>
+                            {e.Note !== "" && (
+                              <IconButton
+                                color="inherit"
+                                aria-label="add to shopping cart"
+                              >
+                                <CommentIcon
+                                  onClick={(w) => {
+                                    // alert(e.Note);
+                                    setNote(e.Note);
+                                    setOpenDialog(true);
+                                    w.stopPropagation();
+                                  }}
+                                />
+                              </IconButton>
+                            )}
+                          </Grid>
+
+                          <Grid item lg={6} xs={6} sm={6} md={6}>
+                            <CircularProgressWithLabel value={e.Progress} />
+                          </Grid>
+                        </Grid>
+                        <hr />
+                        <div style={{ fontSize: "smaller" }}>{e.Title}</div>
+                      </Box>
+                    </Grid>
+                  ))}
+            </Grid>
+          </Accordion>
+          <Accordion defaultExpanded="true">
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography>Admin</Typography>
+            </AccordionSummary>
+            <AccordionDetails></AccordionDetails>
+            <Grid container spacing={1}>
+              {props.jobs &&
+                props.adminJobs.map((e) => (
+                  <Grid
+                    item
+                    lg={2}
+                    sm={6}
+                    xs={12}
+                    key={e.OId}
+                    className={classes.bolding}
+                  >
+                    <Box
+                      borderRadius="5%"
+                      p={4}
+                      key={e.OId}
+                      boxShadow={4}
+                      color="black"
+                      spacing={3}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        fontSize: "0.9rem",
+                        textAlign: "center",
+                        backgroundColor: "#efefef",
+                      }}
+                      onClick={() => {
+                        props.handleJobClick(e.OId, true);
+                      }}
+                    >
+                      <div>{e.Name}</div>
+                    </Box>
+                  </Grid>
+                ))}
+            </Grid>
+          </Accordion>
+          <FullScreenDialog
+            header="Job Notes"
+            text={note}
+            open={openDialog}
+            handleClose={() => setOpenDialog(false)}
+          />
+        </CardContent>
+      </Card>
     </Fragment>
   );
 }
