@@ -65,7 +65,7 @@ export default function Jobs(props) {
                 <SearchIcon />
               </InputAdornment>
             }
-            onChange={props.searchWorkTypes}
+            onChange={props.searchJobs}
           />
         </Grid>
         <Hidden only={["sm", "xs"]}>

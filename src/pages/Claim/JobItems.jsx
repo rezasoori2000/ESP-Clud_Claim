@@ -325,34 +325,37 @@ class JobItems extends React.Component {
                     </Grid>
                   </TableCell>
                 </TableRow>
-
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography>
-                      <b>Completed Items</b>
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <TableRow hover="true" m={1}>
-                      <TableCell
-                        style={{ width: "100%", marginButtm: "40px!important" }}
+                {this.props.finishedItems &&
+                  this.props.finishedItems.length > 0 && (
+                    <Accordion>
+                      <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1a-content"
+                        id="panel1a-header"
                       >
-                        <ul>
-                          {this.props.finishedItems &&
-                            this.props.finishedItems.map((e, inx) => (
-                              <li>{e}</li>
-                            ))}
-                        </ul>
-                      </TableCell>
-                    </TableRow>
-                  </AccordionDetails>
-                </Accordion>
-
-                {this.state.jobItems && this.state.jobItems.length > 1 && (
+                        <Typography>
+                          <b>Completed Items</b>
+                        </Typography>
+                      </AccordionSummary>
+                      <AccordionDetails>
+                        <TableRow hover="true" m={1}>
+                          <TableCell
+                            style={{
+                              width: "100%",
+                              marginButtm: "40px!important",
+                            }}
+                          >
+                            <ul>
+                              {this.props.finishedItems.map((e, inx) => (
+                                <li>{e}</li>
+                              ))}
+                            </ul>
+                          </TableCell>
+                        </TableRow>
+                      </AccordionDetails>
+                    </Accordion>
+                  )}
+                {this.state.jobItems && this.state.jobItems.length >= 1 && (
                   <TableRow
                     hover="true"
                     m={1}
@@ -365,91 +368,92 @@ class JobItems extends React.Component {
                       colSpan="2"
                     >
                       {this.props.jobLevel && (
-                        <Grid container spacing={2}>
-                          <Grid item xs={12} sm={12} lg={2}>
-                            All Items{" "}
-                            {this.props.settings.ShowStandardTime &&
-                              " (" +
-                                Helper.timeConvert(
-                                  Math.round(allItemsV6 / 60)
-                                ) +
-                                ")"}
-                          </Grid>
-
-                          <Grid item xs={12} sm={12} lg={5}>
-                            <AirbnbSlider
-                              ThumbComponent={AirbnbThumbComponent}
-                              aria-label="ios slider"
-                              value={this.state.groupPercent}
-                              getAriaValueText={valuetext}
-                              aria-labelledby="discrete-slider"
-                              valueLabelDisplay="on"
-                              step={5}
-                              marks
-                              min={0}
-                              max={100}
-                              onChangeCommitted={(e, val) =>
-                                this.handleGroupedChanged(val)
-                              }
-                              onChange={(e, val) => this.handleChanged(val)}
-                            />
-                          </Grid>
-                          <Grid item xs={12} sm={12} lg={2}>
-                            <OutlinedInput
-                              value={this.state.groupPercent}
-                              onChange={(event) =>
-                                this.handleGroupedChanged(event.target.value)
-                              }
-                              type="number"
-                              name={`pgs`}
-                              key={1}
-                              fullWidth
-                            />
-                          </Grid>
-                          <Grid
-                            item
-                            xs={4}
-                            sm={4}
-                            lg={1}
-                            style={{ textAlign: "right" }}
-                          >
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              onClick={() =>
-                                this.handleGroupedChanged(
-                                  parseInt(this.state.groupPercent) - 5,
-                                  true
-                                )
-                              }
-                              startIcon={<RemoveIcon />}
-                            ></Button>
-                          </Grid>
-                          <Grid item xs={4} sm={4} lg={1}>
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              onClick={() =>
-                                this.handleGroupedChanged(
-                                  parseInt(this.state.groupPercent) + 5,
-                                  true
-                                )
-                              }
-                              startIcon={<AddIcon />}
-                            ></Button>
-                          </Grid>
-                          <Grid item xs={4} sm={4} lg={1}>
-                            <Button
-                              variant="contained"
-                              color="#196dc4"
-                              border="#196dc4"
-                              backgroundColor="#fff"
-                              onClick={() => this.handleGroupedChanged(100)}
+                        <div>
+                          <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} lg={2}>
+                              All Items{" "}
+                              {this.props.settings.ShowStandardTime &&
+                                " (" +
+                                  Helper.timeConvert(
+                                    Math.round(allItemsV6 / 60)
+                                  ) +
+                                  ")"}
+                            </Grid>
+                            <Grid item xs={12} sm={12} lg={5}>
+                              <AirbnbSlider
+                                ThumbComponent={AirbnbThumbComponent}
+                                aria-label="ios slider"
+                                value={this.state.groupPercent}
+                                getAriaValueText={valuetext}
+                                aria-labelledby="discrete-slider"
+                                valueLabelDisplay="on"
+                                step={5}
+                                marks
+                                min={0}
+                                max={100}
+                                onChangeCommitted={(e, val) =>
+                                  this.handleGroupedChanged(val)
+                                }
+                                onChange={(e, val) => this.handleChanged(val)}
+                              />
+                            </Grid>
+                            <Grid item xs={12} sm={12} lg={2}>
+                              <OutlinedInput
+                                value={this.state.groupPercent}
+                                onChange={(event) =>
+                                  this.handleGroupedChanged(event.target.value)
+                                }
+                                type="number"
+                                name={`pgs`}
+                                key={1}
+                                fullWidth
+                              />
+                            </Grid>
+                            <Grid
+                              item
+                              xs={4}
+                              sm={4}
+                              lg={1}
+                              style={{ textAlign: "right" }}
                             >
-                              100%
-                            </Button>
+                              <Button
+                                variant="contained"
+                                color="secondary"
+                                onClick={() =>
+                                  this.handleGroupedChanged(
+                                    parseInt(this.state.groupPercent) - 5,
+                                    true
+                                  )
+                                }
+                                startIcon={<RemoveIcon />}
+                              ></Button>
+                            </Grid>
+                            <Grid item xs={4} sm={4} lg={1}>
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                onClick={() =>
+                                  this.handleGroupedChanged(
+                                    parseInt(this.state.groupPercent) + 5,
+                                    true
+                                  )
+                                }
+                                startIcon={<AddIcon />}
+                              ></Button>
+                            </Grid>
+                            <Grid item xs={4} sm={4} lg={1}>
+                              <Button
+                                variant="contained"
+                                color="#196dc4"
+                                border="#196dc4"
+                                backgroundColor="#fff"
+                                onClick={() => this.handleGroupedChanged(100)}
+                              >
+                                100%
+                              </Button>
+                            </Grid>
                           </Grid>
-                        </Grid>
+                        </div>
                       )}
                     </TableCell>
                   </TableRow>

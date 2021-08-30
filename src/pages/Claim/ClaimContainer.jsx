@@ -674,7 +674,13 @@ class CalimContainer extends React.Component {
           onCommentSave={this.state.dialogSave}
           alert={this.state.alert}
         />
-        <div style={{ backgroundColor: "#ebedf1", paddingRight: "10px" }}>
+        <div
+          style={{
+            backgroundColor: "#ebedf1",
+            paddingRight: "10px",
+            height: "100%",
+          }}
+        >
           {renderConditionaly()}
         </div>
       </Fragment>

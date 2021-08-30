@@ -104,7 +104,7 @@ class App extends React.Component {
     const isPublic = this.state.claims.p;
     const w = this.state.claims.w;
     return (
-      <div>
+      <div style={{ backgroundColor: "#ebedf1" }}>
         {this.state.loading && this.state.loggedIn && <Loading />}
         {!this.state.loggedIn && <SignIn handleSignIn={this.handleSignIn} />}
         {this.state.loggedIn && role === "u" && (
@@ -118,10 +118,9 @@ class App extends React.Component {
             <main
               style={{
                 flexGrow: 1,
-                paddingLeft: "0px",
-                paddingRight: "0px",
+                paddingLeft: "10px",
+                paddingRight: "10px",
                 paddingTop: "80px",
-                overflow: "hidden",
               }}
             >
               <ClaimContainer
