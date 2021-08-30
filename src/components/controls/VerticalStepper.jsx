@@ -85,7 +85,7 @@ const VerticalStepper = (props) => {
               !(props.isAdmin && index === 3) && (
                 <Step key={label}>
                   <StepLabel>
-                    <Typography style={{ color: "white" }}>
+                    <Typography style={{ color: "white", fontSize: "0.8rem" }}>
                       {label}
                       <br />
                       <span> {getLabels(props, label, index)}</span>
