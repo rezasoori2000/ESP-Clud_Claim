@@ -27,7 +27,7 @@ const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     listItemText: {
-      fontSize: "1.1em",
+      fontSize: "1rem",
     },
 
     root: {
