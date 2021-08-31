@@ -308,7 +308,7 @@ class JobItems extends React.Component {
                         </span>
                       </Grid>
 
-                      <Grid item lg={3} sm={12} xs={12}>
+                      <Grid item lg={3} sm={8} xs={8}>
                         <InputLabel htmlFor="input-with-icon-adornment">
                           Search
                         </InputLabel>
@@ -321,6 +321,20 @@ class JobItems extends React.Component {
                           }
                           onChange={this.props.searchJobItem}
                         />
+                      </Grid>
+                      <Grid item lg={1} sm={4} xs={4}>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          disabled={!this.state.changed}
+                          backgroundColor="#fff"
+                          startIcon={<SaveIcon />}
+                          onClick={() =>
+                            this.props.handleSave(this.state.jobItems)
+                          }
+                        >
+                          Save
+                        </Button>
                       </Grid>
                     </Grid>
                   </TableCell>
