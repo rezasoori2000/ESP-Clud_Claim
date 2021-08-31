@@ -271,19 +271,19 @@ class UserManagement extends React.Component {
             >
               <Hidden only={["xs"]}>
                 <Grid item lg={4} xs={12} style={{ backgroundColor: "#eee" }}>
-                  <h2>Email</h2>
+                  <h4>Email</h4>
                 </Grid>
                 <Grid item lg={4} xs={12} style={{ backgroundColor: "#eee" }}>
-                  <h2>ESP User</h2>
+                  <h4>ESP User</h4>
                 </Grid>
                 <Grid item lg={1} xs={12} style={{ backgroundColor: "#eee" }}>
-                  <h2>Admin</h2>
+                  <h4>Admin</h4>
                 </Grid>
                 <Grid item lg={1} xs={12} style={{ backgroundColor: "#eee" }}>
-                  <h2>Public User</h2>
+                  <h4>Public User</h4>
                 </Grid>
                 <Grid item lg={2} xs={12} style={{ backgroundColor: "#eee" }}>
-                  <h2>Change Password</h2>
+                  <h4>Change Password</h4>
                 </Grid>
               </Hidden>
 
@@ -313,7 +313,7 @@ class UserManagement extends React.Component {
                       variant="contained"
                       color="primary"
                       // className={classes.saveBtn}
-                      size="large"
+                      size="medium"
                       onClick={() => this.onChangePassword(row.Id)}
                       startIcon={<SaveIcon />}
                     >
