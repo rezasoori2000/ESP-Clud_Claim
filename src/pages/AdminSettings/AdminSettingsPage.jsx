@@ -52,7 +52,7 @@ const AdminSettingsPage = (props) => {
     <div>
       <Card>
         <Grid container spacing={3}>
-          <Grid item lg={11}>
+          <Grid item lg={10}>
             <CardHeader
               title="Database Settings"
               subheader="ESP database connection settings "
@@ -64,12 +64,12 @@ const AdminSettingsPage = (props) => {
               }
             />
           </Grid>
-          <Grid item lg={1}>
+          <Grid item lg={2}>
             <Button
               variant="contained"
               color="primary"
               className={classes.saveBtnTop}
-              size="large"
+              size="medium"
               onClick={props.onSave}
               startIcon={<SaveIcon />}
             >
@@ -416,7 +416,7 @@ const AdminSettingsPage = (props) => {
                 onPropertyChange={props.onSelectChange}
               />
             </Grid>
-            <Grid item lg={6}>
+            <Grid item lg={5}>
               <ESPSelect
                 name="PSPerformanceChart"
                 label="Performance Chart Duration"
@@ -426,12 +426,12 @@ const AdminSettingsPage = (props) => {
               />
             </Grid>
             <Grid item lg={5}></Grid>
-            <Grid item lg={1} mx="auto">
+            <Grid item lg={2} mx="auto">
               <Button
                 variant="contained"
                 color="primary"
                 className={classes.saveBtn}
-                size="large"
+                size="medium"
                 onClick={props.onSave}
                 startIcon={<SaveIcon />}
               >
