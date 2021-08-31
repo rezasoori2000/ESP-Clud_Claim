@@ -41,7 +41,11 @@ export default function ItemsList(props) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={`Author:${i.Author}- Resource: ${i.Resource}`}
+                  primary={`Author:${i.Author} ${
+                    i.Resource != null && i.Resource.length > 0
+                      ? `Resource:${i.Resource}`
+                      : ``
+                  } `}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -50,9 +54,16 @@ export default function ItemsList(props) {
                         className={classes.inline}
                         color="textPrimary"
                       >
-                        ({i.Date})
+                        {i.Date}
                       </Typography>
-                      {i.Comment}
+                      <br />
+                      {i.IsBold ? (
+                        <b>
+                          <span style={{ fontSize: "20px" }}>{i.Comment}</span>
+                        </b>
+                      ) : (
+                        <span style={{ fontSize: "20px" }}>{i.Comment}</span>
+                      )}
                     </React.Fragment>
                   }
                 />
