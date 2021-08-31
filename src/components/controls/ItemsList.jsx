@@ -12,7 +12,7 @@ import { Fragment } from "react";
 const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
-    maxWidth: "36ch",
+    maxWidth: "90%",
     backgroundColor: theme.palette.background.paper,
   },
   inline: {
