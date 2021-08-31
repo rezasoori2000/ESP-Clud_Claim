@@ -41,7 +41,7 @@ export default function ItemsList(props) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={i}
+                  primary={`Author:${i.Author}- Resource: ${i.Resource}`}
                   secondary={
                     <React.Fragment>
                       <Typography
@@ -49,7 +49,10 @@ export default function ItemsList(props) {
                         variant="body2"
                         className={classes.inline}
                         color="textPrimary"
-                      ></Typography>
+                      >
+                        ({i.Date})
+                      </Typography>
+                      {i.Comment}
                     </React.Fragment>
                   }
                 />
