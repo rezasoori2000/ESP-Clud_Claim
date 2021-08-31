@@ -59,10 +59,10 @@ export default function ItemsList(props) {
                       <br />
                       {i.IsBold ? (
                         <b>
-                          <span style={{ fontSize: "16px" }}>{i.Comment}</span>
+                          <span style={{ fontSize: "15px" }}>{i.Comment}</span>
                         </b>
                       ) : (
-                        <span style={{ fontSize: "16px" }}>{i.Comment}</span>
+                        <span style={{ fontSize: "15px" }}>{i.Comment}</span>
                       )}
                     </React.Fragment>
                   }
