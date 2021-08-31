@@ -12,6 +12,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import CloseIcon from "@material-ui/icons/Close";
 import Slide from "@material-ui/core/Slide";
+import ItemsList from "./../../components/controls/ItemsList";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -73,6 +74,7 @@ export default function FullScreenDialog(props) {
           </ListItem>
         </List> */}
         <p>{props.text}</p>
+        {props.uls && <ItemsList items={props.uls} />}
       </Dialog>
     </div>
   );

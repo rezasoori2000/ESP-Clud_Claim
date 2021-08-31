@@ -26,7 +26,7 @@ import CardContent from "@material-ui/core/CardContent";
 export default function Jobs(props) {
   const classes = gridSearchStyles();
   const [openDialog, setOpenDialog] = useState(false);
-  const [note, setNote] = useState("");
+  const [note, setNote] = useState([]);
 
   return (
     <Fragment>
@@ -160,7 +160,7 @@ export default function Jobs(props) {
                                 <CommentIcon
                                   onClick={(w) => {
                                     // alert(e.Note);
-                                    setNote("sfsd");
+                                    setNote(e.Note);
                                     setOpenDialog(true);
                                     w.stopPropagation();
                                   }}
@@ -226,7 +226,7 @@ export default function Jobs(props) {
           </Accordion>
           <FullScreenDialog
             header="Job Notes"
-            text={note}
+            uls={note}
             open={openDialog}
             handleClose={() => setOpenDialog(false)}
           />
