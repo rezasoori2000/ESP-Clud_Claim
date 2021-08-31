@@ -140,7 +140,7 @@ export default function Jobs(props) {
                         style={{
                           width: "100%",
                           height: "100%",
-                          fontSize: "0.9rem",
+                          fontSize: "0.8rem",
                           textAlign: "center",
                         }}
                         onClick={() => {
@@ -160,7 +160,7 @@ export default function Jobs(props) {
                                 <CommentIcon
                                   onClick={(w) => {
                                     // alert(e.Note);
-                                    setNote(e.Note);
+                                    setNote("sfsd");
                                     setOpenDialog(true);
                                     w.stopPropagation();
                                   }}
