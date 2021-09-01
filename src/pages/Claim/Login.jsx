@@ -57,12 +57,12 @@ export default function Login(props) {
               sm={6}
               xs={12}
               key={e.OId}
-              style={{ padding: "12px" }}
+              style={{ padding: "8px" }}
               className={classes.bolding}
             >
               <Box
                 borderRadius="5%"
-                p={3}
+                p={2}
                 key={e.OId}
                 className={classes.boxBolding}
                 boxShadow={2}
@@ -73,7 +73,7 @@ export default function Login(props) {
                 style={{
                   width: "100%",
                   height: "100%",
-                  fontSize: "0.8rem",
+                  fontSize: "0.7rem",
                   textAlign: "center",
                 }}
                 onClick={() => {
