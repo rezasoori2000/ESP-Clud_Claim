@@ -88,9 +88,9 @@ const DrawerContainer = (props) => {
 
   const drawer = (
     <div
-      style={{ backgroundColor: "#242845", height: "100%", fontSize: "0.8rem" }}
+      style={{ backgroundColor: "#242845", height: "100%", fontSize: "0.7rem" }}
     >
-      <div className="theme.mixins.toolbar, drawerPaper: 240" />
+      <div className="theme.mixins.toolbar, drawerPaper: 200" />
       <Divider />
       <List className="mt-5">
         <div style={{ textAlign: "center", background: "#000" }}>
