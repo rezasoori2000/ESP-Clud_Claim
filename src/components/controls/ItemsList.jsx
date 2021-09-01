@@ -59,7 +59,15 @@ export default function ItemsList(props) {
                       <br />
                       {i.IsBold ? (
                         <b>
-                          <span style={{ fontSize: "15px" }}>{i.Comment}</span>
+                          <span
+                            style={{
+                              fontSize: "15px",
+                              fontWeight: "1000",
+                              color: "black",
+                            }}
+                          >
+                            {i.Comment}
+                          </span>
                         </b>
                       ) : (
                         <span style={{ fontSize: "15px" }}>{i.Comment}</span>

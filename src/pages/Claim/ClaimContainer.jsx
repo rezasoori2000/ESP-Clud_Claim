@@ -91,10 +91,18 @@ class CalimContainer extends React.Component {
 
   /* #region  Login Methods */
   onCommentSave = (text, login = true) => {
-    this.setState({ dialogOpen: false });
     if (text)
       if (login) this.saveLoginInAPI(this.state.claimingOId, text);
       else this.saveLogoutAPI(this.state.claimingOId, text);
+    this.setState(
+      {
+        ...this.state,
+        dialogOpen: false,
+      },
+      () => {
+        return true;
+      }
+    );
   };
 
   loggedInWorkerClick = (worker) => {
@@ -243,6 +251,7 @@ class CalimContainer extends React.Component {
             ...this.state,
             page: 0,
             workersList,
+            dialogOpen: false,
           },
           () => {
             this.props.changeStep(2, [], this.state.isAdminJob);
