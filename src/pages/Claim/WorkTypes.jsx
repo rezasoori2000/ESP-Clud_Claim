@@ -94,6 +94,7 @@ export default function Worktypes(props) {
             {props.workTypes &&
               props.workTypes
                 .filter((x) => x.Progress < 100)
+
                 .sort(function (a, b) {
                   return a.CategoryOrder - b.CategoryOrder;
                 })

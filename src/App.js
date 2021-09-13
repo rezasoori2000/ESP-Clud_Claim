@@ -129,6 +129,7 @@ class App extends React.Component {
                 workerId={w}
                 settings={this.state.settings}
                 changeStep={this.changeStep}
+                role={this.state.claims.a ? "a" : "u"}
               />
             </main>
           </div>

@@ -149,7 +149,10 @@ export default function Jobs(props) {
                       >
                         <Grid container style={{ color: "black" }}>
                           <Grid item lg={12} xs={12} sm={12} md={12}>
-                            {e.Code}
+                            <span style={{ fontSize: "x-large" }}>
+                              {" "}
+                              {e.Code}
+                            </span>
                           </Grid>
                           <Grid item lg={6} xs={6} sm={6} md={6}>
                             {e.Note !== "" && (

@@ -207,7 +207,7 @@ export default function Summary(props) {
             startIcon={<SaveIcon />}
             onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
-            Claim
+            Save
           </Button>
           <Button
             variant="contained"
@@ -215,9 +215,9 @@ export default function Summary(props) {
             className={classes.btn}
             style={{ color: "white", backgroundColor: "#196dc4" }}
             startIcon={<MeetingRoomIcon />}
-            onClick={() => props.handleSubmit(comment, props.isAdminJob)}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob, true)}
           >
-            Claim & Logout
+            Save & Logout
           </Button>
         </CardActions>
       </Card>

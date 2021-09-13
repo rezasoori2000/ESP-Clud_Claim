@@ -517,11 +517,13 @@ class CalimContainer extends React.Component {
             {
               ...this.state,
               loading: false,
-              page: 0,
+              page: this.props.role == "a" || this.props.public ? 0 : 1,
               LabelText: [],
             },
             () => {
-              this.props.changeStep(1, [], this.state.isAdminJob);
+              if (this.props.role == "a" || this.props.public)
+                this.props.changeStep(1, [], this.state.isAdminJob);
+              else this.props.changeStep(2, [], this.state.isAdminJob);
             }
           );
         });
@@ -540,11 +542,13 @@ class CalimContainer extends React.Component {
             {
               ...this.state,
               loading: false,
-              page: 0,
+              page: this.props.role == "a" || this.props.public ? 0 : 1,
               LabelText: [],
             },
             () => {
-              this.props.changeStep(1, [], this.state.isAdminJob);
+              if (this.props.role == "a" || this.props.public)
+                this.props.changeStep(1, [], this.state.isAdminJob);
+              else this.props.changeStep(2, [], this.state.isAdminJob);
             }
           );
         });
@@ -561,11 +565,13 @@ class CalimContainer extends React.Component {
           {
             ...this.state,
             loading: false,
-            page: 0,
+            page: this.props.role == "a" || this.props.public ? 0 : 1,
             LabelText: [],
           },
           () => {
-            this.props.changeStep(1, [], this.state.isAdminJob);
+            if (this.props.role == "a" || this.props.public)
+              this.props.changeStep(1, [], this.state.isAdminJob);
+            else this.props.changeStep(2, [], this.state.isAdminJob);
           }
         );
       });

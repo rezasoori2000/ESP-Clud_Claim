@@ -322,7 +322,18 @@ class JobItems extends React.Component {
                           onChange={this.props.searchJobItem}
                         />
                       </Grid>
-                      <Grid item lg={1} sm={4} xs={4}>
+                      <Grid
+                        item
+                        lg={1}
+                        sm={4}
+                        xs={4}
+                        style={{
+                          justifyContent: "flex-end",
+
+                          display: "flex",
+                          alignItems: "flex-end",
+                        }}
+                      >
                         <Button
                           variant="contained"
                           size="small"
@@ -333,7 +344,7 @@ class JobItems extends React.Component {
                             this.props.handleSave(this.state.jobItems)
                           }
                         >
-                          Save
+                          Claim
                         </Button>
                       </Grid>
                     </Grid>
@@ -571,7 +582,9 @@ class JobItems extends React.Component {
               </TableBody>
             </Table>
           </CardContent>
-          <CardActions style={{ justifyContent: "flex-end" }}>
+          <CardActions
+            style={{ justifyContent: "flex-end", marginRight: "20px" }}
+          >
             <Button
               variant="contained"
               size="small"
@@ -580,7 +593,7 @@ class JobItems extends React.Component {
               startIcon={<SaveIcon />}
               onClick={() => this.props.handleSave(this.state.jobItems)}
             >
-              Save
+              Claim
             </Button>
           </CardActions>
         </Card>
