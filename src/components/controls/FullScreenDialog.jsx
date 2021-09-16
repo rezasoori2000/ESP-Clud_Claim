@@ -97,7 +97,7 @@ export default function FullScreenDialog(props) {
               <TableBody>
                 {props.textList.map((row) => (
                   <StyledTableRow hover key={row.Date}>
-                    <StyledTableCell component="th" scope="row" align="right">
+                    <StyledTableCell component="th" scope="row">
                       {row.Date}
                     </StyledTableCell>
                     <StyledTableCell align="left">{row.Name}</StyledTableCell>
