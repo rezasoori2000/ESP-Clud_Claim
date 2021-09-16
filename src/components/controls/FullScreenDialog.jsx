@@ -89,7 +89,7 @@ export default function FullScreenDialog(props) {
         <p>{props.text}</p>
         {props.uls && <ItemsList items={props.uls} />}
         {props.textList && props.textList.length > 0 && (
-          <TableContainer component={Paper}>
+          <TableContainer component={Paper} lg={6} sm={12} xs={12}>
             <Table className={classes.table} aria-label="customized table">
               <TableHead>
                 <TableRow></TableRow>
