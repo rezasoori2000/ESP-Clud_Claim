@@ -61,6 +61,17 @@ class ClaimLogic extends React.Component {
       "Submit Admin Job"
     );
   }
+  GetClaimedByAPI = async (jobCode, worktypId) => {
+    var value = {
+      jobCode,
+      worktypId,
+    };
+    return Helper.apiPost(
+      `Claim/GetWorkTypeClaimedBy?jobCode=${jobCode}&worktypeId=${worktypId}`,
+      value,
+      "Get Work Type Claimed by"
+    );
+  };
 
   render() {
     return <din></din>;

@@ -5,6 +5,8 @@ import Hidden from "@material-ui/core/Hidden";
 import SearchIcon from "@material-ui/icons/Search";
 import gridSearchStyles from "../../components/controls/Styles";
 import { Button, IconButton } from "@material-ui/core";
+import CommentIcon from "@material-ui/icons/Comment";
+import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 
 import Accordion from "@material-ui/core/Accordion";
@@ -12,13 +14,13 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-import CommentIcon from "@material-ui/icons/Comment";
+
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FullScreenDialog from "../../components/controls/FullScreenDialog";
+
 import Card from "@material-ui/core/Card";
 
 import CardContent from "@material-ui/core/CardContent";
@@ -155,26 +157,21 @@ export default function Jobs(props) {
                             xs={12}
                             sm={12}
                             md={12}
-                            style={{ backgroundColor: "#bfe668" }}
+                            style={{
+                              backgroundColor:
+                                e.JobStageName == "postproduction"
+                                  ? "#dce2e2"
+                                  : "#bfe668",
+                            }}
                           >
                             <span style={{ fontSize: "large" }}> {e.Code}</span>
                           </Grid>
-                          <Grid
-                            item
-                            lg={12}
-                            xs={12}
-                            sm={12}
-                            md={12}
-                            style={{ backgroundColor: "" }}
-                          >
+                          <Grid item lg={12} xs={12} sm={12} md={12}>
                             <hr />
                           </Grid>
                           <Grid item lg={6} xs={6} sm={6} md={6}>
                             {e.Note !== "" && (
-                              <IconButton
-                                color="inherit"
-                                aria-label="add to shopping cart"
-                              >
+                              <IconButton color="inherit">
                                 <CommentIcon
                                   onClick={(w) => {
                                     // alert(e.Note);

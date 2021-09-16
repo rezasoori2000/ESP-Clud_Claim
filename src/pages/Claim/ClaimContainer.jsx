@@ -464,7 +464,7 @@ class CalimContainer extends React.Component {
           // mainWorkTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
           workTypes: selectedJob.WorkTypes,
           mainWorkTypes: selectedJob.WorkTypes,
-
+          selectedJobCode: selectedJob.Code,
           page: 2,
           isAdminJob: false,
           LabelText: labelText,
@@ -621,6 +621,7 @@ class CalimContainer extends React.Component {
               handleBack={this.handleBack}
               handleWorkTypeClick={this.handleWorkTypeClick}
               handleFullJob={this.handleFullJob}
+              jobCode={this.state.selectedJobCode}
             />
           );
         }
