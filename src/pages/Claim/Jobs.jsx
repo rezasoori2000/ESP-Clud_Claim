@@ -114,7 +114,7 @@ export default function Jobs(props) {
                   .map((e) => (
                     <Grid
                       item
-                      lg={2}
+                      lg={props.jobs.length > 48 ? 1 : 2}
                       sm={6}
                       xs={12}
                       key={e.OId}
@@ -122,11 +122,12 @@ export default function Jobs(props) {
                     >
                       <Box
                         borderRadius="5%"
-                        p={4}
+                        p={1}
                         key={e.OId}
                         boxShadow={4}
                         color="white"
                         className={classes.boxBolding}
+                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
                         bgcolor={
                           e.JobStageName == "production"
                             ? "#9abf47"
@@ -148,8 +149,25 @@ export default function Jobs(props) {
                         }}
                       >
                         <Grid container style={{ color: "black" }}>
-                          <Grid item lg={12} xs={12} sm={12} md={12}>
+                          <Grid
+                            item
+                            lg={12}
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            style={{ backgroundColor: "#bfe668" }}
+                          >
                             <span style={{ fontSize: "large" }}> {e.Code}</span>
+                          </Grid>
+                          <Grid
+                            item
+                            lg={12}
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            style={{ backgroundColor: "" }}
+                          >
+                            <hr />
                           </Grid>
                           <Grid item lg={6} xs={6} sm={6} md={6}>
                             {e.Note !== "" && (
