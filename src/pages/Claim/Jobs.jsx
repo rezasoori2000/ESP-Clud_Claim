@@ -103,7 +103,10 @@ export default function Jobs(props) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>Production</Typography>
+              <Typography variant="h4" component="div">
+                Production
+                <hr />
+              </Typography>
             </AccordionSummary>
 
             <AccordionDetails></AccordionDetails>
@@ -157,12 +160,12 @@ export default function Jobs(props) {
                             xs={12}
                             sm={12}
                             md={12}
-                            style={{
-                              backgroundColor:
-                                e.JobStageName == "postproduction"
-                                  ? "#dce2e2"
-                                  : "#bfe668",
-                            }}
+                            // style={{
+                            //   backgroundColor:
+                            //     e.JobStageName == "postproduction"
+                            //       ? "#dce2e2"
+                            //       : "#bfe668",
+                            // }}
                           >
                             <span style={{ fontSize: "large" }}> {e.Code}</span>
                           </Grid>
@@ -170,7 +173,7 @@ export default function Jobs(props) {
                             <hr />
                           </Grid>
                           <Grid item lg={6} xs={6} sm={6} md={6}>
-                            {e.Note !== "" && (
+                            {e.Note !== "" && e.Note.length > 0 && (
                               <IconButton color="inherit">
                                 <CommentIcon
                                   onClick={(w) => {
@@ -201,7 +204,9 @@ export default function Jobs(props) {
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
-              <Typography>Admin</Typography>
+              <Typography variant="h4" component="div">
+                Admin <hr />
+              </Typography>
             </AccordionSummary>
             <AccordionDetails></AccordionDetails>
             <Grid container spacing={1}>
