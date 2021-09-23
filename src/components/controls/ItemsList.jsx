@@ -30,7 +30,7 @@ export default function ItemsList(props) {
           .filter((x) => x !== "Claim from ESP-Claim")
           .map((i) => (
             <Fragment>
-              <ListItem alignItems="flex-start">
+              <ListItem alignItems="flex-start" key={i.Resource}>
                 <ListItemAvatar>
                   <Avatar
                     aria-label="recipe"

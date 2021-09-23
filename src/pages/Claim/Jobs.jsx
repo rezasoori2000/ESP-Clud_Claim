@@ -16,20 +16,77 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
+import BuildIcon from "@material-ui/icons/Build";
+import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
+import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
-import Card from "@material-ui/core/Card";
-
-import CardContent from "@material-ui/core/CardContent";
+import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
+import ClaimLogic from "../../components/logics/ClaimLogic";
+import Loading from "../loading";
 
 export default function Jobs(props) {
   const classes = gridSearchStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [note, setNote] = useState([]);
-
+  const [activeButton, setactiveButton] = useState("prod");
+  const [jobs, setJobs] = useState(props.jobs);
+  const [preJobs, setPreJobs] = useState([]);
+  const [postJobs, setPostJobs] = useState([]);
+  const [loadedJobs, setLoadedJobs] = useState([]);
+  const [loading, setLoading] = useState(false);
+  function handlePreProduction() {
+    setLoading(true);
+    setactiveButton("pre");
+    if (!loadedJobs.includes("pre")) {
+      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 2)
+        .then((r) => {
+          const values = JSON.parse(r.data);
+          setPreJobs(values.Item1);
+          setJobs(values.Item1);
+          loadedJobs.push("pre");
+          setLoadedJobs(loadedJobs);
+          props.handleJobLoaded(values.Item1);
+          setLoading(false);
+        })
+        .catch((err) => {
+          alert("Error in retrieve Jobs list");
+        });
+    } else {
+      setLoading(false);
+      setJobs(preJobs);
+    }
+  }
+  function handlePostProduction() {
+    setLoading(true);
+    setactiveButton("post");
+    if (!loadedJobs.includes("post")) {
+      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 4)
+        .then((r) => {
+          const values = JSON.parse(r.data);
+          setPostJobs(values.Item1);
+          setJobs(values.Item1);
+          loadedJobs.push("post");
+          setLoadedJobs(loadedJobs);
+          props.handleJobLoaded(values.Item1);
+          setLoading(false);
+        })
+        .catch((err) => {
+          alert("Error in retrieve Jobs list");
+        });
+    } else {
+      setLoading(false);
+      setJobs(postJobs);
+    }
+  }
+  function handleProduction() {
+    setJobs(props.jobs);
+    setactiveButton("prod");
+  }
   return (
     <Fragment>
       <Card style={{ backgroundColor: "#ebedf1" }}>
@@ -97,29 +154,72 @@ export default function Jobs(props) {
               </Grid>
             </Hidden>
           </Grid>
-          <Accordion defaultExpanded="true">
+          <Accordion defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
               <Typography variant="h4" component="div">
-                Production
-                <hr />
+                Jobs <hr />
               </Typography>
             </AccordionSummary>
 
-            <AccordionDetails></AccordionDetails>
+            <AccordionDetails>
+              <Grid item lg={1} sm={6} xs={12}>
+                <Button
+                  variant={activeButton == "pre" ? "contained" : "outlined"}
+                  size="small"
+                  onClick={() => handlePreProduction()}
+                  startIcon={<EmojiPeopleIcon />}
+                >
+                  Pre-Production
+                </Button>
+              </Grid>
+              <Grid item lg={1} sm={6} xs={12}>
+                <Button
+                  variant={activeButton == "prod" ? "contained" : "outlined"}
+                  size="small"
+                  onClick={() => handleProduction()}
+                  startIcon={<DirectionsWalkIcon />}
+                >
+                  <span>
+                    &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </span>
+                </Button>
+              </Grid>
+
+              <Grid item lg={1} sm={6} xs={12}>
+                <Button
+                  variant={activeButton == "post" ? "contained" : "outlined"}
+                  size="small"
+                  onClick={() => handlePostProduction()}
+                  startIcon={<BuildIcon />}
+                >
+                  Post-Production
+                </Button>
+              </Grid>
+            </AccordionDetails>
             <Grid container spacing={1}>
-              {props.jobs &&
-                props.jobs
+              {loading && <Loading />}
+              {!loading &&
+                jobs &&
+                jobs
                   .sort(function (a, b) {
                     return a.JobStageOrder - b.JobStageOrder;
                   })
+                  .filter(
+                    (x) =>
+                      (activeButton == "post" &&
+                        x.JobStageName == "postproduction") ||
+                      (activeButton == "pre" &&
+                        x.JobStageName == "preproduction") ||
+                      (activeButton == "prod" && x.JobStageName == "production")
+                  )
                   .map((e) => (
                     <Grid
                       item
-                      lg={props.jobs.length > 48 ? 1 : 2}
+                      lg={jobs.length > 48 ? 1 : 2}
                       sm={6}
                       xs={12}
                       key={e.OId}
@@ -174,15 +274,16 @@ export default function Jobs(props) {
                           </Grid>
                           <Grid item lg={6} xs={6} sm={6} md={6}>
                             {e.Note !== "" && e.Note.length > 0 && (
-                              <IconButton color="inherit">
-                                <CommentIcon
-                                  onClick={(w) => {
-                                    // alert(e.Note);
-                                    setNote(e.Note);
-                                    setOpenDialog(true);
-                                    w.stopPropagation();
-                                  }}
-                                />
+                              <IconButton
+                                color="inherit"
+                                onClick={(w) => {
+                                  // alert(e.Note);
+                                  setNote(e.Note);
+                                  setOpenDialog(true);
+                                  w.stopPropagation();
+                                }}
+                              >
+                                <CommentIcon />
                               </IconButton>
                             )}
                           </Grid>
@@ -198,14 +299,15 @@ export default function Jobs(props) {
                   ))}
             </Grid>
           </Accordion>
-          <Accordion defaultExpanded="true">
+          <Accordion defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
               aria-controls="panel1a-content"
               id="panel1a-header"
             >
               <Typography variant="h4" component="div">
-                Admin <hr />
+                Admin Jobs
+                <hr />
               </Typography>
             </AccordionSummary>
             <AccordionDetails></AccordionDetails>

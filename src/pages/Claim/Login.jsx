@@ -14,7 +14,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 export default function Login(props) {
   const classes = gridSearchStyles();
   return (
-    <Fragment style={{ backgroundColor: "#ebedf1!important" }}>
+    <Fragment>
       <div className={classes.search}>
         <Grid container spacing={1} style={{ backgroundColor: "#ebedf1" }}>
           <Grid

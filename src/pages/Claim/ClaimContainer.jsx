@@ -231,6 +231,23 @@ class CalimContainer extends React.Component {
     }
   };
 
+  handleJobLoaded = (newJobs) => {
+    var stateJobs = this.state.jobs;
+    var mainStateJobs = this.state.mainJobs;
+    stateJobs.push(...newJobs);
+    mainStateJobs.push(...newJobs);
+
+    this.setState(
+      {
+        ...this.state,
+        jobs: stateJobs,
+        mainJobs: mainStateJobs,
+      },
+      () => {
+        return true;
+      }
+    );
+  };
   saveLogoutAPI = (id, comment) => {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
@@ -371,7 +388,7 @@ class CalimContainer extends React.Component {
       loading: true,
     });
 
-    ClaimLogic.getJobsOfWorkerFromApi(claimingOId)
+    ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3)
       .then((r) => {
         const values = JSON.parse(r.data);
         this.setState({
@@ -452,7 +469,8 @@ class CalimContainer extends React.Component {
         }
       );
     } else {
-      const selectedJob = this.state.jobs.find((x) => x.OId === jobId);
+      const jobs = this.state.jobs;
+      const selectedJob = jobs.find((x) => x.OId === jobId);
       var labelText = this.state.LabelText;
       labelText.push(selectedJob.Code);
 
@@ -603,11 +621,14 @@ class CalimContainer extends React.Component {
             <Jobs
               claimingOId={this.state.claimingOId}
               searchJobs={this.searchJobs}
-              jobs={this.state.jobs}
+              jobs={this.state.mainJobs}
               adminJobs={this.state.adminJobs}
+              prejobs={this.state.prejobs}
+              postjobs={this.state.postjobs}
               handleJobClick={this.handleJobClick}
               handleBack={this.handleBack}
               handleLogOut={this.handleLogOut}
+              handleJobLoaded={this.handleJobLoaded}
             />
           );
         }

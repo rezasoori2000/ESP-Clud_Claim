@@ -64,10 +64,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     link: {
       textDecoration: "none",
-      color: "white",
+      color: "#fff",
     },
     whiteColor: {
-      color: "white",
+      color: "#fff",
     },
   })
 );
@@ -101,12 +101,9 @@ const DrawerContainer = (props) => {
         <br />
         {props.isSystemAdmin && (
           <div>
-            <Link
-              to="/claim"
-              style={{ textDecoration: "none", color: "white" }}
-            >
+            <Link to="/claim" style={{ textDecoration: "none", color: "#fff" }}>
               <ListItem button key="1">
-                <ListItemIcon style={{ color: "white" }}>
+                <ListItemIcon style={{ color: "#fff" }}>
                   <InboxIcon />{" "}
                 </ListItemIcon>
                 <ListItemText
@@ -124,10 +121,10 @@ const DrawerContainer = (props) => {
             />
             <Link
               to="/settings"
-              style={{ textDecoration: "none", color: "white" }}
+              style={{ textDecoration: "none", color: "#fff" }}
             >
               <ListItem button key="2">
-                <ListItemIcon style={{ color: "white" }}>
+                <ListItemIcon style={{ color: "#fff" }}>
                   <SettingsIcon />{" "}
                 </ListItemIcon>
                 <ListItemText
@@ -137,12 +134,9 @@ const DrawerContainer = (props) => {
               </ListItem>
             </Link>
 
-            <Link
-              to="/users"
-              style={{ textDecoration: "none", color: "white" }}
-            >
+            <Link to="/users" style={{ textDecoration: "none", color: "#fff" }}>
               <ListItem button key="2">
-                <ListItemIcon style={{ color: "white" }}>
+                <ListItemIcon style={{ color: "#fff" }}>
                   <SettingsIcon />{" "}
                 </ListItemIcon>
                 <ListItemText
@@ -155,7 +149,6 @@ const DrawerContainer = (props) => {
             <Button
               variant="outlined"
               size="small"
-              color="white"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
                 localStorage.removeItem("_claim");
@@ -213,9 +206,7 @@ const DrawerContainer = (props) => {
           </IconButton>
           <Grid container spacing={3}>
             <Grid item lg={11}>
-              <Typography variant="h7" noWrap>
-                ESP-Cloud Claim
-              </Typography>
+              <Typography noWrap>ESP-Cloud Claim</Typography>
             </Grid>
             <Grid item lg={1}></Grid>
           </Grid>
