@@ -180,31 +180,35 @@ export default function Jobs(props) {
                   </td>
 
                   <td>
-                    <Button
-                      variant={
-                        activeButton == "prod" ? "contained" : "outlined"
-                      }
-                      size="small"
-                      onClick={() => handleProduction()}
-                      startIcon={<DirectionsWalkIcon />}
-                    >
-                      <span>
-                        &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      </span>
-                    </Button>
+                    {!props.showPreProduction && (
+                      <Button
+                        variant={
+                          activeButton == "prod" ? "contained" : "outlined"
+                        }
+                        size="small"
+                        onClick={() => handleProduction()}
+                        startIcon={<DirectionsWalkIcon />}
+                      >
+                        <span>
+                          &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        </span>
+                      </Button>
+                    )}
                   </td>
 
                   <td>
-                    <Button
-                      variant={
-                        activeButton == "post" ? "contained" : "outlined"
-                      }
-                      size="small"
-                      onClick={() => handlePostProduction()}
-                      startIcon={<BuildIcon />}
-                    >
-                      Post-Production
-                    </Button>
+                    {!props.showPostProduction && (
+                      <Button
+                        variant={
+                          activeButton == "post" ? "contained" : "outlined"
+                        }
+                        size="small"
+                        onClick={() => handlePostProduction()}
+                        startIcon={<BuildIcon />}
+                      >
+                        Post-Production
+                      </Button>
+                    )}
                   </td>
                 </tr>
               </table>

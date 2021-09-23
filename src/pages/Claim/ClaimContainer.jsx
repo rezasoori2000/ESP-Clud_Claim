@@ -625,6 +625,8 @@ class CalimContainer extends React.Component {
               adminJobs={this.state.adminJobs}
               prejobs={this.state.prejobs}
               postjobs={this.state.postjobs}
+              showPreProduction={this.state.settings.HidePreProductionJobs}
+              showPostProduction={this.state.settings.HidePostProductionJobs}
               handleJobClick={this.handleJobClick}
               handleBack={this.handleBack}
               handleLogOut={this.handleLogOut}
