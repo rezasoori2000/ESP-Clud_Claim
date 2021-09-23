@@ -73,7 +73,11 @@ export default function SignIn(props) {
         <Typography component="h4" variant="h4">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
+        <form
+          className={classes.form}
+          noValidate
+          onSubmit={handleSignInClicked}
+        >
           <TextField
             variant="outlined"
             margin="normal"
@@ -108,7 +112,7 @@ export default function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            onClick={handleSignInClicked}
+            type="submit"
           >
             Sign In
           </Button>
