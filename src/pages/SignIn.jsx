@@ -77,6 +77,7 @@ export default function SignIn(props) {
           className={classes.form}
           noValidate
           onSubmit={handleSignInClicked}
+          method="post"
         >
           <TextField
             variant="outlined"
