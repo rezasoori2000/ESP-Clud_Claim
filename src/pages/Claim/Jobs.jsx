@@ -166,39 +166,46 @@ export default function Jobs(props) {
             </AccordionSummary>
 
             <AccordionDetails>
-              <Grid item lg={1} sm={6} xs={12}>
-                <Button
-                  variant={activeButton == "pre" ? "contained" : "outlined"}
-                  size="small"
-                  onClick={() => handlePreProduction()}
-                  startIcon={<EmojiPeopleIcon />}
-                >
-                  Pre-Production
-                </Button>
-              </Grid>
-              <Grid item lg={1} sm={6} xs={12}>
-                <Button
-                  variant={activeButton == "prod" ? "contained" : "outlined"}
-                  size="small"
-                  onClick={() => handleProduction()}
-                  startIcon={<DirectionsWalkIcon />}
-                >
-                  <span>
-                    &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  </span>
-                </Button>
-              </Grid>
-
-              <Grid item lg={1} sm={6} xs={12}>
-                <Button
-                  variant={activeButton == "post" ? "contained" : "outlined"}
-                  size="small"
-                  onClick={() => handlePostProduction()}
-                  startIcon={<BuildIcon />}
-                >
-                  Post-Production
-                </Button>
-              </Grid>
+              <table>
+                <tr>
+                  <td>
+                    <Button
+                      variant={activeButton == "pre" ? "contained" : "outlined"}
+                      size="small"
+                      onClick={() => handlePreProduction()}
+                      startIcon={<EmojiPeopleIcon />}
+                    >
+                      Pre-Production
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      variant={
+                        activeButton == "prod" ? "contained" : "outlined"
+                      }
+                      size="small"
+                      onClick={() => handleProduction()}
+                      startIcon={<DirectionsWalkIcon />}
+                    >
+                      <span>
+                        &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      </span>
+                    </Button>
+                  </td>
+                  <td>
+                    <Button
+                      variant={
+                        activeButton == "post" ? "contained" : "outlined"
+                      }
+                      size="small"
+                      onClick={() => handlePostProduction()}
+                      startIcon={<BuildIcon />}
+                    >
+                      Post-Production
+                    </Button>
+                  </td>
+                </tr>
+              </table>
             </AccordionDetails>
             <Grid container spacing={1}>
               {loading && <Loading />}
