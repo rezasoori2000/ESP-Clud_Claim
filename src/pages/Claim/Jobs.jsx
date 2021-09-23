@@ -178,6 +178,7 @@ export default function Jobs(props) {
                       Pre-Production
                     </Button>
                   </td>
+
                   <td>
                     <Button
                       variant={
@@ -192,6 +193,7 @@ export default function Jobs(props) {
                       </span>
                     </Button>
                   </td>
+
                   <td>
                     <Button
                       variant={
