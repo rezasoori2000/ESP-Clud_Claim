@@ -169,31 +169,33 @@ export default function Jobs(props) {
               <table>
                 <tr>
                   <td>
-                    <Button
-                      variant={activeButton == "pre" ? "contained" : "outlined"}
-                      size="small"
-                      onClick={() => handlePreProduction()}
-                      startIcon={<EmojiPeopleIcon />}
-                    >
-                      Pre-Production
-                    </Button>
-                  </td>
-
-                  <td>
                     {!props.showPreProduction && (
                       <Button
                         variant={
-                          activeButton == "prod" ? "contained" : "outlined"
+                          activeButton == "pre" ? "contained" : "outlined"
                         }
                         size="small"
-                        onClick={() => handleProduction()}
-                        startIcon={<DirectionsWalkIcon />}
+                        onClick={() => handlePreProduction()}
+                        startIcon={<EmojiPeopleIcon />}
                       >
-                        <span>
-                          &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </span>
+                        Pre-Production
                       </Button>
                     )}
+                  </td>
+
+                  <td>
+                    <Button
+                      variant={
+                        activeButton == "prod" ? "contained" : "outlined"
+                      }
+                      size="small"
+                      onClick={() => handleProduction()}
+                      startIcon={<DirectionsWalkIcon />}
+                    >
+                      <span>
+                        &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      </span>
+                    </Button>
                   </td>
 
                   <td>
