@@ -45,6 +45,7 @@ class CalimContainer extends React.Component {
       logoutClicked: false,
       totalProgress: 0,
       finishedItems: [],
+      logoutChecked: false,
     };
   }
 
@@ -122,7 +123,20 @@ class CalimContainer extends React.Component {
       }
     );
   };
-  handleLogin = (sid, isOnLeave) => {
+  handleLogin = (sid, isOnLeave, logout) => {
+    if (logout) {
+      this.handleLogOut(sid);
+      this.setState(
+        {
+          ...this.state,
+          logoutChecked: false,
+        },
+        () => {
+          window.location = "";
+        }
+      );
+      return;
+    }
     if (isOnLeave) {
       this.setState({
         ...this.state,
@@ -613,6 +627,7 @@ class CalimContainer extends React.Component {
               searchNames={this.searchNames}
               handleLogin={this.handleLogin}
               settings={this.state.settings}
+              logoutChecked={this.state.logoutChecked}
             />
           );
         }

@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import Grid from "@material-ui/core/Grid";
 import DoneIcon from "@material-ui/icons/Done";
 import FaceIcon from "@material-ui/icons/Face";
@@ -8,20 +8,21 @@ import SearchIcon from "@material-ui/icons/Search";
 import gridSearchStyles from "../../components/controls/Styles";
 import { BlurCircular } from "@material-ui/icons";
 import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
+import { InputLabel, Switch } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
 export default function Login(props) {
   const classes = gridSearchStyles();
+  const [logout, setLogout] = useState(props.logoutChecked);
   return (
     <Fragment>
       <div className={classes.search}>
         <Grid container spacing={1} style={{ backgroundColor: "#ebedf1" }}>
           <Grid
             item
-            lg={6}
-            sm={6}
-            xs={12}
+            lg={4}
+            sm={4}
+            xs={6}
             style={{ fontSize: "24px", paddingTop: "30px" }}
           >
             <span
@@ -30,7 +31,31 @@ export default function Login(props) {
               <b> Login</b>
             </span>
           </Grid>
-          <Grid item lg={6} sm={6} xs={12} style={{ marginTop: "20px" }}>
+          <Grid
+            item
+            lg={4}
+            sm={4}
+            xs={6}
+            style={{ marginTop: "20px", alignContent: "right" }}
+          >
+            <InputLabel htmlFor="input-with-icon-adornment">Log out</InputLabel>
+
+            <Switch
+              color="secondary"
+              style={{ color: "#9abf47" }}
+              checked={logout}
+              onChange={(e) => {
+                setLogout(e.target.checked);
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            lg={4}
+            sm={4}
+            xs={12}
+            style={{ marginTop: "20px", alignContent: "right" }}
+          >
             <InputLabel htmlFor="input-with-icon-adornment">Search</InputLabel>
             <Input
               id="input-with-icon-adornment"
@@ -77,7 +102,7 @@ export default function Login(props) {
                   textAlign: "center",
                 }}
                 onClick={() => {
-                  props.handleLogin(e.OId, e.IsOnLeave);
+                  props.handleLogin(e.OId, e.IsOnLeave, logout);
                 }}
               >
                 {/* {e.IsLoggedIn && (
