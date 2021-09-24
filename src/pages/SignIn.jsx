@@ -56,6 +56,9 @@ export default function SignIn(props) {
     setEmail(e.target.value);
   };
   const passwordChange = (e) => {
+    if (e.keyCode === 13) {
+      handleSignInClicked();
+    }
     setPassword(e.target.value);
   };
   const handleSignInClicked = () => {
@@ -73,12 +76,7 @@ export default function SignIn(props) {
         <Typography component="h4" variant="h4">
           Sign in
         </Typography>
-        <form
-          className={classes.form}
-          noValidate
-          onSubmit={handleSignInClicked}
-          method="post"
-        >
+        <div className={classes.form} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -101,7 +99,7 @@ export default function SignIn(props) {
             type="password"
             id="password"
             autoComplete="current-password"
-            onChange={(e) => passwordChange(e)}
+            onKeyUp={(e) => passwordChange(e)}
           />
           {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
@@ -113,7 +111,8 @@ export default function SignIn(props) {
             variant="contained"
             color="primary"
             className={classes.submit}
-            type="submit"
+            type="text"
+            onClick={handleSignInClicked}
           >
             Sign In
           </Button>
@@ -129,7 +128,7 @@ export default function SignIn(props) {
               </Link>
             </Grid>
           </Grid> */}
-        </form>
+        </div>
       </div>
       <Box mt={8}>
         <Copyright />
