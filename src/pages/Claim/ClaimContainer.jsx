@@ -235,7 +235,7 @@ class CalimContainer extends React.Component {
     var stateJobs = this.state.jobs;
     var mainStateJobs = this.state.mainJobs;
     stateJobs.push(...newJobs);
-    mainStateJobs.push(...newJobs);
+    //   mainStateJobs.push(...newJobs);
 
     this.setState(
       {

@@ -39,7 +39,24 @@ export default function Jobs(props) {
   const [postJobs, setPostJobs] = useState([]);
   const [loadedJobs, setLoadedJobs] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchVal, setsearchVal] = useState("");
+
+  function searchJobs(event) {
+    var txt = event.target.value;
+    setsearchVal(txt);
+    var filterJobs =
+      event.target.value.length > 0
+        ? props.jobs.filter(
+            (t) =>
+              t.Title.toLowerCase().includes(txt.toLowerCase()) ||
+              t.Code.includes(txt)
+          )
+        : props.jobs;
+    setJobs(filterJobs);
+  }
+
   function handlePreProduction() {
+    setsearchVal("");
     setLoading(true);
     setactiveButton("pre");
     if (!loadedJobs.includes("pre")) {
@@ -62,6 +79,7 @@ export default function Jobs(props) {
     }
   }
   function handlePostProduction() {
+    setsearchVal("");
     setLoading(true);
     setactiveButton("post");
     if (!loadedJobs.includes("post")) {
@@ -84,6 +102,7 @@ export default function Jobs(props) {
     }
   }
   function handleProduction() {
+    setsearchVal("");
     setJobs(props.jobs);
     setactiveButton("prod");
   }
@@ -138,7 +157,8 @@ export default function Jobs(props) {
                     <SearchIcon />
                   </InputAdornment>
                 }
-                onChange={props.searchJobs}
+                value={searchVal}
+                onChange={searchJobs}
               />
             </Grid>
             <Hidden only={["sm", "xs"]}>
