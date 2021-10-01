@@ -123,6 +123,7 @@ export default function Jobs(props) {
               ></Button>
             </Grid>
             <Grid item lg={7} sm={4} xs={5}>
+              ``
               <span style={{ fontSize: "18px", marginTop: "30px" }}>
                 <b>Job&nbsp;Selection</b>
               </span>

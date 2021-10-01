@@ -4,7 +4,7 @@ import DrawerContainer from "./components/DrawerContainer";
 import { Route } from "react-router-dom";
 import Performance from "./pages/Performance";
 import Settings from "./pages/AdminSettings/AdminSettingsContainer";
-import Board from "./pages/Board";
+import ProductionBoard from "./pages/ProductionBoard/ProductionBoardContainer";
 import Welcome from "./pages/Welcome";
 import ClaimContainer from "./pages/Claim/ClaimContainer";
 import Helper from "./components/logics/Helper";
@@ -180,8 +180,8 @@ class App extends React.Component {
                 )}
               />
               <Route path="/performanceState" component={Performance} />
-              <Route path="/board" component={Board} />
               <Route path="/users" component={UserManagement} />
+              <Route path="/productionBoard" component={ProductionBoard} />
             </main>
           </div>
         )}

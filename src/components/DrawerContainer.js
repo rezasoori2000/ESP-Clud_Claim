@@ -133,7 +133,20 @@ const DrawerContainer = (props) => {
                 />
               </ListItem>
             </Link>
-
+            <Link
+              to="/ProductionBoard"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
+              <ListItem button key="2">
+                <ListItemIcon style={{ color: "#fff" }}>
+                  <SettingsIcon />{" "}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Production&nbsp;Board"
+                  classes={{ primary: classes.listItemText }}
+                />
+              </ListItem>
+            </Link>
             <Link to="/users" style={{ textDecoration: "none", color: "#fff" }}>
               <ListItem button key="2">
                 <ListItemIcon style={{ color: "#fff" }}>
