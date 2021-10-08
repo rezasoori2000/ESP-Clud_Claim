@@ -7,13 +7,22 @@ import {
   Switch,
   InputLabel,
 } from "@material-ui/core";
+import { PieChart } from "react-minimal-pie-chart";
 import CardContent from "@material-ui/core/CardContent";
 import SearchIcon from "@material-ui/icons/Search";
-import CircularProgressWithLabel from "./../../components/controls/CircularProgressWithLabel";
+
 import CheckIcon from "@mui/icons-material/Check";
 import { Button, IconButton } from "@material-ui/core";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import Hidden from "@material-ui/core/Hidden";
+
+import Tooltip from "@material-ui/core/Tooltip";
+import {
+  createMuiTheme,
+  MuiThemeProvider,
+  withStyles,
+} from "@material-ui/core/styles";
+import transitions from "@material-ui/core/styles/transitions";
 
 const ProductionBoardPage = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -21,6 +30,23 @@ const ProductionBoardPage = (props) => {
   const [searchVal, setsearchVal] = useState("");
   const [jobs, setJobs] = useState(props.jobs);
   const [wt, setWt] = useState(true);
+  const [tooltipIsOpen, setTooltipIsOpen] = useState(true);
+
+  const theme = createMuiTheme({
+    overrides: {
+      MuiTooltip: {
+        tooltip: {
+          fontSize: "0.7em",
+          color: "yellow",
+          backgroundColor: "#eeeeee",
+        },
+      },
+    },
+  });
+  const defaultLabelStyle = {
+    fontSize: "20px",
+    fontFamily: "sans-serif",
+  };
   function searchJobs(event) {
     var txt = event.target.value;
     setsearchVal(txt);
@@ -48,40 +74,146 @@ const ProductionBoardPage = (props) => {
 
     return tempArray;
   }
-  function getMobileWorkTypes(wts) {
-    var len = wts.length;
-    var obj = "<table style='border: 1px solid #b0b0b0;width:100%'>";
 
+  function beginTr(wts) {
     var chuncked = chunkArray(wts, 4);
-    for (var i = 0; i < chuncked.length; i++) {
-      obj += "<tr>";
-      for (var j = 0; j < chuncked[i].length; j++) {
-        obj += `<td style='border: 1px solid #b0b0b0'>${chuncked[i][j].Name}</td>`;
-      }
-      obj += `</tr><tr>`;
 
-      for (var j = 0; j < chuncked[i].length; j++) {
-        var value = chuncked[i][j].Progress;
-        obj +=
-          value == 100
-            ? `<td  style='background-color:green;color:white; border: 1px solid #b0b0b0'>Done</td>`
-            : value == 0
-            ? `<td  style=' border: 1px solid #b0b0b0'></td>`
-            : `<td  style=' border: 1px solid #b0b0b0'>${value}%</td>`;
+    var items = [];
+    var htd = [];
+    var trs = [];
+    var element = {};
+    for (var i = 0; i < chuncked.length; i++) {
+      var section = chuncked[i];
+      htd = [];
+      for (var j = 0; j < section.length; j++) {
+        htd.push(<td>{section[j].Name}</td>);
       }
-      obj += `</tr>`;
+      trs.push(<tr>{htd}</tr>);
+      htd = [];
+      for (var j = 0; j < section.length; j++) {
+        if (section[j].Progress == 100) element = <CheckIcon />;
+        else {
+          element = (
+            <MuiThemeProvider theme={theme}>
+              <Tooltip
+                title={section[j].ChartObj.filter((x) => x.value > 0).map(
+                  (t) => (
+                    <tr>
+                      <td style={{ backgroundColor: t.color }}> </td>
+                      <td>
+                        <h1> {t.value}</h1>
+                      </td>
+                    </tr>
+                  )
+                )}
+                placement="top"
+              >
+                <PieChart
+                  data={section[j].ChartObj.filter((x) => x.value > 0)}
+                  radius={PieChart.defaultProps.radius - 10}
+                  segmentsShift={(index) => (index === 0 ? 10 : 0.5)}
+                  label={({ dataEntry }) => dataEntry.value}
+                  labelStyle={{
+                    ...defaultLabelStyle,
+                  }}
+                />
+              </Tooltip>
+            </MuiThemeProvider>
+          );
+        }
+        htd.push(<td>{element}</td>);
+        element = {};
+      }
+      trs.push(<tr>{htd}</tr>);
+      htd = [];
     }
-    obj += "</table>";
-    return obj;
+    items.push(<table>{trs}</table>);
+
+    return items;
   }
+
   return (
     <div style={{ width: "99%" }}>
       <Grid container spacing={5}>
         <Hidden only={["xs"]}>
-          <Grid item lg={10} sm={6} xs={12}>
+          <Grid item lg={2} sm={6} xs={12}>
             <h1>Production&nbsp;Board</h1>
           </Grid>
+          <Grid item lg={8} sm={6} xs={12}>
+            <table style={{ width: "100%" }}>
+              <tbody>
+                <tr>
+                  <td style={{ width: "10%" }}>
+                    <div
+                      style={{
+                        backgroundColor: "#00C400",
+                        float: "left",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <span>&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                  </td>
+                  <td>Finished</td>
+                  <td style={{ width: "10%" }}>
+                    <div
+                      style={{
+                        backgroundColor: "#ffff00",
+                        float: "left",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <span>&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                  </td>
+                  <td>Scheduled</td>
+                  <td style={{ width: "10%" }}>
+                    <div
+                      style={{
+                        backgroundColor: "#ffa500",
+                        float: "left",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <span>&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                  </td>
+                  <td>High Priority</td>
+                  <td style={{ width: "10%" }}>
+                    <div
+                      style={{
+                        backgroundColor: "#d3d3d3",
+                        float: "left",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <span>&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                  </td>
+                  <td>Non-scheduled</td>
+                  <td style={{ width: "10%" }}>
+                    <div
+                      style={{
+                        backgroundColor: "#808080",
+                        float: "left",
+                        width: "100%",
+                        height: "100%",
+                      }}
+                    >
+                      <span>&nbsp;&nbsp;&nbsp;</span>
+                    </div>
+                  </td>
+                  <td>Out Of Factory</td>
+                </tr>
+              </tbody>
+            </table>
+          </Grid>
         </Hidden>
+
         <Grid item lg={2} sm={6} xs={7}>
           <Input
             id="input-with-icon-adornment"
@@ -121,7 +253,9 @@ const ProductionBoardPage = (props) => {
               {jobs &&
                 jobs[0] &&
                 jobs[0].WorkTypes &&
-                jobs[0].WorkTypes.map((w) => <th>{w.Name}</th>)}
+                jobs[0].WorkTypes.map((w) => (
+                  <th style={{ minWidth: "65px" }}>{w.Name}</th>
+                ))}
             </tr>
           </thead>
           <tbody>
@@ -165,17 +299,46 @@ const ProductionBoardPage = (props) => {
                   </td>
                   <td>{e.Progress}%</td>
                   {e.WorkTypes &&
-                    e.WorkTypes.map((w) => (
-                      <td>
-                        {w.Progress == 100 ? (
+                    e.WorkTypes.map((w) =>
+                      w.Progress == 100 ? (
+                        <td>
                           <CheckIcon />
-                        ) : w.Progress == 0 ? (
-                          <span></span>
-                        ) : (
-                          <CircularProgressWithLabel value={w.Progress} />
-                        )}
-                      </td>
-                    ))}
+                        </td>
+                      ) : (
+                        <MuiThemeProvider theme={theme}>
+                          <Tooltip
+                            title={w.ChartObj.filter((x) => x.value > 0).map(
+                              (t) => (
+                                <tr>
+                                  <td style={{ backgroundColor: t.color }}>
+                                    {" "}
+                                  </td>
+                                  <td>
+                                    <h1> {t.value}</h1>
+                                  </td>
+                                </tr>
+                              )
+                            )}
+                            placement="top"
+                          >
+                            <td>
+                              <PieChart
+                                data={w.ChartObj.filter((x) => x.value > 0)}
+                                radius={PieChart.defaultProps.radius - 10}
+                                segmentsShift={(index) =>
+                                  index === 0 ? 10 : 0.5
+                                }
+                                label={({ dataEntry }) => dataEntry.value}
+                                onMouseOver={() => {}}
+                                labelStyle={{
+                                  ...defaultLabelStyle,
+                                }}
+                              />
+                            </td>
+                          </Tooltip>
+                        </MuiThemeProvider>
+                      )
+                    )}
                 </tr>
               ))}
           </tbody>
@@ -231,13 +394,16 @@ const ProductionBoardPage = (props) => {
                   </td>
                 </tr>
                 <tr>
-                  {e && e.WorkTypes && wt && (
+                  {/* {e && e.WorkTypes && wt && (
                     <td
                       colSpan="5"
                       dangerouslySetInnerHTML={{
                         __html: getMobileWorkTypes(e.WorkTypes),
                       }}
                     />
+                  )} */}
+                  {e.WorkTypes && wt && (
+                    <Fragment>{beginTr(e.WorkTypes)}</Fragment>
                   )}
                 </tr>
                 <tr>
