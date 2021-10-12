@@ -574,7 +574,7 @@ class CalimContainer extends React.Component {
             {
               ...this.state,
               loading: false,
-              page: this.props.role == "a" || this.props.public ? 0 : 1,
+              page: 0,
               LabelText: [],
             },
             () => {
@@ -597,7 +597,7 @@ class CalimContainer extends React.Component {
           {
             ...this.state,
             loading: false,
-            page: this.props.role == "a" || this.props.public ? 0 : 1,
+            page: 0,
             LabelText: [],
           },
           () => {
