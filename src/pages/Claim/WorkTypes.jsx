@@ -35,7 +35,7 @@ export default function Worktypes(props) {
   }
   return (
     <Fragment>
-      <Card style={{ backgroundColor: "#ebedf1" }}>
+      <Card style={{ backgroundColor: "#fff" }}>
         <CardContent>
           <Grid container spacing={2}>
             <Grid ml={0} item lg={1} sm={4} xs={4}>

@@ -50,6 +50,7 @@ const AdminSettingsPage = (props) => {
 
   return (
     <div>
+      {window.scrollTo(0, 0)}
       <Card>
         <Grid container spacing={3}>
           <Grid item lg={10}>

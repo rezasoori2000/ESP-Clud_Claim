@@ -38,7 +38,7 @@ const useStyles = makeStyles({
     minHight: "40px",
     lineHeight: "20px",
   },
-  root: { backgroundColor: "#ebedf1" },
+  root: { backgroundColor: "#fff" },
 });
 
 export default function Summary(props) {
@@ -47,6 +47,7 @@ export default function Summary(props) {
 
   return (
     <Fragment>
+      {window.scrollTo(0, 0)}
       <Grid container spacing={3}>
         <Grid item lg={1} sm={2} xs={4}>
           <Button

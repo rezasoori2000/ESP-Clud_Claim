@@ -120,3 +120,6 @@ th[scope="row"] {
 body {
   padding-bottom: 90vh;
 }
+tr.border-bottom {
+  border-bottom: 1pt solid #3f51b5;
+}

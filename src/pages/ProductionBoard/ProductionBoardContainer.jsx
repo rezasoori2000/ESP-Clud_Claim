@@ -1,8 +1,9 @@
-import React from "react";
+import React, { Fragment } from "react";
 import ProductionBoard from "./ProductionBoardPage";
 import config from "../../config";
 import axios from "axios";
 import Helper from "../../components/logics/Helper";
+import Loading from "../loading.js";
 
 class ProductionBoardContainer extends React.Component {
   constructor() {
@@ -46,7 +47,17 @@ class ProductionBoardContainer extends React.Component {
   };
 
   render(props) {
-    return this.state.loaded && <ProductionBoard jobs={this.state.jobs} />;
+    return (
+      <Fragment>
+        {!this.state.loaded && <Loading />}
+        {this.state.loaded && (
+          <ProductionBoard
+            jobs={this.state.jobs}
+            settings={this.props.settings}
+          />
+        )}
+      </Fragment>
+    );
   }
 }
 

@@ -186,110 +186,80 @@ export default function Jobs(props) {
             </AccordionSummary>
 
             <AccordionDetails>
-              <Hidden only={["lg", "xl", "md"]}>
-                <table>
-                  <tr>
-                    <td>
-                      {!props.showPreProduction && (
-                        <Button
-                          variant={
-                            activeButton == "pre" ? "contained" : "outlined"
-                          }
-                          size="small"
-                          onClick={() => handlePreProduction()}
-                          startIcon={<EmojiPeopleIcon />}
-                        >
-                          Pre-Production
-                        </Button>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      <Button
-                        variant={
-                          activeButton == "prod" ? "contained" : "outlined"
-                        }
-                        size="small"
-                        onClick={() => handleProduction()}
-                        startIcon={<DirectionsWalkIcon />}
-                      >
-                        <span>
-                          &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </span>
-                      </Button>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>
-                      {!props.showPostProduction && (
-                        <Button
-                          variant={
-                            activeButton == "post" ? "contained" : "outlined"
-                          }
-                          size="small"
-                          onClick={() => handlePostProduction()}
-                          startIcon={<BuildIcon />}
-                        >
-                          Post-Production
-                        </Button>
-                      )}
-                    </td>
-                  </tr>
-                </table>
-              </Hidden>
-              <Hidden only={["xs"]}>
-                <table>
-                  <tr>
-                    <td>
-                      {!props.showPreProduction && (
-                        <Button
-                          variant={
-                            activeButton == "pre" ? "contained" : "outlined"
-                          }
-                          size="small"
-                          onClick={() => handlePreProduction()}
-                          startIcon={<EmojiPeopleIcon />}
-                        >
-                          Pre-Production
-                        </Button>
-                      )}
-                    </td>
-
-                    <td>
-                      <Button
-                        variant={
-                          activeButton == "prod" ? "contained" : "outlined"
-                        }
-                        size="small"
-                        onClick={() => handleProduction()}
-                        startIcon={<DirectionsWalkIcon />}
-                      >
-                        <span>
-                          &nbsp;&nbsp;&nbsp;Production&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                        </span>
-                      </Button>
-                    </td>
-
-                    <td>
-                      {!props.showPostProduction && (
-                        <Button
-                          variant={
-                            activeButton == "post" ? "contained" : "outlined"
-                          }
-                          size="small"
-                          onClick={() => handlePostProduction()}
-                          startIcon={<BuildIcon />}
-                        >
-                          Post-Production
-                        </Button>
-                      )}
-                    </td>
-                  </tr>
-                </table>
-              </Hidden>
+              <Grid
+                ml={0}
+                item
+                lg={1}
+                sm={2}
+                xs={4}
+                style={{ textAlign: "right" }}
+              >
+                {!props.showPreProduction && (
+                  <Button
+                    variant={activeButton == "pre" ? "contained" : "outlined"}
+                    style={{
+                      color: activeButton == "pre" ? "white" : "black",
+                      backgroundColor:
+                        activeButton == "pre" ? "#196dc4" : "white",
+                    }}
+                    size="small"
+                    onClick={() => handlePreProduction()}
+                  >
+                    Pre&nbsp;Prod.
+                  </Button>
+                )}
+              </Grid>
+              <Grid
+                ml={0}
+                item
+                lg={1}
+                sm={2}
+                xs={4}
+                style={{ textAlign: "right" }}
+              >
+                <Button
+                  variant={activeButton == "prod" ? "contained" : "outlined"}
+                  style={{
+                    color: activeButton == "prod" ? "white" : "black",
+                    backgroundColor:
+                      activeButton == "prod" ? "#196dc4" : "white",
+                  }}
+                  size="small"
+                  onClick={() => handleProduction()}
+                >
+                  <span>
+                    &nbsp;&nbsp;&nbsp;Prod.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  </span>
+                </Button>
+              </Grid>
+              <Grid
+                ml={0}
+                item
+                lg={1}
+                sm={2}
+                xs={4}
+                style={{ textAlign: "right" }}
+              >
+                {!props.showPostProduction && (
+                  <Button
+                    variant={activeButton == "post" ? "contained" : "outlined"}
+                    style={{
+                      color: activeButton == "post" ? "white" : "black",
+                      backgroundColor:
+                        activeButton == "post" ? "#196dc4" : "white",
+                    }}
+                    size="small"
+                    onClick={() => handlePostProduction()}
+                  >
+                    Post&nbsp;Prod.
+                  </Button>
+                )}
+              </Grid>
             </AccordionDetails>
             <Grid container spacing={1}>
+              <Grid ml={0} item lg={12} sm={12} xs={12} md={12}>
+                <hr />
+              </Grid>
               {loading && <Loading />}
               {!loading &&
                 jobs &&

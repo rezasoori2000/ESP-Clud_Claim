@@ -284,7 +284,7 @@ class JobItems extends React.Component {
     }
     return (
       <Fragment>
-        <Card style={{ backgroundColor: "#ebedf1" }}>
+        <Card style={{ backgroundColor: "#fff" }}>
           <CardContent>
             <Table aria-label="customized table">
               <TableBody>

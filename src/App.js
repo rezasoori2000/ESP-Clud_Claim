@@ -181,7 +181,12 @@ class App extends React.Component {
               />
               <Route path="/performanceState" component={Performance} />
               <Route path="/users" component={UserManagement} />
-              <Route path="/productionBoard" component={ProductionBoard} />
+              <Route
+                path="/productionBoard"
+                render={(props) => (
+                  <ProductionBoard settings={this.state.settings} />
+                )}
+              />
             </main>
           </div>
         )}
