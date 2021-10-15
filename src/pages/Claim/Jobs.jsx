@@ -1,14 +1,16 @@
 import React, { Fragment, useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
 
-import SearchIcon from "@material-ui/icons/Search";
+import SearchIcon from "@mui/icons-material/Search";
+
+import CancelIcon from "@mui/icons-material/Cancel";
+
 import gridSearchStyles from "../../components/controls/Styles";
 import { Button, IconButton } from "@material-ui/core";
 import CommentIcon from "@material-ui/icons/Comment";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-
+import InputBase from "@mui/material/InputBase";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -16,14 +18,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import BuildIcon from "@material-ui/icons/Build";
-import DirectionsWalkIcon from "@material-ui/icons/DirectionsWalk";
-import EmojiPeopleIcon from "@material-ui/icons/EmojiPeople";
+import SettingsIcon from "@mui/icons-material/Settings";
+import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
+import SubdirectoryArrowLeftOutlinedIcon from "@mui/icons-material/SubdirectoryArrowLeftOutlined";
+
 import Card from "@material-ui/core/Card";
+import Box from "@material-ui/core/Box";
 import CardContent from "@material-ui/core/CardContent";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
 
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 import ClaimLogic from "../../components/logics/ClaimLogic";
@@ -54,7 +55,10 @@ export default function Jobs(props) {
         : props.jobs;
     setJobs(filterJobs);
   }
-
+  function clearSearch() {
+    setsearchVal("");
+    setJobs(props.jobs);
+  }
   function handlePreProduction() {
     setsearchVal("");
     setLoading(true);
@@ -147,19 +151,24 @@ export default function Jobs(props) {
               </Grid>
             </Hidden>
             <Grid item lg={3} sm={12} xs={12}>
-              <InputLabel htmlFor="input-with-icon-adornment">
-                Search
-              </InputLabel>
-              <Input
-                id="input-with-icon-adornment"
-                startAdornment={
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                }
+              <IconButton sx={{ p: "10px" }} aria-label="menu">
+                <SearchIcon />
+              </IconButton>
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search"
+                variant="outlined"
                 value={searchVal}
                 onChange={searchJobs}
               />
+              <IconButton
+                color="primary"
+                sx={{ p: "10px" }}
+                aria-label="directions"
+                onClick={() => clearSearch()}
+              >
+                <CancelIcon />
+              </IconButton>
             </Grid>
             <Hidden only={["sm", "xs"]}>
               <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
@@ -186,11 +195,12 @@ export default function Jobs(props) {
             </AccordionSummary>
 
             <AccordionDetails>
+              <Grid ml={0} item lg={3} sm={0} xs={0}></Grid>
               <Grid
                 ml={0}
                 item
-                lg={1}
-                sm={2}
+                lg={2}
+                sm={4}
                 xs={4}
                 style={{ textAlign: "right" }}
               >
@@ -204,6 +214,8 @@ export default function Jobs(props) {
                     }}
                     size="small"
                     onClick={() => handlePreProduction()}
+                    startIcon={<CallMadeOutlinedIcon />}
+                    fullWidth
                   >
                     Pre&nbsp;Prod.
                   </Button>
@@ -212,8 +224,8 @@ export default function Jobs(props) {
               <Grid
                 ml={0}
                 item
-                lg={1}
-                sm={2}
+                lg={2}
+                sm={4}
                 xs={4}
                 style={{ textAlign: "right" }}
               >
@@ -226,6 +238,8 @@ export default function Jobs(props) {
                   }}
                   size="small"
                   onClick={() => handleProduction()}
+                  startIcon={<SettingsIcon />}
+                  fullWidth
                 >
                   <span>
                     &nbsp;&nbsp;&nbsp;Prod.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -235,8 +249,8 @@ export default function Jobs(props) {
               <Grid
                 ml={0}
                 item
-                lg={1}
-                sm={2}
+                lg={2}
+                sm={4}
                 xs={4}
                 style={{ textAlign: "right" }}
               >
@@ -248,8 +262,10 @@ export default function Jobs(props) {
                       backgroundColor:
                         activeButton == "post" ? "#196dc4" : "white",
                     }}
+                    startIcon={<SubdirectoryArrowLeftOutlinedIcon />}
                     size="small"
                     onClick={() => handlePostProduction()}
+                    fullWidth
                   >
                     Post&nbsp;Prod.
                   </Button>
@@ -275,6 +291,7 @@ export default function Jobs(props) {
                         x.JobStageName == "preproduction") ||
                       (activeButton == "prod" && x.JobStageName == "production")
                   )
+                  .filter((x) => x.WorkTypes.length > 0)
                   .map((e) => (
                     <Grid
                       item
@@ -331,6 +348,11 @@ export default function Jobs(props) {
                           <Grid item lg={12} xs={12} sm={12} md={12}>
                             <hr />
                           </Grid>
+
+                          <div style={{ fontSize: "small" }}>{e.Title}</div>
+                          <Grid item lg={12} xs={12} sm={12} md={12}>
+                            <hr />
+                          </Grid>
                           <Grid item lg={6} xs={6} sm={6} md={6}>
                             {e.Note !== "" && e.Note.length > 0 && (
                               <IconButton
@@ -351,8 +373,6 @@ export default function Jobs(props) {
                             <CircularProgressWithLabel value={e.Progress} />
                           </Grid>
                         </Grid>
-                        <hr />
-                        <div style={{ fontSize: "smaller" }}>{e.Title}</div>
                       </Box>
                     </Grid>
                   ))}

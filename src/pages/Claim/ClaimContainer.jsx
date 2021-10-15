@@ -303,20 +303,12 @@ class CalimContainer extends React.Component {
 
   /* #region  WorkType */
 
-  searchWorkTypes = (event) => {
-    var txt = event.target.value;
-    var workTypes =
-      event.target.value.length > 0
-        ? this.state.mainWorkTypes.filter((t) =>
-            t.Name.toLowerCase().includes(txt.toLowerCase())
-          )
-        : this.state.mainWorkTypes;
+  clearSearchWorkTypes = () => {
     this.setState({
       ...this.state,
-      workTypes,
+      workTypes: this.state.mainWorkTypes,
     });
   };
-
   handleWorkTypeClick = async (worktypeId) => {
     this.setState({
       ...this.state,
@@ -653,7 +645,6 @@ class CalimContainer extends React.Component {
           return (
             <WorkTypes
               claimingOId={this.state.claimingOId}
-              searchWorkTypes={this.searchWorkTypes}
               settings={this.props.settings}
               workTypes={this.state.workTypes}
               handleBack={this.handleBack}

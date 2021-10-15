@@ -27,6 +27,7 @@ import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const AirbnbSlider = withStyles({
   root: {
@@ -128,6 +129,7 @@ class JobItems extends React.Component {
       jobItems: props.items,
       changed: props.items.some((x) => x.Progress100 !== x.Main_Progress100),
       groupPercent: 0,
+      searchVal: "",
     };
   }
   mainJobItems = () => [];
@@ -193,21 +195,7 @@ class JobItems extends React.Component {
       changed,
     });
   };
-  searchJobItem = (e) => {
-    console.log(e.target.value);
 
-    var jItems =
-      e.target.value.length > 0
-        ? this.mainJobItems.filter((t) =>
-            t.Name.toLowerCase().includes(e.target.value.toLowerCase())
-          )
-        : this.mainJobItems;
-
-    this.setState({
-      ...this.state,
-      jobItems: jItems,
-    });
-  };
   roundNumber(v, g) {
     return v > g
       ? v % 5 == 0
@@ -218,7 +206,8 @@ class JobItems extends React.Component {
       : Math.floor((v + 4) / 5) * 5;
   }
   handleGroupedChanged(v, btn = false) {
-    if (v > 100 || v < 0) return false;
+    if (v < 0) return false;
+    if (v > 100) v = 100;
     const items = this.state.jobItems;
     v = btn ? this.roundNumber(v, this.state.groupPercent) : v;
 
@@ -271,6 +260,27 @@ class JobItems extends React.Component {
         : 0;
     return val;
   }
+
+  searchItems = (e) => {
+    var txt = e.target.value;
+    var jItems =
+      e.target.value.length > 0
+        ? this.mainJobItems.filter((t) => t.Name.toLowerCase().includes(txt))
+        : this.mainJobItems;
+
+    this.setState({
+      ...this.state,
+      jobItems: jItems,
+      searchVal: txt,
+    });
+  };
+  clearSearch = () => {
+    this.setState({
+      ...this.state,
+      jobItems: this.mainJobItems,
+      searchVal: "",
+    });
+  };
   render() {
     const { classes } = this.props;
 
@@ -309,18 +319,25 @@ class JobItems extends React.Component {
                       </Grid>
 
                       <Grid item lg={3} sm={8} xs={8}>
-                        <InputLabel htmlFor="input-with-icon-adornment">
-                          Search
-                        </InputLabel>
-                        <Input
-                          id="input-with-icon-adornment"
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <SearchIcon />
-                            </InputAdornment>
-                          }
-                          onChange={this.props.searchJobItem}
+                        <IconButton sx={{ p: "10px" }} aria-label="menu">
+                          <SearchIcon />
+                        </IconButton>
+                        <InputBase
+                          sx={{ ml: 1, flex: 1 }}
+                          Id="worktypeSearchVal"
+                          placeholder="Search"
+                          variant="outlined"
+                          value={this.state.searchVal}
+                          onChange={this.searchItems}
                         />
+                        <IconButton
+                          color="primary"
+                          sx={{ p: "10px" }}
+                          aria-label="directions"
+                          onClick={this.clearSearch}
+                        >
+                          <CancelIcon />
+                        </IconButton>
                       </Grid>
                       <Grid
                         item

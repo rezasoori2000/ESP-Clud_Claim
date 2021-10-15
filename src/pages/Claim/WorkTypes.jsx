@@ -11,11 +11,8 @@ import CommentIcon from "@material-ui/icons/Comment";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
-import Slider from "@material-ui/core/Slider";
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import CancelIcon from "@mui/icons-material/Cancel";
 import Hidden from "@material-ui/core/Hidden";
 import ClaimLogic from "../../components/logics/ClaimLogic";
 
@@ -26,6 +23,25 @@ export default function Worktypes(props) {
   });
   const [note, setNote] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [items, setSearchItems] = useState(props.workTypes);
+  const [searchVal, setSearcVal] = useState("");
+
+  function searchItems(event) {
+    var txt = event.target.value;
+    setSearcVal(txt);
+    var workTypes =
+      event.target.value.length > 0
+        ? props.workTypes.filter((t) =>
+            t.Name.toLowerCase().includes(txt.toLowerCase())
+          )
+        : props.workTypes;
+
+    setSearchItems(workTypes);
+  }
+  function clearSearch() {
+    setSearchItems(props.workTypes);
+    setSearcVal("");
+  }
   function handleWorktypeNoteClicked(id, code) {
     const response = ClaimLogic.GetClaimedByAPI(code, id);
     response.then((e) => {
@@ -74,18 +90,27 @@ export default function Worktypes(props) {
               </Grid>
             </Hidden>
             <Grid item lg={3} sm={12} xs={12}>
-              <InputLabel htmlFor="input-with-icon-adornment">
-                Search
-              </InputLabel>
-              <Input
-                id="input-with-icon-adornment"
-                startAdornment={
-                  <InputAdornment position="start">
-                    <SearchIcon />
-                  </InputAdornment>
-                }
-                onChange={props.searchWorkTypes}
+              <IconButton sx={{ p: "10px" }} aria-label="menu">
+                <SearchIcon />
+              </IconButton>
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                Id="worktypeSearchVal"
+                placeholder="Search"
+                variant="outlined"
+                value={searchVal}
+                onChange={searchItems}
               />
+              <IconButton
+                color="primary"
+                sx={{ p: "10px" }}
+                aria-label="directions"
+                onClick={() => {
+                  clearSearch();
+                }}
+              >
+                <CancelIcon />
+              </IconButton>
             </Grid>
             <Hidden only={["sm", "xs"]}>
               <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
@@ -103,8 +128,8 @@ export default function Worktypes(props) {
 
           <hr />
           <Grid container spacing={1}>
-            {props.workTypes &&
-              props.workTypes
+            {items &&
+              items
                 .filter((x) => x.Progress < 100)
 
                 .sort(function (a, b) {

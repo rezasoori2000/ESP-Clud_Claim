@@ -62,8 +62,13 @@ th {
   color: #fff;
 }
 
-td:nth-of-type(2) {
+/* td:nth-of-type(2) {
   font-style: italic;
+} */
+
+table#pbDesktop td {
+  font-weight: 400;
+  color: black;
 }
 
 /* Fixed Headers */

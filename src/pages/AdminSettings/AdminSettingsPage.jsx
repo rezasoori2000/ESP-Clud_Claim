@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -47,10 +47,13 @@ const AdminSettingsPage = (props) => {
   );
 
   const classes = useStyles();
-
+  useEffect(() => {
+    {
+      window.scrollTo(0, 0);
+    }
+  }, []);
   return (
     <div>
-      {window.scrollTo(0, 0)}
       <Card>
         <Grid container spacing={3}>
           <Grid item lg={10}>
@@ -339,7 +342,7 @@ const AdminSettingsPage = (props) => {
                 <Grid item lg={12}>
                   <label>Extra Columns</label>
                 </Grid>
-                <Grid item lg={4}>
+                <Grid item lg={3}>
                   <ESPCheckbox
                     name="PBTitleColumn"
                     label="Title"
@@ -347,7 +350,15 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
-                <Grid item lg={4}>
+                <Grid item lg={3}>
+                  <ESPCheckbox
+                    name="PBCustomerColumn"
+                    label="Customer"
+                    checked={props.adminSettings.PBCustomerColumn}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={3}>
                   <ESPCheckbox
                     name="PBHourColumn"
                     label="Hours"
@@ -355,7 +366,7 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
-                <Grid item lg={4}>
+                <Grid item lg={3}>
                   <ESPCheckbox
                     name="PBDueDateColumn"
                     label="Due Date"

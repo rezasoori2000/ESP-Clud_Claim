@@ -114,6 +114,7 @@ class App extends React.Component {
               texts={this.state.texts}
               isAdmin={this.state.isAdmin}
               isSystemAdmin={false}
+              ShowProductionBoard={this.state.settings.PBShowProductionBoard}
             />
             <main
               style={{
@@ -123,13 +124,25 @@ class App extends React.Component {
                 paddingTop: "80px",
               }}
             >
-              <ClaimContainer
-                public={isPublic}
-                isUser={true}
-                workerId={w}
-                settings={this.state.settings}
-                changeStep={this.changeStep}
-                role={this.state.claims.a ? "a" : "u"}
+              <Route
+                path="/claim"
+                render={(props) => (
+                  <ClaimContainer
+                    public={false}
+                    settings={this.state.settings}
+                    changeStep={this.changeStep}
+                    isUser={false}
+                    workerId="0"
+                    {...props}
+                  />
+                )}
+              />
+
+              <Route
+                path="/productionBoard"
+                render={(props) => (
+                  <ProductionBoard settings={this.state.settings} />
+                )}
               />
             </main>
           </div>

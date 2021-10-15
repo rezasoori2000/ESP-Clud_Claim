@@ -80,11 +80,6 @@ const DrawerContainer = (props) => {
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
-  // const childRef = useRef();
-  // const handleNextStep = (step) => {
-  //   setStep(step);
-  //   childRef.current.handleSetStep(activeStep);
-  // };
 
   const drawer = (
     <div
@@ -98,6 +93,7 @@ const DrawerContainer = (props) => {
         </div>
         <br />
         <br />
+
         <br />
         {props.isSystemAdmin && (
           <div>
@@ -114,11 +110,6 @@ const DrawerContainer = (props) => {
                 </ListItemText>
               </ListItem>
             </Link>
-            <VerticalStepper
-              step={props.step}
-              texts={props.texts}
-              isAdmin={props.isAdmin}
-            />
             <Link
               to="/settings"
               style={{ textDecoration: "none", color: "#fff" }}
@@ -158,6 +149,11 @@ const DrawerContainer = (props) => {
                 />
               </ListItem>
             </Link>
+            <VerticalStepper
+              step={props.step}
+              texts={props.texts}
+              isAdmin={props.isAdmin}
+            />
             <Divider />
             <Button
               variant="outlined"
@@ -175,6 +171,35 @@ const DrawerContainer = (props) => {
         )}
         {!props.isSystemAdmin && (
           <div>
+            <Link to="/claim" style={{ textDecoration: "none", color: "#fff" }}>
+              <ListItem button key="1">
+                <ListItemIcon style={{ color: "#fff" }}>
+                  <InboxIcon />{" "}
+                </ListItemIcon>
+                <ListItemText
+                  primary="Claim"
+                  classes={{ primary: classes.listItemText }}
+                >
+                  <h4>Claim</h4>
+                </ListItemText>
+              </ListItem>
+            </Link>
+            {props.ShowProductionBoard && (
+              <Link
+                to="/ProductionBoard"
+                style={{ textDecoration: "none", color: "#fff" }}
+              >
+                <ListItem button key="2">
+                  <ListItemIcon style={{ color: "#fff" }}>
+                    <SettingsIcon />{" "}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Production&nbsp;Board"
+                    classes={{ primary: classes.listItemText }}
+                  />
+                </ListItem>
+              </Link>
+            )}
             <VerticalStepper
               step={props.step}
               texts={props.texts}
@@ -238,7 +263,7 @@ const DrawerContainer = (props) => {
               paper: classes.drawerPaper,
             }}
             ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
+              keepMounted: true,
             }}
           >
             {drawer}

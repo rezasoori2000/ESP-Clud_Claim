@@ -299,11 +299,11 @@ const ProductionBoardPage = (props) => {
           </Hidden>
         </Grid>
         <Hidden only={["xs"]}>
-          <table>
+          <table id="pbDesktop">
             <thead>
               <tr>
                 <th xs={2}>Code</th>
-                <th xs={4}>Customer</th>
+                {props.settings.PBCustomerColumn && <th>Customer</th>}
                 {props.settings.PBTitleColumn && <th>Title</th>}
                 {props.settings.PBHourColumn && <th>Hours</th>}
                 {props.settings.PBDueDateColumn && <th>Due Date</th>}
@@ -344,7 +344,7 @@ const ProductionBoardPage = (props) => {
                       )}
                       {e.Comments.length == 0 && e.Code}
                     </td>
-                    <td>{e.Customer}</td>
+                    {props.settings.PBCustomerColumn && <td>{e.Customer}</td>}
                     {props.settings.PBTitleColumn && (
                       <td
                         className="border-bottom"
@@ -363,7 +363,7 @@ const ProductionBoardPage = (props) => {
                       </td>
                     )}
                     {props.settings.PBHourColumn && <td>{e.Hours}</td>}
-                    {props.settings.PBDueDateColumn && <td>{e.DueDate}</td>}
+                    {props.settings.PBDueDateColumn && <td>{e.Due}</td>}
                     <td>{e.Progress}%</td>
                     {e.WorkTypes &&
                       e.WorkTypes.map((w) =>
@@ -469,7 +469,9 @@ const ProductionBoardPage = (props) => {
                     <td colSpan="1">{e.Progress}%</td>
                   </tr>
                   <tr>
-                    <td colSpan="4">{e.Customer}</td>
+                    {props.settings.PBCustomerColumn && (
+                      <td colSpan="4">{e.Customer}</td>
+                    )}
                   </tr>
                   {props.settings.PBTitleColumn && (
                     <tr>
@@ -493,7 +495,7 @@ const ProductionBoardPage = (props) => {
                   {props.settings.PBDueDateColumn && (
                     <tr>
                       <td colSpan="1">Due:</td>
-                      <td colSpan="3">{e.DueDate}</td>
+                      <td colSpan="3">{e.Due}</td>
                     </tr>
                   )}
                   {props.settings.PBHourColumn && (
