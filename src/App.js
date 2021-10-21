@@ -33,7 +33,6 @@ class App extends React.Component {
     };
   }
   componentDidMount() {
-    //localStorage.setItem("_claim", "");
     const token = Helper.getLocalToken();
     if (localStorage.getItem("_claim")) this.getServerSettings();
   }
@@ -125,14 +124,26 @@ class App extends React.Component {
               }}
             >
               <Route
+                exact
+                path="/"
+                render={(props) => (
+                  <ClaimContainer
+                    public={isPublic}
+                    settings={this.state.settings}
+                    changeStep={this.changeStep}
+                    workerId={w}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
                 path="/claim"
                 render={(props) => (
                   <ClaimContainer
-                    public={false}
+                    public={isPublic}
                     settings={this.state.settings}
                     changeStep={this.changeStep}
-                    isUser={false}
-                    workerId="0"
+                    workerId={w}
                     {...props}
                   />
                 )}

@@ -345,6 +345,10 @@ class CalimContainer extends React.Component {
     });
   };
 
+  /* #endregion */
+
+  /*#region Job*/
+
   searchJobs = (event) => {
     var txt = event.target.value;
     var jobs =
@@ -385,9 +389,6 @@ class CalimContainer extends React.Component {
       }
     );
   };
-  /* #endregion */
-
-  /*#region Job*/
   goToJobsPage = (page, claimingOId) => {
     this.setState({
       ...this.state,
@@ -399,14 +400,7 @@ class CalimContainer extends React.Component {
         const values = JSON.parse(r.data);
         this.setState({
           ...this.state,
-          // jobs: values.Item1.filter((x) =>
-          //   x.WorkTypes.some((x) => x.HasJobItems)
-          // ),
-          // mainJobs: values.Item1.filter((x) =>
-          //   x.WorkTypes.some((x) => x.HasJobItems)
-          // ),
           jobs: values.Item1,
-
           mainJobs: values.Item1,
           adminJobs: values.Item2,
           mainAdminJobs: values.Item2,
