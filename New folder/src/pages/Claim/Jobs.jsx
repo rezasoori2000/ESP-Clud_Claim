@@ -330,73 +330,48 @@ export default function Jobs(props) {
                         }}
                       >
                         <Grid container style={{ color: "black" }}>
-                          <Hidden only={["sm", "md", "xl", "lg"]}>
-                            <Grid item lg={4} xs={4} sm={4} md={4}>
-                              {e.Note !== "" && e.Note.length > 0 && (
-                                <IconButton
-                                  color="inherit"
-                                  onClick={(w) => {
-                                    // alert(e.Note);
-                                    setNote(e.Note);
-                                    setOpenDialog(true);
-                                    w.stopPropagation();
-                                  }}
-                                >
-                                  <CommentIcon />
-                                </IconButton>
-                              )}
-                            </Grid>
-                            <Grid item lg={4} xs={4} sm={4} md={4}>
-                              <span style={{ fontSize: "large" }}>
-                                {e.Code}
-                              </span>
-                            </Grid>
-
-                            <Grid item lg={4} xs={4} sm={4} md={4}>
-                              <CircularProgressWithLabel value={e.Progress} />
-                            </Grid>
-                          </Hidden>
-                          <Hidden only={["xs"]}>
-                            <Grid item lg={12} xs={12} sm={12} md={12}>
-                              <Grid item lg={12} xs={12} sm={12} md={12}>
-                                <span style={{ fontSize: "large" }}>
-                                  {e.Code}
-                                </span>
-                              </Grid>
-                            </Grid>
-                            <Grid item lg={12} xs={12} sm={12} md={12}>
-                              <hr />
-                            </Grid>
-                            <Grid item lg={6} xs={6} sm={6} md={6}>
-                              {e.Note !== "" && e.Note.length > 0 && (
-                                <IconButton
-                                  color="inherit"
-                                  onClick={(w) => {
-                                    // alert(e.Note);
-                                    setNote(e.Note);
-                                    setOpenDialog(true);
-                                    w.stopPropagation();
-                                  }}
-                                >
-                                  <CommentIcon />
-                                </IconButton>
-                              )}
-                            </Grid>
-
-                            <Grid item lg={6} xs={6} sm={6} md={6}>
-                              <CircularProgressWithLabel value={e.Progress} />
-                            </Grid>
-                          </Hidden>
-
+                          <Grid
+                            item
+                            lg={12}
+                            xs={12}
+                            sm={12}
+                            md={12}
+                            // style={{
+                            //   backgroundColor:
+                            //     e.JobStageName == "postproduction"
+                            //       ? "#dce2e2"
+                            //       : "#bfe668",
+                            // }}
+                          >
+                            <span style={{ fontSize: "large" }}> {e.Code}</span>
+                          </Grid>
                           <Grid item lg={12} xs={12} sm={12} md={12}>
                             <hr />
                           </Grid>
 
                           <div style={{ fontSize: "small" }}>{e.Title}</div>
+                          <Grid item lg={12} xs={12} sm={12} md={12}>
+                            <hr />
+                          </Grid>
+                          <Grid item lg={6} xs={6} sm={6} md={6}>
+                            {e.Note !== "" && e.Note.length > 0 && (
+                              <IconButton
+                                color="inherit"
+                                onClick={(w) => {
+                                  // alert(e.Note);
+                                  setNote(e.Note);
+                                  setOpenDialog(true);
+                                  w.stopPropagation();
+                                }}
+                              >
+                                <CommentIcon />
+                              </IconButton>
+                            )}
+                          </Grid>
 
-                          {/* <Grid item lg={6} xs={6} sm={6} md={6}>
+                          <Grid item lg={6} xs={6} sm={6} md={6}>
                             <CircularProgressWithLabel value={e.Progress} />
-                          </Grid> */}
+                          </Grid>
                         </Grid>
                       </Box>
                     </Grid>
