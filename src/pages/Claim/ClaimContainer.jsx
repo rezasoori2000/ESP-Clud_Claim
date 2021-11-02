@@ -27,6 +27,7 @@ class CalimContainer extends React.Component {
       page: 0,
       loading: false,
       worktypeId: 0,
+      workTypeName: "",
       jobId: 0,
       isAdminJob: false,
       adminWorkType: null,
@@ -50,11 +51,60 @@ class CalimContainer extends React.Component {
   }
 
   componentWillMount() {
+    this.setState(
+      {
+        ...this.state,
+        loading: true,
+      },
+      () => {
+        this.loadWorkersList();
+      }
+    );
+  }
+
+  componentDidMount() {}
+
+  /* #region Claim From PB */
+  getPBJobItems = (jid, wid) => {
     this.setState({
       ...this.state,
       loading: true,
     });
 
+    var labelText = this.state.LabelText;
+    ClaimLogic.getJobItemsFromApi(jid, wid, this.state.claimingOId).then(
+      (r) => {
+        var data = JSON.parse(r.data);
+        labelText.push(data.WorkType.Name);
+        this.setState(
+          {
+            ...this.state,
+            jobId: jid,
+            jobLevel: data.WorkType.JobLevel,
+            workTypeName: data.WorkType.Name,
+            jobItems: data.jobItems,
+            mainJobItems: data.jobItems,
+            finishedItems: data.finishedItems,
+            canClaimWholeJob: data.canClaimWholeJob,
+            totalClaiminMinutes: data.totalPhyCalimMinutes,
+            totalProgress: data.totalProgress,
+            page: 3,
+            loading: false,
+            worktypeId: wid,
+            LabelText: labelText,
+            JobTitle: data.JobTitle,
+          },
+          () => {
+            this.props.changeStep(5, labelText, this.state.isAdminJob);
+          }
+        );
+      }
+    );
+  };
+  /* #region Claim From PB */
+
+  /* #region  Login Methods */
+  loadWorkersList = () => {
     try {
       Loginlogics.getListOfWorkersFromApi(this.props.workerId)
         .then((r) => {
@@ -80,17 +130,14 @@ class CalimContainer extends React.Component {
           );
         })
         .catch((err) => {
-          alert("Error in getting Workers list 1");
+          alert("Error in fetching Workers list ");
         });
     } catch (err) {
       console.log(err);
-      alert("Error in getting Workers list 2");
+      alert("Error in fetching Workers list ");
     }
-  }
+  };
 
-  componentDidMount() {}
-
-  /* #region  Login Methods */
   onCommentSave = (text, login = true) => {
     if (text)
       if (login) this.saveLoginInAPI(this.state.claimingOId, text);
@@ -118,8 +165,12 @@ class CalimContainer extends React.Component {
         claimingOId: worker.OId,
       },
       () => {
-        this.props.changeStep(3, labelText, this.state.isAdminJob);
-        this.goToJobsPage(page, worker.OId);
+        if (this.props.fromPB) {
+          this.getPBJobItems(this.props.jobId, this.props.workTypeId);
+        } else {
+          this.props.changeStep(3, labelText, this.state.isAdminJob);
+          this.goToJobsPage(page, worker.OId);
+        }
       }
     );
   };
@@ -153,7 +204,7 @@ class CalimContainer extends React.Component {
     const id = parseInt(sid);
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
-
+    this.props.setClaimingId(id);
     if (worker.IsLoggedIn) {
       this.loggedInWorkerClick(worker);
     } else {
@@ -210,7 +261,11 @@ class CalimContainer extends React.Component {
             LabelText: labelText,
           },
           () => {
-            this.props.changeStep(3, labelText, this.state.isAdminJob);
+            if (this.props.fromPB) {
+              this.getPBJobItems(this.props.jobId, this.props.workTypeId);
+            } else {
+              this.props.changeStep(3, labelText, this.state.isAdminJob);
+            }
           }
         );
       })
@@ -564,9 +619,13 @@ class CalimContainer extends React.Component {
               LabelText: [],
             },
             () => {
-              if (this.props.role == "a" || this.props.public)
-                this.props.changeStep(1, [], this.state.isAdminJob);
-              else this.props.changeStep(2, [], this.state.isAdminJob);
+              if (this.props.fromPB)
+                this.props.history.push("/productionBoard");
+              else {
+                if (this.props.role == "a" || this.props.public)
+                  this.props.changeStep(1, [], this.state.isAdminJob);
+                else this.props.changeStep(2, [], this.state.isAdminJob);
+              }
             }
           );
         });
@@ -680,15 +739,12 @@ class CalimContainer extends React.Component {
                   ? "Full Job"
                   : this.state.adminWorkType
                   ? "Admin Work"
-                  : this.state.mainWorkTypes.find(
-                      (x) => x.OId === this.state.worktypeId
-                    ).Name
+                  : this.state.workTypeName
               }
               jobName={
                 this.state.adminWorkType
                   ? this.state.adminWorkType.Name
-                  : this.state.mainJobs.find((x) => x.OId === this.state.jobId)
-                      .Title
+                  : this.state.JobTitle
               }
               claimingItems={this.state.changedClaimingItems}
               isAdminJob={this.state.isAdminJob}

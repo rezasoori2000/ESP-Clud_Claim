@@ -1,6 +1,6 @@
 import React, { Fragment, useState } from "react";
 import Grid from "@material-ui/core/Grid";
-import DoneIcon from "@material-ui/icons/Done";
+import IOSSwitch from "../../components/controls/IosSwitch";
 import FaceIcon from "@material-ui/icons/Face";
 import Box from "@material-ui/core/Box";
 import InputBase from "@material-ui/core/InputBase";
@@ -38,11 +38,26 @@ export default function Login(props) {
             xs={6}
             style={{ marginTop: "20px", alignContent: "right" }}
           >
-            <InputLabel htmlFor="input-with-icon-adornment">Log out</InputLabel>
+            {/* <InputLabel
+              htmlFor="input-with-icon-adornment"
+              style={{ fontSize: "12" }}
+            >
+              Log out
+            </InputLabel> */}
+            <div>
+              <span style={{ fontSize: "1em" }}>Log out&nbsp;</span>
 
-            <Switch
+              <span style={{ fontSize: "0.8em" }}>
+                (switch then click on name)
+              </span>
+            </div>
+            {/* <Switch
               color="secondary"
               style={{ color: "#9abf47" }}
+              size="medium"
+
+            /> */}
+            <IOSSwitch
               checked={logout}
               onChange={(e) => {
                 setLogout(e.target.checked);

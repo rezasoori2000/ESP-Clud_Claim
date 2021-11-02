@@ -45,7 +45,9 @@ class ProductionBoardContainer extends React.Component {
       alert(`Error in calling ESP API (production board)- ${err}`);
     }
   };
-
+  claimOnPB = async (jid, wid) => {
+    this.props.claimOnPB(jid, wid);
+  };
   render(props) {
     return (
       <Fragment>
@@ -54,6 +56,7 @@ class ProductionBoardContainer extends React.Component {
           <ProductionBoard
             jobs={this.state.jobs}
             settings={this.props.settings}
+            claimOnPB={this.claimOnPB}
           />
         )}
       </Fragment>

@@ -105,6 +105,29 @@ export default function Jobs(props) {
       setJobs(postJobs);
     }
   }
+  function handleSiteWork() {
+    setsearchVal("");
+    setLoading(true);
+    setactiveButton("site");
+    if (!loadedJobs.includes("site")) {
+      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 4)
+        .then((r) => {
+          const values = JSON.parse(r.data);
+          setPostJobs(values.Item1);
+          setJobs(values.Item1);
+          loadedJobs.push("site");
+          setLoadedJobs(loadedJobs);
+          props.handleJobLoaded(values.Item1);
+          setLoading(false);
+        })
+        .catch((err) => {
+          alert("Error in retrieve Jobs list");
+        });
+    } else {
+      setLoading(false);
+      setJobs(postJobs);
+    }
+  }
   function handleProduction() {
     setsearchVal("");
     setJobs(props.jobs);
@@ -195,13 +218,13 @@ export default function Jobs(props) {
             </AccordionSummary>
 
             <AccordionDetails>
-              <Grid ml={0} item lg={3} sm={0} xs={0}></Grid>
+              <Grid ml={0} item lg={2} sm={0} xs={0}></Grid>
               <Grid
                 ml={0}
                 item
                 lg={2}
-                sm={4}
-                xs={4}
+                sm={3}
+                xs={3}
                 style={{ textAlign: "right" }}
               >
                 {!props.showPreProduction && (
@@ -225,8 +248,8 @@ export default function Jobs(props) {
                 ml={0}
                 item
                 lg={2}
-                sm={4}
-                xs={4}
+                sm={3}
+                xs={3}
                 style={{ textAlign: "right" }}
               >
                 <Button
@@ -250,8 +273,8 @@ export default function Jobs(props) {
                 ml={0}
                 item
                 lg={2}
-                sm={4}
-                xs={4}
+                sm={3}
+                xs={3}
                 style={{ textAlign: "right" }}
               >
                 {!props.showPostProduction && (
@@ -270,6 +293,29 @@ export default function Jobs(props) {
                     Post&nbsp;Prod.
                   </Button>
                 )}
+              </Grid>
+              <Grid
+                ml={0}
+                item
+                lg={2}
+                sm={3}
+                xs={3}
+                style={{ textAlign: "right" }}
+              >
+                <Button
+                  variant={activeButton == "site" ? "contained" : "outlined"}
+                  style={{
+                    color: activeButton == "site" ? "white" : "black",
+                    backgroundColor:
+                      activeButton == "site" ? "#196dc4" : "white",
+                  }}
+                  startIcon={<SubdirectoryArrowLeftOutlinedIcon />}
+                  size="small"
+                  onClick={() => handleSiteWork()}
+                  fullWidth
+                >
+                  Site&nbsp;Work.
+                </Button>
               </Grid>
             </AccordionDetails>
             <Grid container spacing={1}>
@@ -357,17 +403,14 @@ export default function Jobs(props) {
                             </Grid>
                           </Hidden>
                           <Hidden only={["xs"]}>
-                            <Grid item lg={12} xs={12} sm={12} md={12}>
-                              <Grid item lg={12} xs={12} sm={12} md={12}>
-                                <span style={{ fontSize: "large" }}>
-                                  {e.Code}
-                                </span>
-                              </Grid>
-                            </Grid>
-                            <Grid item lg={12} xs={12} sm={12} md={12}>
-                              <hr />
-                            </Grid>
-                            <Grid item lg={6} xs={6} sm={6} md={6}>
+                            <Grid
+                              item
+                              lg={6}
+                              xs={6}
+                              sm={6}
+                              md={6}
+                              style={{ backgroundColor: "#718d35" }}
+                            >
                               {e.Note !== "" && e.Note.length > 0 && (
                                 <IconButton
                                   color="inherit"
@@ -383,8 +426,25 @@ export default function Jobs(props) {
                               )}
                             </Grid>
 
-                            <Grid item lg={6} xs={6} sm={6} md={6}>
+                            <Grid
+                              item
+                              lg={6}
+                              xs={6}
+                              sm={6}
+                              md={6}
+                              style={{ backgroundColor: "#718d35" }}
+                            >
                               <CircularProgressWithLabel value={e.Progress} />
+                            </Grid>
+                            <Grid item lg={12} xs={12} sm={12} md={12}>
+                              <hr />
+                            </Grid>
+                            <Grid item lg={12} xs={12} sm={12} md={12}>
+                              <Grid item lg={12} xs={12} sm={12} md={12}>
+                                <span style={{ fontSize: "large" }}>
+                                  {e.Code}
+                                </span>
+                              </Grid>
                             </Grid>
                           </Hidden>
 

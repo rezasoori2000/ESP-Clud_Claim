@@ -215,20 +215,25 @@ const AdminSettingsPage = (props) => {
                   />
                 </Grid>
               </Grid>
-              <ESPCheckbox
-                name="HidePreProductionJobs"
-                label="Hide PreProduction Jobs"
-                checked={props.adminSettings.HidePreProductionJobs}
-                onPropertyChange={props.onPropertyChange}
-              />
-              <ESPCheckbox
-                name="HidePostProductionJobs"
-                label="Hide PostProduction Jobs"
-                checked={props.adminSettings.HidePostProductionJobs}
-                onPropertyChange={props.onPropertyChange}
-              />
+              <Grid container>
+                <Grid item lg={5}>
+                  <ESPCheckbox
+                    name="HidePreProductionJobs"
+                    label="Hide PreProduction Jobs"
+                    checked={props.adminSettings.HidePreProductionJobs}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={3}>
+                  <ESPCheckbox
+                    name="ShowQty"
+                    label="Show Unit Qty"
+                    checked={props.adminSettings.ShowQty}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
-
             <Grid item lg={6}>
               <ESPSelect
                 name="Groups"
@@ -290,11 +295,19 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
-                <Grid item lg={5}>
+                <Grid item lg={4}>
                   <ESPCheckbox
                     name="ShowRework"
                     label="Show Rework"
                     checked={props.adminSettings.ShowRework}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={4}>
+                  <ESPCheckbox
+                    name="ShowColour"
+                    label="Show Colour"
+                    checked={props.adminSettings.ShowColour}
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
@@ -318,9 +331,9 @@ const AdminSettingsPage = (props) => {
         />
         <CardContent>
           <Grid container spacing={3}>
-            <Grid item lg={6}>
+            <Grid item lg={8}>
               <Grid container>
-                <Grid item lg={6}>
+                <Grid item lg={4}>
                   <ESPCheckbox
                     name="PBShowProductionBoard"
                     label="Enable Production Board"
@@ -328,11 +341,19 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
-                <Grid item lg={6}>
+                <Grid item lg={4}>
                   <ESPCheckbox
                     name="PBHideOutOfFactoryWorkTypes"
                     label="Hide Out of Factory WorkTypes"
                     checked={props.adminSettings.PBHideOutOfFactoryWorkTypes}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={4}>
+                  <ESPCheckbox
+                    name="ClaimOnPB"
+                    label="Claim on Production Board"
+                    checked={props.adminSettings.ClaimOnPB}
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
@@ -377,7 +398,7 @@ const AdminSettingsPage = (props) => {
               </Grid>
             </Grid>
 
-            <Grid item lg={6}>
+            <Grid item lg={4}>
               <ESPSelect
                 name="PBJobOrders"
                 label="Job Order"

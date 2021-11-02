@@ -17,12 +17,15 @@ class App extends React.Component {
     super();
     this.state = {
       step: 0,
+      page: 0,
+      fromPB: false,
       settings: null,
       texts: [],
       isAdmin: false,
       loggedIn: false,
       isPublic: false,
       loading: true,
+      claimingId: 0,
       claims: {
         user_t: "",
         a: false,
@@ -64,7 +67,12 @@ class App extends React.Component {
       alert(`Error in calling ESP (Admin Settings) API- ${err}`);
     }
   };
-
+  setClaimingId = (id) => {
+    this.setState({
+      ...this.state,
+      claimingId: id,
+    });
+  };
   changeStep = (j, texts, isAdmin = false) => {
     this.setState({
       ...this.state,
@@ -97,6 +105,21 @@ class App extends React.Component {
         else alert("Error in get security code" + response);
         return null;
       });
+  };
+  claimOnPB = (jid, wid) => {
+    this.setState(
+      {
+        ...this.state,
+        step: 1,
+        page: 0,
+        pbWorkTypeId: wid,
+        pbJobId: jid,
+        fromPB: true,
+      },
+      () => {
+        this.props.history.push("/claim");
+      }
+    );
   };
   render() {
     const role = this.state.claims.a ? "a" : "u";
@@ -132,6 +155,11 @@ class App extends React.Component {
                     settings={this.state.settings}
                     changeStep={this.changeStep}
                     workerId={w}
+                    fromPB={this.state.fromPB}
+                    jobId={this.state.pbJobId}
+                    workTypeId={this.state.pbWorkTypeId}
+                    page={this.state.page}
+                    setClaimingId={this.setClaimingId}
                     {...props}
                   />
                 )}
@@ -142,8 +170,13 @@ class App extends React.Component {
                   <ClaimContainer
                     public={isPublic}
                     settings={this.state.settings}
+                    setClaimingId={this.setClaimingId}
+                    fromPB={this.state.fromPB}
+                    jobId={this.state.pbJobId}
+                    workTypeId={this.state.pbWorkTypeId}
                     changeStep={this.changeStep}
                     workerId={w}
+                    page={this.state.page}
                     {...props}
                   />
                 )}
@@ -152,7 +185,11 @@ class App extends React.Component {
               <Route
                 path="/productionBoard"
                 render={(props) => (
-                  <ProductionBoard settings={this.state.settings} />
+                  <ProductionBoard
+                    settings={this.state.settings}
+                    claimingId={this.state.claimingId}
+                    claimOnPB={this.claimOnPB}
+                  />
                 )}
               />
             </main>
@@ -186,8 +223,13 @@ class App extends React.Component {
                   <ClaimContainer
                     public={false}
                     settings={this.state.settings}
+                    setClaimingId={this.setClaimingId}
                     changeStep={this.changeStep}
                     isUser={false}
+                    fromPB={this.state.fromPB}
+                    jobId={this.state.pbJobId}
+                    workTypeId={this.state.pbWorkTypeId}
+                    page={this.state.page}
                     workerId="0"
                     {...props}
                   />
@@ -208,7 +250,12 @@ class App extends React.Component {
               <Route
                 path="/productionBoard"
                 render={(props) => (
-                  <ProductionBoard settings={this.state.settings} />
+                  <ProductionBoard
+                    claimingId={this.state.claimingId}
+                    settings={this.state.settings}
+                    setClaimingId={this.setClaimingId}
+                    claimOnPB={this.claimOnPB}
+                  />
                 )}
               />
             </main>

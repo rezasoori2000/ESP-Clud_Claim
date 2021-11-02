@@ -1,14 +1,7 @@
 import React, { Fragment, useState } from "react";
-import {
-  Card,
-  Grid,
-  Input,
-  InputAdornment,
-  Switch,
-  InputLabel,
-} from "@material-ui/core";
+import { Grid, Input, InputAdornment, InputLabel } from "@material-ui/core";
 import { PieChart } from "react-minimal-pie-chart";
-import CardContent from "@material-ui/core/CardContent";
+import IOSSwitch from "../../components/controls/IosSwitch";
 import SearchIcon from "@material-ui/icons/Search";
 
 import CheckIcon from "@mui/icons-material/Check";
@@ -75,7 +68,7 @@ const ProductionBoardPage = (props) => {
     return tempArray;
   }
   function getChart() {}
-  function beginTr(wts) {
+  function beginTr(code, wts) {
     var chuncked = chunkArray(wts, 4);
 
     var items = [];
@@ -92,6 +85,7 @@ const ProductionBoardPage = (props) => {
       htd = [];
       for (var j = 0; j < section.length; j++) {
         if (section[j].Progress == 100) element = <CheckIcon />;
+        if (section[j].Progress == 0) element = <dir />;
         else {
           element = (
             <MuiThemeProvider theme={theme}>
@@ -171,9 +165,8 @@ const ProductionBoardPage = (props) => {
               <InputLabel htmlFor="input-with-icon-adornment">
                 Bar/Pie
               </InputLabel>
-              <Switch
-                color="secondary"
-                style={{ color: "#9abf47" }}
+
+              <IOSSwitch
                 onChange={(e) => {
                   setPie(e.target.checked);
                 }}
@@ -275,9 +268,8 @@ const ProductionBoardPage = (props) => {
               <InputLabel htmlFor="input-with-icon-adornment">
                 Show W/T
               </InputLabel>
-              <Switch
-                color="secondary"
-                style={{ color: "#9abf47" }}
+
+              <IOSSwitch
                 checked={wt}
                 onChange={(s) => {
                   setWt(s.target.checked);
@@ -288,9 +280,8 @@ const ProductionBoardPage = (props) => {
               <InputLabel htmlFor="input-with-icon-adornment">
                 Pie/Bar
               </InputLabel>
-              <Switch
-                color="secondary"
-                style={{ color: "#9abf47" }}
+
+              <IOSSwitch
                 onChange={(e) => {
                   setPie(e.target.checked);
                 }}
@@ -307,6 +298,8 @@ const ProductionBoardPage = (props) => {
                 {props.settings.PBTitleColumn && <th>Title</th>}
                 {props.settings.PBHourColumn && <th>Hours</th>}
                 {props.settings.PBDueDateColumn && <th>Due Date</th>}
+                {props.settings.ShowQty && <th>Unit Qty</th>}
+                {props.settings.ShowColour && <th>Colour</th>}
                 <th>Prog.</th>
                 {jobs &&
                   jobs[0] &&
@@ -364,13 +357,29 @@ const ProductionBoardPage = (props) => {
                     )}
                     {props.settings.PBHourColumn && <td>{e.Hours}</td>}
                     {props.settings.PBDueDateColumn && <td>{e.Due}</td>}
+                    {props.settings.ShowQty && <td>{e.UnitQty}</td>}
+                    {props.settings.ShowColour && <td>{e.Colour}</td>}
                     <td>{e.Progress}%</td>
                     {e.WorkTypes &&
                       e.WorkTypes.map((w) =>
                         w.Progress == 100 ? (
-                          <td>
+                          <td
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              verticalAlign: "middle",
+                            }}
+                          >
                             <CheckIcon />
                           </td>
+                        ) : w.Progress == 0 ? (
+                          <td
+                            style={{
+                              margin: 0,
+                              padding: 0,
+                              verticalAlign: "middle",
+                            }}
+                          ></td>
                         ) : (
                           <MuiThemeProvider theme={theme}>
                             <Tooltip
@@ -388,16 +397,30 @@ const ProductionBoardPage = (props) => {
                               )}
                               placement="top"
                             >
-                              <td style={{ margin: 0, padding: 0 }}>
+                              <td
+                                style={{
+                                  margin: 0,
+                                  padding: 0,
+                                  verticalAlign: "middle",
+                                }}
+                                onClick={(r) =>
+                                  props.settings.ClaimOnPB &&
+                                  props.claimOnPB(e.Oid, w.Oid)
+                                }
+                              >
                                 {pie && (
                                   <PieChart
+                                    style={{
+                                      margin: 0,
+                                      padding: 0,
+                                      marginLeft: "10px",
+                                    }}
                                     data={w.ChartObj.filter((x) => x.value > 0)}
                                     radius={PieChart.defaultProps.radius - 10}
                                     segmentsShift={(index) =>
                                       index === 0 ? 10 : 0.5
                                     }
                                     label={({ dataEntry }) => dataEntry.value}
-                                    onMouseOver={() => {}}
                                     labelStyle={{
                                       ...defaultLabelStyle,
                                     }}
@@ -507,7 +530,15 @@ const ProductionBoardPage = (props) => {
 
                   <tr>
                     {e.WorkTypes && wt && (
-                      <td colSpan="4">{beginTr(e.WorkTypes)}</td>
+                      <td
+                        onClick={(r) =>
+                          props.settings.ClaimOnPB &&
+                          props.claimOnPB(e.Oid, wt.Oid)
+                        }
+                        colSpan="4"
+                      >
+                        {beginTr(e.Code, e.WorkTypes)}
+                      </td>
                     )}
                   </tr>
                   <tr>
