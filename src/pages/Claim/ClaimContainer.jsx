@@ -289,7 +289,7 @@ class CalimContainer extends React.Component {
         LabelText: [worker.Name],
       });
     } else {
-      await this.saveLogoutAPI(id, comment);
+      var response = await this.saveLogoutAPI(id, comment);
       if (this.props.logout) window.location = "/ProductionBoard";
       else window.location = "";
     }
@@ -318,9 +318,10 @@ class CalimContainer extends React.Component {
 
     var response = await Loginlogics.saveLogoutAPI(id, comment)
       .then((r) => {
-        if (!JSON.parse(r.data).Successful) {
-          alert(r.Message);
-          return;
+        var obj = JSON.parse(r.data);
+        if (!obj.Successful) {
+          alert(obj.Message);
+          return false;
         }
         worker.IsLoggedIn = false;
         var inx = workersList.findIndex((x) => x.OId === id);

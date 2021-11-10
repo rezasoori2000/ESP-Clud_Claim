@@ -459,7 +459,9 @@ export default function Jobs(props) {
                             <hr />
                           </Grid>
 
-                          <div style={{ fontSize: "small" }}>{e.Title}</div>
+                          <div style={{ fontSize: "small" }}>
+                            {e.Title.substring(0, 150)}
+                          </div>
 
                           {/* <Grid item lg={6} xs={6} sm={6} md={6}>
                             <CircularProgressWithLabel value={e.Progress} />

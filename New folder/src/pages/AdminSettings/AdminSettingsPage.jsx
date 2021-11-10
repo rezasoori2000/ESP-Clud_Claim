@@ -290,6 +290,7 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
+
                 <Grid item lg={5}>
                   <ESPCheckbox
                     name="ShowRework"

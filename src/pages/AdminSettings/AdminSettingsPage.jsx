@@ -279,11 +279,22 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
-                <Grid item lg={4}>
+                <Grid item lg={12}>
                   <ESPCheckbox
                     name="ShowStandardTime"
                     label="Show Standard Time"
                     checked={props.adminSettings.ShowStandardTime}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+
+                <Grid item lg={12}>
+                  <ESPTextField
+                    name="NoClaimAllowance"
+                    label="No Claim Allowance"
+                    helptext="Seconds No Claim Allowance Before Logout"
+                    type="number"
+                    value={props.adminSettings.NoClaimAllowance}
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
