@@ -138,17 +138,18 @@ class CalimContainer extends React.Component {
     }
   };
 
-  onCommentSave = (text, login = true) => {
+  onCommentSave = async (text, login = true) => {
     if (text)
-      if (login) this.saveLoginInAPI(this.state.claimingOId, text);
-      else this.saveLogoutAPI(this.state.claimingOId, text);
+      if (login) await this.saveLoginInAPI(this.state.claimingOId, text);
+      else await this.saveLogoutAPI(this.state.claimingOId, text);
     this.setState(
       {
         ...this.state,
         dialogOpen: false,
       },
       () => {
-        return true;
+        if (this.props.logout) window.location = "/ProductionBoard";
+        else window.location = "";
       }
     );
   };
@@ -175,17 +176,9 @@ class CalimContainer extends React.Component {
     );
   };
   handleLogin = (sid, isOnLeave, logout) => {
-    if (logout) {
+    if (logout || this.props.logout) {
       this.handleLogOut(sid);
-      this.setState(
-        {
-          ...this.state,
-          logoutChecked: false,
-        },
-        () => {
-          window.location = "";
-        }
-      );
+
       return;
     }
     if (isOnLeave) {
@@ -233,11 +226,11 @@ class CalimContainer extends React.Component {
       }
     }
   };
-  saveLoginInAPI = (id, comment) => {
+  saveLoginInAPI = async (id, comment) => {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
     var labelText = [];
-    Loginlogics.saveLoginInAPI(id, comment)
+    await Loginlogics.saveLoginInAPI(id, comment)
       .then((r) => {
         if (!JSON.parse(r.data).Successful) {
           alert(r.Message);
@@ -273,7 +266,7 @@ class CalimContainer extends React.Component {
         alert(err);
       });
   };
-  handleLogOut = (id, comment) => {
+  handleLogOut = async (id, comment) => {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
     if (
@@ -296,7 +289,9 @@ class CalimContainer extends React.Component {
         LabelText: [worker.Name],
       });
     } else {
-      this.saveLogoutAPI(id, comment);
+      await this.saveLogoutAPI(id, comment);
+      if (this.props.logout) window.location = "/ProductionBoard";
+      else window.location = "";
     }
   };
 
@@ -317,11 +312,11 @@ class CalimContainer extends React.Component {
       }
     );
   };
-  saveLogoutAPI = (id, comment) => {
+  saveLogoutAPI = async (id, comment) => {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
 
-    var response = Loginlogics.saveLogoutAPI(id, comment)
+    var response = await Loginlogics.saveLogoutAPI(id, comment)
       .then((r) => {
         if (!JSON.parse(r.data).Successful) {
           alert(r.Message);
@@ -673,6 +668,7 @@ class CalimContainer extends React.Component {
               handleLogin={this.handleLogin}
               settings={this.state.settings}
               logoutChecked={this.state.logoutChecked}
+              loggingOut={this.props.logout}
             />
           );
         }

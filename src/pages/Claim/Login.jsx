@@ -10,14 +10,38 @@ import { BlurCircular } from "@material-ui/icons";
 import Input from "@material-ui/core/Input";
 import { InputLabel, Switch } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import ArrowBack from "@material-ui/icons/ArrowBack";
+import Button from "@material-ui/core/Button";
 
 export default function Login(props) {
   const classes = gridSearchStyles();
   const [logout, setLogout] = useState(props.logoutChecked);
+  const personList = props.loggingOut
+    ? props.items.filter((x) => x.IsLoggedIn)
+    : props.items;
   return (
     <Fragment>
       <div className={classes.search}>
         <Grid container spacing={1} style={{ backgroundColor: "#ebedf1" }}>
+          {props.loggingOut && (
+            <Grid
+              item
+              lg={1}
+              sm={1}
+              xs={6}
+              style={{ fontSize: "24px", paddingTop: "30px" }}
+            >
+              <Button
+                variant="outlined"
+                size="small"
+                style={{ textAlign: "right" }}
+                onClick={() => {
+                  window.location = "/ProductionBoard";
+                }}
+                startIcon={<ArrowBack />}
+              ></Button>
+            </Grid>
+          )}
           <Grid
             item
             lg={4}
@@ -33,37 +57,11 @@ export default function Login(props) {
           </Grid>
           <Grid
             item
-            lg={4}
-            sm={4}
+            lg={3}
+            sm={3}
             xs={6}
             style={{ marginTop: "20px", alignContent: "right" }}
-          >
-            {/* <InputLabel
-              htmlFor="input-with-icon-adornment"
-              style={{ fontSize: "12" }}
-            >
-              Log out
-            </InputLabel> */}
-            <div>
-              <span style={{ fontSize: "1em" }}>Log out&nbsp;</span>
-
-              <span style={{ fontSize: "0.8em" }}>
-                (switch then click on name)
-              </span>
-            </div>
-            {/* <Switch
-              color="secondary"
-              style={{ color: "#9abf47" }}
-              size="medium"
-
-            /> */}
-            <IOSSwitch
-              checked={logout}
-              onChange={(e) => {
-                setLogout(e.target.checked);
-              }}
-            />
-          </Grid>
+          ></Grid>
           <Grid
             item
             lg={4}
@@ -89,8 +87,8 @@ export default function Login(props) {
         spacing={0}
         style={{ marginTop: 10, backgroundColor: "#ebedf1" }}
       >
-        {props.items &&
-          props.items.map((e) => (
+        {personList &&
+          personList.map((e) => (
             <Grid
               item
               lg={2}

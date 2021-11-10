@@ -198,12 +198,18 @@ class JobItems extends React.Component {
 
   roundNumber(v, g) {
     return v > g
-      ? v % 5 == 0
+      ? v % this.props.settings.IncrementPercentage == 0
         ? v
-        : Math.ceil((v - 4) / 5) * 5
-      : v % 5 == 0
+        : Math.ceil(
+            (v - this.props.settings.IncrementPercentage - 1) /
+              this.props.settings.IncrementPercentage
+          ) * this.props.settings.IncrementPercentage
+      : v % this.props.settings.IncrementPercentage == 0
       ? v
-      : Math.floor((v + 4) / 5) * 5;
+      : Math.floor(
+          (v + this.props.settings.IncrementPercentage - 1) /
+            this.props.settings.IncrementPercentage
+        ) * this.props.settings.IncrementPercentage;
   }
   handleGroupedChanged(v, btn = false) {
     if (v < 0) return false;
@@ -429,7 +435,7 @@ class JobItems extends React.Component {
                                 getAriaValueText={valuetext}
                                 aria-labelledby="discrete-slider"
                                 valueLabelDisplay="on"
-                                step={5}
+                                step={this.props.settings.IncrementPercentage}
                                 marks
                                 min={0}
                                 max={100}
@@ -463,7 +469,8 @@ class JobItems extends React.Component {
                                 color="secondary"
                                 onClick={() =>
                                   this.handleGroupedChanged(
-                                    parseInt(this.state.groupPercent) - 5,
+                                    parseInt(this.state.groupPercent) -
+                                      this.props.settings.IncrementPercentage,
                                     true
                                   )
                                 }
@@ -476,7 +483,8 @@ class JobItems extends React.Component {
                                 color="primary"
                                 onClick={() =>
                                   this.handleGroupedChanged(
-                                    parseInt(this.state.groupPercent) + 5,
+                                    parseInt(this.state.groupPercent) +
+                                      this.props.settings.IncrementPercentage,
                                     true
                                   )
                                 }
@@ -533,7 +541,7 @@ class JobItems extends React.Component {
                               getAriaValueText={valuetext}
                               aria-labelledby="discrete-slider"
                               valueLabelDisplay="on"
-                              step={5}
+                              step={this.props.settings.IncrementPercentage}
                               marks
                               min={0}
                               max={100}
@@ -564,7 +572,12 @@ class JobItems extends React.Component {
                           >
                             <IconButton
                               aria-label="remove"
-                              onClick={() => this.handleBtn(-5, inx)}
+                              onClick={() =>
+                                this.handleBtn(
+                                  -this.props.settings.IncrementPercentage,
+                                  inx
+                                )
+                              }
                             >
                               <RemoveIcon />
                             </IconButton>
@@ -572,7 +585,12 @@ class JobItems extends React.Component {
                           <Grid item xs={4} sm={4} lg={1}>
                             <IconButton
                               aria-label="add"
-                              onClick={() => this.handleBtn(5, inx)}
+                              onClick={() =>
+                                this.handleBtn(
+                                  this.props.settings.IncrementPercentage,
+                                  inx
+                                )
+                              }
                             >
                               <AddIcon />
                             </IconButton>

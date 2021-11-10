@@ -38,6 +38,7 @@ export default function Jobs(props) {
   const [jobs, setJobs] = useState(props.jobs);
   const [preJobs, setPreJobs] = useState([]);
   const [postJobs, setPostJobs] = useState([]);
+  const [siteJobs, setSiteJobs] = useState([]);
   const [loadedJobs, setLoadedJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchVal, setsearchVal] = useState("");
@@ -110,10 +111,10 @@ export default function Jobs(props) {
     setLoading(true);
     setactiveButton("site");
     if (!loadedJobs.includes("site")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 4)
+      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 4, true)
         .then((r) => {
           const values = JSON.parse(r.data);
-          setPostJobs(values.Item1);
+          setSiteJobs(values.Item1);
           setJobs(values.Item1);
           loadedJobs.push("site");
           setLoadedJobs(loadedJobs);
@@ -125,7 +126,7 @@ export default function Jobs(props) {
         });
     } else {
       setLoading(false);
-      setJobs(postJobs);
+      setJobs(siteJobs);
     }
   }
   function handleProduction() {
@@ -335,9 +336,15 @@ export default function Jobs(props) {
                         x.JobStageName == "postproduction") ||
                       (activeButton == "pre" &&
                         x.JobStageName == "preproduction") ||
-                      (activeButton == "prod" && x.JobStageName == "production")
+                      (activeButton == "prod" &&
+                        x.JobStageName == "production") ||
+                      (activeButton == "site" && x.JobStageName == "SiteWork")
                   )
-                  .filter((x) => x.WorkTypes.length > 0)
+                  .filter(
+                    (x) =>
+                      (activeButton != "site" && x.WorkTypes.length > 0) ||
+                      activeButton == "site"
+                  )
                   .map((e) => (
                     <Grid
                       item

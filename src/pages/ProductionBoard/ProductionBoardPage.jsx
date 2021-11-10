@@ -3,7 +3,7 @@ import { Grid, Input, InputAdornment, InputLabel } from "@material-ui/core";
 import { PieChart } from "react-minimal-pie-chart";
 import IOSSwitch from "../../components/controls/IosSwitch";
 import SearchIcon from "@material-ui/icons/Search";
-
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import CheckIcon from "@mui/icons-material/Check";
 import { Button, IconButton } from "@material-ui/core";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
@@ -37,7 +37,7 @@ const ProductionBoardPage = (props) => {
     },
   });
   const defaultLabelStyle = {
-    fontSize: "20px",
+    fontSize: "1.8em",
     fontFamily: "sans-serif",
   };
   function searchJobs(event) {
@@ -158,10 +158,10 @@ const ProductionBoardPage = (props) => {
       <div style={{ width: "99%" }}>
         <Grid container spacing={5}>
           <Hidden only={["xs"]}>
-            <Grid item lg={2} sm={6} xs={12}>
+            <Grid item lg={2} sm={6}>
               <h1>Production&nbsp;Board</h1>
             </Grid>
-            <Grid item lg={1} sm={6} xs={12}>
+            <Grid item lg={1} sm={6}>
               <InputLabel htmlFor="input-with-icon-adornment">
                 Bar/Pie
               </InputLabel>
@@ -172,7 +172,7 @@ const ProductionBoardPage = (props) => {
                 }}
               />
             </Grid>
-            <Grid item lg={4} sm={6} xs={12}>
+            <Grid item lg={4} sm={6}>
               <table style={{ width: "100%" }}>
                 <tbody>
                   <tr>
@@ -251,7 +251,7 @@ const ProductionBoardPage = (props) => {
             </Grid>
           </Hidden>
 
-          <Grid item lg={2} sm={6} xs={4}>
+          <Grid item lg={2} sm={6} xs={6}>
             <Input
               id="input-with-icon-adornment"
               startAdornment={
@@ -262,6 +262,16 @@ const ProductionBoardPage = (props) => {
               value={searchVal}
               onChange={searchJobs}
             />
+          </Grid>
+          <Grid item xs={6} lg={2} md={4}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => props.logoutFromPB()}
+              startIcon={<MeetingRoomIcon />}
+            >
+              Logout
+            </Button>
           </Grid>
           <Hidden only={["lg", "xl", "md"]}>
             <Grid item xs={4}>
@@ -286,6 +296,83 @@ const ProductionBoardPage = (props) => {
                   setPie(e.target.checked);
                 }}
               />
+            </Grid>
+            <Grid item xs={12}>
+              <table style={{ width: "100%" }}>
+                <tbody>
+                  <tr>
+                    <td style={{ width: "10%" }}>
+                      <div
+                        style={{
+                          backgroundColor: "#00C400",
+                          float: "left",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </div>
+                    </td>
+                    <td>Finished</td>
+
+                    <td style={{ width: "10%" }}>
+                      <div
+                        style={{
+                          backgroundColor: "#ffa500",
+                          float: "left",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </div>
+                    </td>
+                    <td>High Priority</td>
+
+                    <td style={{ width: "10%" }}>
+                      <div
+                        style={{
+                          backgroundColor: "#808080",
+                          float: "left",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </div>
+                    </td>
+                    <td>Out Of Factory</td>
+                  </tr>
+                  <tr>
+                    <td style={{ width: "10%" }}>
+                      <div
+                        style={{
+                          backgroundColor: "#ffff00",
+                          float: "left",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </div>
+                    </td>
+                    <td>Scheduled</td>
+                    <td style={{ width: "10%" }}>
+                      <div
+                        style={{
+                          backgroundColor: "#d3d3d3",
+                          float: "left",
+                          width: "100%",
+                          height: "100%",
+                        }}
+                      >
+                        <span>&nbsp;&nbsp;&nbsp;</span>
+                      </div>
+                    </td>
+                    <td>Non-scheduled</td>
+                  </tr>
+                </tbody>
+              </table>
             </Grid>
           </Hidden>
         </Grid>
@@ -399,8 +486,8 @@ const ProductionBoardPage = (props) => {
                             >
                               <td
                                 style={{
-                                  margin: 0,
-                                  padding: 0,
+                                  paddingRight: "5px",
+                                  paddingLeft: "2px",
                                   verticalAlign: "middle",
                                 }}
                                 onClick={(r) =>
@@ -414,6 +501,7 @@ const ProductionBoardPage = (props) => {
                                       margin: 0,
                                       padding: 0,
                                       marginLeft: "10px",
+                                      fontSize: "1.2em",
                                     }}
                                     data={w.ChartObj.filter((x) => x.value > 0)}
                                     radius={PieChart.defaultProps.radius - 10}
@@ -442,8 +530,11 @@ const ProductionBoardPage = (props) => {
                                         <td
                                           style={{
                                             width: t.value,
+                                            marginLeft: "3px",
+                                            marginRight: "3px",
                                             backgroundColor: t.color,
-                                            fontSize: "0.8em",
+                                            fontSize: "1.2em",
+                                            // padding: "2px",
                                           }}
                                         >
                                           {t.value}

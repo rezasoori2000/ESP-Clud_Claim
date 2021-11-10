@@ -48,6 +48,9 @@ class ProductionBoardContainer extends React.Component {
   claimOnPB = async (jid, wid) => {
     this.props.claimOnPB(jid, wid);
   };
+  logoutFromPB = () => {
+    this.props.logoutFromPB();
+  };
   render(props) {
     return (
       <Fragment>
@@ -57,6 +60,7 @@ class ProductionBoardContainer extends React.Component {
             jobs={this.state.jobs}
             settings={this.props.settings}
             claimOnPB={this.claimOnPB}
+            logoutFromPB={this.props.logoutFromPB}
           />
         )}
       </Fragment>

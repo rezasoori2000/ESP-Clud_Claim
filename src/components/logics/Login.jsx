@@ -5,7 +5,7 @@ import Helper from "./Helper";
 
 class LoginLogic extends React.Component {
   getListOfWorkersFromApi = async (workerId) => {
-    return Helper.apiPost(
+    return await Helper.apiPost(
       "Workers/GetListOfWorkers?workerId=" + workerId,
       {},
       "Error in calling ESP (Get Workers List)"
@@ -41,7 +41,7 @@ class LoginLogic extends React.Component {
         "Content-Type": "application/json",
       };
 
-      return Helper.apiPost("Workers/PostLogoutWorker", value);
+      return await Helper.apiPost("Workers/PostLogoutWorker", value);
     } catch (err) {
       alert(`Error in calling ESP (Logout) API- ${err}`);
     }

@@ -19,6 +19,7 @@ class App extends React.Component {
       step: 0,
       page: 0,
       fromPB: false,
+      logout: false,
       settings: null,
       texts: [],
       isAdmin: false,
@@ -121,6 +122,20 @@ class App extends React.Component {
       }
     );
   };
+  logoutFromPB = () => {
+    this.setState(
+      {
+        ...this.state,
+        step: 1,
+        page: 0,
+        fromPB: false,
+        logout: true,
+      },
+      () => {
+        this.props.history.push("/claim");
+      }
+    );
+  };
   render() {
     const role = this.state.claims.a ? "a" : "u";
     const isPublic = this.state.claims.p;
@@ -156,6 +171,7 @@ class App extends React.Component {
                     changeStep={this.changeStep}
                     workerId={w}
                     fromPB={this.state.fromPB}
+                    logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
                     page={this.state.page}
@@ -172,6 +188,7 @@ class App extends React.Component {
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
                     fromPB={this.state.fromPB}
+                    logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
                     changeStep={this.changeStep}
@@ -189,6 +206,7 @@ class App extends React.Component {
                     settings={this.state.settings}
                     claimingId={this.state.claimingId}
                     claimOnPB={this.claimOnPB}
+                    logoutFromPB={this.logoutFromPB}
                   />
                 )}
               />
@@ -227,6 +245,7 @@ class App extends React.Component {
                     changeStep={this.changeStep}
                     isUser={false}
                     fromPB={this.state.fromPB}
+                    logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
                     page={this.state.page}
@@ -255,6 +274,7 @@ class App extends React.Component {
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
                     claimOnPB={this.claimOnPB}
+                    logoutFromPB={this.logoutFromPB}
                   />
                 )}
               />

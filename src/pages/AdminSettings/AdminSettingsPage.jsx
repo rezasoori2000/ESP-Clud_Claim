@@ -173,10 +173,16 @@ const AdminSettingsPage = (props) => {
                 items={props.adminSettings.Factories}
                 onPropertyChange={props.onSelectChange}
               />
-              <ESPCheckbox
+              {/* <ESPCheckbox
                 name="MultipleJobs"
                 label="Enable Multiple Jobs"
                 checked={props.adminSettings.MultipleJobs}
+                onPropertyChange={props.onPropertyChange}
+              /> */}
+              <ESPCheckbox
+                name="AllowClaimingOutOfFactoryWork"
+                label="Allow claiming on Out of Factory work"
+                checked={props.adminSettings.AllowClaimingOutOfFactoryWork}
                 onPropertyChange={props.onPropertyChange}
               />
               <ESPTextField
@@ -224,14 +230,6 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
-                <Grid item lg={3}>
-                  <ESPCheckbox
-                    name="ShowQty"
-                    label="Show Unit Qty"
-                    checked={props.adminSettings.ShowQty}
-                    onPropertyChange={props.onPropertyChange}
-                  />
-                </Grid>
               </Grid>
             </Grid>
             <Grid item lg={6}>
@@ -242,12 +240,12 @@ const AdminSettingsPage = (props) => {
                 items={props.adminSettings.Groups}
                 onPropertyChange={props.onSelectChange}
               />
-              <ESPCheckbox
+              {/* <ESPCheckbox
                 name="ScheduledJobs"
                 label="Show Scheduled Jobs After Claim"
                 checked={props.adminSettings.ScheduledJobs}
                 onPropertyChange={props.onPropertyChange}
-              />
+              /> */}
               <ESPSelect
                 name="JobListOrdering"
                 label="Job List Order"
@@ -259,12 +257,6 @@ const AdminSettingsPage = (props) => {
                 name="CanFinishWholeJob"
                 label="Enable Finish Whole Job feature"
                 checked={props.adminSettings.CanFinishWholeJob}
-                onPropertyChange={props.onPropertyChange}
-              />
-              <ESPCheckbox
-                name="AllowClaimingOutOfFactoryWork"
-                label="Allow claiming on Out of Factory work"
-                checked={props.adminSettings.AllowClaimingOutOfFactoryWork}
                 onPropertyChange={props.onPropertyChange}
               />
 
@@ -395,10 +387,18 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
+                <Grid item lg={3}>
+                  <ESPCheckbox
+                    name="ShowQty"
+                    label="Show Unit Qty"
+                    checked={props.adminSettings.ShowQty}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
               </Grid>
             </Grid>
 
-            <Grid item lg={4}>
+            <Grid item lg={3}>
               <ESPSelect
                 name="PBJobOrders"
                 label="Job Order"
@@ -407,10 +407,19 @@ const AdminSettingsPage = (props) => {
                 onPropertyChange={props.onSelectChange}
               />
             </Grid>
+            <Grid item lg={1}>
+              <ESPCheckbox
+                name="Z2A"
+                label="Z to A"
+                checked={props.adminSettings.Z2A}
+                onPropertyChange={props.onPropertyChange}
+              />
+            </Grid>
           </Grid>
         </CardContent>
       </Card>
       <hr />
+      {/*     
       <Card>
         <CardHeader
           title="Performance Statistics"
@@ -480,6 +489,7 @@ const AdminSettingsPage = (props) => {
           </Grid>
         </CardContent>
       </Card>
+     */}
     </div>
   );
 };

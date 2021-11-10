@@ -20,13 +20,13 @@ class ClaimLogic extends React.Component {
     }
   };
 
-  getJobsOfWorkerFromApi = async (workerId, jobStage) => {
+  getJobsOfWorkerFromApi = async (workerId, jobStage, siteWork = false) => {
     var data = {
       id: workerId,
       jobStage,
     };
     return Helper.apiPost(
-      `Claim/GetJobsOfWorker?id=${workerId}&jobStage=${jobStage}`,
+      `Claim/GetJobsOfWorker?id=${workerId}&jobStage=${jobStage}&siteWork=${siteWork}`,
       data,
       ""
     );
