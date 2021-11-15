@@ -386,6 +386,8 @@ const ProductionBoardPage = (props) => {
                 {props.settings.PBHourColumn && <th>Hours</th>}
                 {props.settings.PBDueDateColumn && <th>Due Date</th>}
                 {props.settings.ShowQty && <th>Unit Qty</th>}
+                {props.settings.ShowSalesPerson && <th>SalesPerson</th>}
+                {props.settings.ShowEstimator && <th>Estimator</th>}
                 {props.settings.ShowColour && <th>Colour</th>}
                 <th>Prog.</th>
                 {jobs &&
@@ -445,6 +447,8 @@ const ProductionBoardPage = (props) => {
                     {props.settings.PBHourColumn && <td>{e.Hours}</td>}
                     {props.settings.PBDueDateColumn && <td>{e.Due}</td>}
                     {props.settings.ShowQty && <td>{e.UnitQty}</td>}
+                    {props.settings.ShowSalesPerson && <td>{e.SalesPerson}</td>}
+                    {props.settings.ShowEstimator && <td>{e.Estimator}</td>}
                     {props.settings.ShowColour && <td>{e.Colour}</td>}
                     <td>{e.Progress}%</td>
                     {e.WorkTypes &&

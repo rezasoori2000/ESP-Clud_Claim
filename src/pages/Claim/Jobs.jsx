@@ -56,6 +56,16 @@ export default function Jobs(props) {
         : props.jobs;
     setJobs(filterJobs);
   }
+  function chunkSubstr(str, size) {
+    const numChunks = Math.ceil(str.length / size);
+    const chunks = new Array(numChunks);
+
+    for (let i = 0, o = 0; i < numChunks; ++i, o += size) {
+      chunks[i] = str.substr(o, size);
+    }
+
+    return chunks;
+  }
   function clearSearch() {
     setsearchVal("");
     setJobs(props.jobs);
@@ -458,11 +468,9 @@ export default function Jobs(props) {
                           <Grid item lg={12} xs={12} sm={12} md={12}>
                             <hr />
                           </Grid>
-
-                          <div style={{ fontSize: "small" }}>
-                            {e.Title.substring(0, 150)}
-                          </div>
-
+                          <Grid item lg={12} xs={12} sm={12} md={12}>
+                            <div style={{ fontSize: "small" }}> {e.Title}</div>
+                          </Grid>
                           {/* <Grid item lg={6} xs={6} sm={6} md={6}>
                             <CircularProgressWithLabel value={e.Progress} />
                           </Grid> */}

@@ -29,7 +29,7 @@ class LoginLogic extends React.Component {
       "Content-Type": "application/json",
     };
 
-    return Helper.apiPost("Workers/PostLoginWorker", value, "");
+    return await Helper.apiPost("Workers/PostLoginWorker", value, "");
   };
 
   saveLogoutAPI = async (id, comment) => {

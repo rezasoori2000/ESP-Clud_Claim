@@ -6,7 +6,7 @@ class ClaimLogic extends React.Component {
   getJobItemsFromApi = async (jobId, worktypeId, workerId) => {
     var response = {};
     try {
-      return Helper.apiPost(
+      return await Helper.apiPost(
         "Claim/GetJobItems",
         {
           jobId: jobId,
@@ -25,21 +25,26 @@ class ClaimLogic extends React.Component {
       id: workerId,
       jobStage,
     };
-    return Helper.apiPost(
+    return await Helper.apiPost(
       `Claim/GetJobsOfWorker?id=${workerId}&jobStage=${jobStage}&siteWork=${siteWork}`,
       data,
       ""
     );
   };
 
-  submitClaimInAPI = async (workerId, jobId, jobItems, comment) => {
+  submitClaimInAPI = async (workerId, jobId, jobItems, comment, logout) => {
     var value = {
       workerId: workerId,
       jobId: jobId,
       jobItems: jobItems,
       comment: comment,
+      logout,
     };
-    return Helper.apiPost("Claim/PostSubmitClaim", value, "Submit Claim Job");
+    return await Helper.apiPost(
+      "Claim/PostSubmitClaim",
+      value,
+      "Submit Claim Job"
+    );
   };
   submitFullJobClaimInAPI = async (workerId, jobId, comment) => {
     var value = {
@@ -47,25 +52,26 @@ class ClaimLogic extends React.Component {
       jobId: jobId,
       comment: comment,
     };
-    return Helper.apiPost(
+    return await Helper.apiPost(
       "Claim/PostClaimWholeJob",
       value,
       "Submit Claim Full Job"
     );
   };
 
-  submitAdminJobClaimInAPI(claimingOId, OId, comment) {
+  submitAdminJobClaimInAPI = async (claimingOId, OId, comment, logout) => {
     var value = {
       workerId: claimingOId,
       WorkTypeId: OId,
       comment: comment,
+      logout,
     };
-    return Helper.apiPost(
+    return await Helper.apiPost(
       "Claim/PostSubmitClaimAdminTask",
       value,
       "Submit Admin Job"
     );
-  }
+  };
   GetClaimedByAPI = async (jobCode, worktypId) => {
     var value = {
       jobCode,

@@ -65,73 +65,69 @@ class CalimContainer extends React.Component {
   componentDidMount() {}
 
   /* #region Claim From PB */
-  getPBJobItems = (jid, wid) => {
+  getPBJobItems = async (jid, wid) => {
     this.setState({
       ...this.state,
       loading: true,
     });
 
     var labelText = this.state.LabelText;
-    ClaimLogic.getJobItemsFromApi(jid, wid, this.state.claimingOId).then(
-      (r) => {
-        var data = JSON.parse(r.data);
-        labelText.push(data.WorkType.Name);
-        this.setState(
-          {
-            ...this.state,
-            jobId: jid,
-            jobLevel: data.WorkType.JobLevel,
-            workTypeName: data.WorkType.Name,
-            jobItems: data.jobItems,
-            mainJobItems: data.jobItems,
-            finishedItems: data.finishedItems,
-            canClaimWholeJob: data.canClaimWholeJob,
-            totalClaiminMinutes: data.totalPhyCalimMinutes,
-            totalProgress: data.totalProgress,
-            page: 3,
-            loading: false,
-            worktypeId: wid,
-            LabelText: labelText,
-            JobTitle: data.JobTitle,
-          },
-          () => {
-            this.props.changeStep(5, labelText, this.state.isAdminJob);
-          }
-        );
+    var r = await ClaimLogic.getJobItemsFromApi(
+      jid,
+      wid,
+      this.state.claimingOId
+    );
+    var data = JSON.parse(r.data);
+    labelText.push(data.WorkType.Name);
+    this.setState(
+      {
+        ...this.state,
+        jobId: jid,
+        jobLevel: data.WorkType.JobLevel,
+        workTypeName: data.WorkType.Name,
+        jobItems: data.jobItems,
+        mainJobItems: data.jobItems,
+        finishedItems: data.finishedItems,
+        canClaimWholeJob: data.canClaimWholeJob,
+        totalClaiminMinutes: data.totalPhyCalimMinutes,
+        totalProgress: data.totalProgress,
+        page: 3,
+        loading: false,
+        worktypeId: wid,
+        LabelText: labelText,
+        JobTitle: data.JobTitle,
+      },
+      () => {
+        this.props.changeStep(5, labelText, this.state.isAdminJob);
       }
     );
   };
   /* #region Claim From PB */
 
   /* #region  Login Methods */
-  loadWorkersList = () => {
+  loadWorkersList = async () => {
     try {
-      Loginlogics.getListOfWorkersFromApi(this.props.workerId)
-        .then((r) => {
-          const response = JSON.parse(r.data);
-          this.setState(
-            {
-              ...this.state,
-              workersList: response,
-              mainWorkersList: response,
-              loading: false,
-              settings: this.props.settings,
-              LabelText: [],
-            },
-            () => {
-              this.props.changeStep(2, [], this.state.isAdminJob);
-              if (this.props.workerId !== 0) {
-                var worker = response.find((x) => x.OId == this.props.workerId);
-                if (worker && worker.IsLoggedIn) {
-                  this.loggedInWorkerClick(worker);
-                }
-              }
+      var r = await Loginlogics.getListOfWorkersFromApi(this.props.workerId);
+      const response = JSON.parse(r.data);
+      this.setState(
+        {
+          ...this.state,
+          workersList: response,
+          mainWorkersList: response,
+          loading: false,
+          settings: this.props.settings,
+          LabelText: [],
+        },
+        () => {
+          this.props.changeStep(2, [], this.state.isAdminJob);
+          if (this.props.workerId !== 0) {
+            var worker = response.find((x) => x.OId == this.props.workerId);
+            if (worker && worker.IsLoggedIn) {
+              this.loggedInWorkerClick(worker);
             }
-          );
-        })
-        .catch((err) => {
-          alert("Error in fetching Workers list ");
-        });
+          }
+        }
+      );
     } catch (err) {
       console.log(err);
       alert("Error in fetching Workers list ");
@@ -230,41 +226,37 @@ class CalimContainer extends React.Component {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
     var labelText = [];
-    await Loginlogics.saveLoginInAPI(id, comment)
-      .then((r) => {
-        if (!JSON.parse(r.data).Successful) {
-          alert(r.Message);
-          return;
+    var r = await Loginlogics.saveLoginInAPI(id, comment);
+
+    if (!JSON.parse(r.data).Successful) {
+      alert(r.Message);
+      return;
+    }
+
+    worker.IsLoggedIn = true;
+    var inx = workersList.findIndex((x) => x.OId === id);
+
+    if (inx !== -1) {
+      workersList[inx] = worker;
+    }
+
+    labelText.push(worker.Name);
+    this.setState(
+      {
+        ...this.state,
+        claimingOId: id,
+        claimingUser: worker.Name,
+        workersList,
+        LabelText: labelText,
+      },
+      () => {
+        if (this.props.fromPB) {
+          this.getPBJobItems(this.props.jobId, this.props.workTypeId);
+        } else {
+          this.props.changeStep(3, labelText, this.state.isAdminJob);
         }
-
-        worker.IsLoggedIn = true;
-        var inx = workersList.findIndex((x) => x.OId === id);
-
-        if (inx !== -1) {
-          workersList[inx] = worker;
-        }
-
-        labelText.push(worker.Name);
-        this.setState(
-          {
-            ...this.state,
-            claimingOId: id,
-            claimingUser: worker.Name,
-            workersList,
-            LabelText: labelText,
-          },
-          () => {
-            if (this.props.fromPB) {
-              this.getPBJobItems(this.props.jobId, this.props.workTypeId);
-            } else {
-              this.props.changeStep(3, labelText, this.state.isAdminJob);
-            }
-          }
-        );
-      })
-      .catch((err) => {
-        alert(err);
-      });
+      }
+    );
   };
   handleLogOut = async (id, comment) => {
     const workersList = this.state.workersList;
@@ -313,36 +305,36 @@ class CalimContainer extends React.Component {
     );
   };
   saveLogoutAPI = async (id, comment) => {
+    var r = await Loginlogics.saveLogoutAPI(id, comment);
+
+    var obj = JSON.parse(r.data);
+    if (!obj.Successful) {
+      alert(obj.Message);
+      return false;
+    }
+
+    const workersList = this.setWorkerLOgout(id);
+    this.setState(
+      {
+        ...this.state,
+        page: 0,
+        workersList,
+        dialogOpen: false,
+      },
+      () => {
+        this.props.changeStep(2, [], this.state.isAdminJob);
+      }
+    );
+  };
+  setWorkerLOgout = (id) => {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
-
-    var response = await Loginlogics.saveLogoutAPI(id, comment)
-      .then((r) => {
-        var obj = JSON.parse(r.data);
-        if (!obj.Successful) {
-          alert(obj.Message);
-          return false;
-        }
-        worker.IsLoggedIn = false;
-        var inx = workersList.findIndex((x) => x.OId === id);
-        if (inx !== -1) {
-          workersList[inx] = worker;
-        }
-        this.setState(
-          {
-            ...this.state,
-            page: 0,
-            workersList,
-            dialogOpen: false,
-          },
-          () => {
-            this.props.changeStep(2, [], this.state.isAdminJob);
-          }
-        );
-      })
-      .catch((err) => {
-        alert(err);
-      });
+    worker.IsLoggedIn = false;
+    var inx = workersList.findIndex((x) => x.OId === id);
+    if (inx !== -1) {
+      workersList[inx] = worker;
+    }
+    return workersList;
   };
   searchNames = (event) => {
     this.setState({
@@ -367,33 +359,32 @@ class CalimContainer extends React.Component {
     });
     const workType = this.state.mainWorkTypes.find((x) => x.OId == worktypeId);
     var labelText = this.state.LabelText;
-    ClaimLogic.getJobItemsFromApi(
+    var r = await ClaimLogic.getJobItemsFromApi(
       this.state.jobId,
       worktypeId,
       this.state.claimingOId
-    ).then((r) => {
-      var data = JSON.parse(r.data);
-      labelText.push(workType.Name);
-      this.setState(
-        {
-          ...this.state,
-          jobLevel: workType.JobLevel,
-          jobItems: data.jobItems,
-          mainJobItems: data.jobItems,
-          finishedItems: data.finishedItems,
-          canClaimWholeJob: data.canClaimWholeJob,
-          totalClaiminMinutes: data.totalPhyCalimMinutes,
-          totalProgress: data.totalProgress,
-          page: 3,
-          loading: false,
-          worktypeId: worktypeId,
-          LabelText: labelText,
-        },
-        () => {
-          this.props.changeStep(5, labelText, this.state.isAdminJob);
-        }
-      );
-    });
+    );
+    var data = JSON.parse(r.data);
+    labelText.push(workType.Name);
+    this.setState(
+      {
+        ...this.state,
+        jobLevel: workType.JobLevel,
+        jobItems: data.jobItems,
+        mainJobItems: data.jobItems,
+        finishedItems: data.finishedItems,
+        canClaimWholeJob: data.canClaimWholeJob,
+        totalClaiminMinutes: data.totalPhyCalimMinutes,
+        totalProgress: data.totalProgress,
+        page: 3,
+        loading: false,
+        worktypeId: worktypeId,
+        LabelText: labelText,
+      },
+      () => {
+        this.props.changeStep(5, labelText, this.state.isAdminJob);
+      }
+    );
   };
 
   /* #endregion */
@@ -440,29 +431,24 @@ class CalimContainer extends React.Component {
       }
     );
   };
-  goToJobsPage = (page, claimingOId) => {
+  goToJobsPage = async (page, claimingOId) => {
     this.setState({
       ...this.state,
       loading: true,
     });
 
-    ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3)
-      .then((r) => {
-        const values = JSON.parse(r.data);
-        this.setState({
-          ...this.state,
-          jobs: values.Item1,
-          mainJobs: values.Item1,
-          adminJobs: values.Item2,
-          mainAdminJobs: values.Item2,
-          loading: false,
-          claimingOId,
-          page,
-        });
-      })
-      .catch((err) => {
-        alert("Error in retrieve Jobs list");
-      });
+    var r = await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3);
+    const values = JSON.parse(r.data);
+    this.setState({
+      ...this.state,
+      jobs: values.Item1,
+      mainJobs: values.Item1,
+      adminJobs: values.Item2,
+      mainAdminJobs: values.Item2,
+      loading: false,
+      claimingOId,
+      page,
+    });
   };
   handleBack = (pageId) => {
     var labelText = this.state.LabelText;
@@ -569,7 +555,7 @@ class CalimContainer extends React.Component {
     }
   };
 
-  handleSubmitClaim = (comment, isAdmin = false, logout = false) => {
+  handleSubmitClaim = async (comment, isAdmin = false, logout = false) => {
     this.setState({
       ...this.state,
       loading: true,
@@ -577,68 +563,16 @@ class CalimContainer extends React.Component {
 
     if (!isAdmin) {
       if (this.state.isFullJob) {
-        ClaimLogic.submitFullJobClaimInAPI(
+        var e = await ClaimLogic.submitFullJobClaimInAPI(
           this.state.claimingOId,
           this.state.jobId,
-          comment
-        ).then((e) => {
-          this.setState(
-            {
-              ...this.state,
-              loading: false,
-              page: this.props.role == "a" || this.props.public ? 0 : 1,
-              LabelText: [],
-            },
-            () => {
-              if (this.props.role == "a" || this.props.public)
-                this.props.changeStep(1, [], this.state.isAdminJob);
-              else this.props.changeStep(2, [], this.state.isAdminJob);
-            }
-          );
-        });
-      } else {
-        const response = ClaimLogic.submitClaimInAPI(
-          this.state.claimingOId,
-          this.state.jobId,
-          this.state.jobItems.filter(
-            (x) => x.Progress100 !== x.Main_Progress100
-          ),
           comment
         );
-
-        response.then((e) => {
-          this.setState(
-            {
-              ...this.state,
-              loading: false,
-              page: 0,
-              LabelText: [],
-            },
-            () => {
-              if (this.props.fromPB)
-                this.props.history.push("/productionBoard");
-              else {
-                if (this.props.role == "a" || this.props.public)
-                  this.props.changeStep(1, [], this.state.isAdminJob);
-                else this.props.changeStep(2, [], this.state.isAdminJob);
-              }
-            }
-          );
-        });
-      }
-    } else {
-      const response = ClaimLogic.submitAdminJobClaimInAPI(
-        this.state.claimingOId,
-        this.state.adminWorkType.OId,
-        comment
-      );
-
-      response.then((e) => {
         this.setState(
           {
             ...this.state,
             loading: false,
-            page: 0,
+            page: this.props.role == "a" || this.props.public ? 0 : 1,
             LabelText: [],
           },
           () => {
@@ -647,9 +581,60 @@ class CalimContainer extends React.Component {
             else this.props.changeStep(2, [], this.state.isAdminJob);
           }
         );
-      });
+      } else {
+        var e = await ClaimLogic.submitClaimInAPI(
+          this.state.claimingOId,
+          this.state.jobId,
+          this.state.jobItems.filter(
+            (x) => x.Progress100 !== x.Main_Progress100
+          ),
+          comment,
+          logout
+        );
+        this.setState(
+          {
+            ...this.state,
+            loading: false,
+            page: 0,
+            LabelText: [],
+            workersList: logout
+              ? this.setWorkerLOgout(this.state.claimingOId)
+              : this.state.workersList,
+          },
+          () => {
+            if (this.props.fromPB) this.props.history.push("/productionBoard");
+            else {
+              if (this.props.role == "a" || this.props.public)
+                this.props.changeStep(1, [], this.state.isAdminJob);
+              else this.props.changeStep(2, [], this.state.isAdminJob);
+            }
+          }
+        );
+      }
+    } else {
+      var e = await ClaimLogic.submitAdminJobClaimInAPI(
+        this.state.claimingOId,
+        this.state.adminWorkType.OId,
+        comment,
+        logout
+      );
+      this.setState(
+        {
+          ...this.state,
+          loading: false,
+          page: 0,
+          LabelText: [],
+          workersList: logout
+            ? this.setWorkerLOgout(this.state.claimingOId)
+            : this.state.workersList,
+        },
+        () => {
+          if (this.props.role == "a" || this.props.public)
+            this.props.changeStep(1, [], this.state.isAdminJob);
+          else this.props.changeStep(2, [], this.state.isAdminJob);
+        }
+      );
     }
-    if (logout) this.handleLogOut(this.state.claimingOId, "logout from Claim");
   };
 
   handleFullSubmitClaim = (comment, isAdmin = false) => {};

@@ -406,6 +406,22 @@ const AdminSettingsPage = (props) => {
                     onPropertyChange={props.onPropertyChange}
                   />
                 </Grid>
+                <Grid item lg={3}>
+                  <ESPCheckbox
+                    name="ShowSalesPerson"
+                    label="Show SalesPerson"
+                    checked={props.adminSettings.ShowSalesPerson}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={3}>
+                  <ESPCheckbox
+                    name="ShowEstimator"
+                    label="Show Estimator"
+                    checked={props.adminSettings.ShowEstimator}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
               </Grid>
             </Grid>
 
