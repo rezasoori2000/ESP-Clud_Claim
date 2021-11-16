@@ -21,58 +21,61 @@ import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import VerticalStepper from "./controls/VerticalStepper";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 
-const drawerWidth = 240;
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    listItemText: {
-      fontSize: "0.8rem",
-    },
-
-    root: {
-      display: "flex",
-    },
-    drawer: {
-      [theme.breakpoints.up("sm")]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
-    },
-    appBar: {
-      [theme.breakpoints.up("sm")]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        background: "#ebedf1",
-        color: "Black",
-      },
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-      [theme.breakpoints.up("sm")]: {
-        display: "none",
-      },
-    },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-      width: drawerWidth,
-    },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
-    },
-    link: {
-      textDecoration: "none",
-      color: "#fff",
-    },
-    whiteColor: {
-      color: "#fff",
-    },
-  })
-);
+import FormatIndentDecreaseIcon from "@mui/icons-material/FormatIndentDecrease";
+import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
 
 const DrawerContainer = (props) => {
+  const drawerWidth = props.menuSize;
+  const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+      listItemText: {
+        fontSize: "0.8rem",
+      },
+
+      root: {
+        display: "flex",
+      },
+      drawer: {
+        [theme.breakpoints.up("sm")]: {
+          width: drawerWidth,
+          flexShrink: 0,
+        },
+      },
+      appBar: {
+        [theme.breakpoints.up("sm")]: {
+          width: `calc(100% - ${drawerWidth}px)`,
+          marginLeft: drawerWidth,
+          background: "#ebedf1",
+          color: "Black",
+        },
+      },
+      menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up("sm")]: {
+          display: "none",
+        },
+      },
+      // necessary for content to be below app bar
+      toolbar: theme.mixins.toolbar,
+      drawerPaper: {
+        width: drawerWidth,
+      },
+      content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+      },
+      link: {
+        textDecoration: "none",
+        color: "#fff",
+      },
+      whiteColor: {
+        color: "#fff",
+      },
+    })
+  );
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -214,7 +217,7 @@ const DrawerContainer = (props) => {
                 localStorage.removeItem("_claim");
                 window.location.reload(false);
               }}
-              startIcon={<MeetingRoomIcon />}
+              startIcon={<ArrowBackIosNewIcon />}
             >
               Logout
             </Button>
@@ -243,7 +246,21 @@ const DrawerContainer = (props) => {
             <MenuIcon />
           </IconButton>
           <Grid container spacing={3}>
-            <Grid item lg={11}>
+            <Grid item lg={1}>
+              <Button
+                onClick={() => {
+                  props.changeMenuSize();
+                }}
+                startIcon={
+                  props.menuSize == 240 ? (
+                    <FormatIndentDecreaseIcon />
+                  ) : (
+                    <FormatIndentIncreaseIcon />
+                  )
+                }
+              ></Button>
+            </Grid>
+            <Grid item lg={10}>
               <Typography noWrap>ESP-Cloud Claim</Typography>
             </Grid>
             <Grid item lg={1}></Grid>

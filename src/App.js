@@ -34,6 +34,7 @@ class App extends React.Component {
         w: 0,
         pa: 0,
       },
+      menuSize: 240,
     };
   }
   componentDidMount() {
@@ -82,7 +83,18 @@ class App extends React.Component {
       isAdmin,
     });
   };
-
+  changeMenuSize = () => {
+    if (this.state.menuSize == 0)
+      this.setState({
+        ...this.state,
+        menuSize: 240,
+      });
+    else
+      this.setState({
+        ...this.state,
+        menuSize: 0,
+      });
+  };
   handleSignIn = (email, password) => {
     var response = Helper.setAsyncApiToken(email, password);
     response
@@ -152,6 +164,8 @@ class App extends React.Component {
               isAdmin={this.state.isAdmin}
               isSystemAdmin={false}
               ShowProductionBoard={this.state.settings.PBShowProductionBoard}
+              menuSize={this.state.menuSize}
+              changeMenuSize={this.changeMenuSize}
             />
             <main
               style={{
@@ -220,6 +234,8 @@ class App extends React.Component {
               texts={this.state.texts}
               isAdmin={this.state.isAdmin}
               isSystemAdmin={true}
+              menuSize={this.state.menuSize}
+              changeMenuSize={this.changeMenuSize}
             />
             <main
               style={{
@@ -227,11 +243,12 @@ class App extends React.Component {
                 paddingLeft: "0px",
                 paddingRight: "0px",
                 paddingTop: "80px",
+                marginLeft: this.state.menuSize == 0 ? "-100px" : "0px",
               }}
             >
               <div
                 style={{
-                  drawerPaper: { width: 240 },
+                  drawerPaper: { width: this.state.menuSize },
                 }}
               />
               <Route path="/" component={Welcome} />
