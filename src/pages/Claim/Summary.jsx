@@ -47,10 +47,13 @@ export default function Summary(props) {
   const [comment, setComment] = useState("");
   const classes = useStyles();
   var num = 0;
+  var avgStd = 0;
+  var changedItems = props.claimingItems.filter(
+    (x) => x.Progress100 !== x.Main_Progress100
+  ).length;
+  const workType = props.workType;
   const totalminute =
-    props.totalPhyCalimgMinutes /
-    props.claimingItems.filter((x) => x.Progress100 !== x.Main_Progress100)
-      .length;
+    props.totalPhyCalimgMinutes / (workType.JobLevel ? 1 : changedItems);
   const chartData = [];
   function space(n) {
     var s = "";
@@ -192,20 +195,24 @@ export default function Summary(props) {
                                 (e.StdTime * e.Progress100) / 6000
                               )}
                             </Typography>
+
                             <span style={{ fontSize: "0.0rem" }}>
                               {
                                 (num =
                                   chartData.filter((x) => x.name == e.Name)
                                     .length + 1)
                               }
-                              {chartData.push({
-                                id: e.OId,
-                                name: e.Name,
-                                country: e.Name,
-                                country: num > 1 ? e.Name + space(num) : e.Name,
-                                actual: totalminute,
-                                std: (e.StdTime * e.Progress100) / 6000,
-                              })}
+                              {!workType.JobLevel &&
+                                chartData.push({
+                                  id: e.OId,
+                                  name: e.Name,
+                                  country:
+                                    num > 1 ? e.Name + space(num) : e.Name,
+                                  actual: totalminute,
+                                  std: (e.StdTime * e.Progress100) / 6000,
+                                })}
+                              {workType.JobLevel &&
+                                (avgStd += (e.StdTime * e.Progress100) / 6000)}
                             </span>
                           </Fragment>
                         ))}
@@ -213,6 +220,15 @@ export default function Summary(props) {
                   </ListItem>
                 )}
               </List>
+              {workType.JobLevel && (
+                <span style={{ fontSize: "0.0rem" }}>
+                  {chartData.push({
+                    country: workType.Name,
+                    actual: totalminute,
+                    std: avgStd,
+                  })}
+                </span>
+              )}
               {props.settings.PSEnableIndividual && (
                 <Barchart Columns={chartData} Title="Performance" />
               )}

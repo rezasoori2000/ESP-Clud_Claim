@@ -253,12 +253,12 @@ const AdminSettingsPage = (props) => {
                 items={props.adminSettings.JobListOrdering}
                 onPropertyChange={props.onSelectChange}
               />
-              <ESPCheckbox
+              {/* <ESPCheckbox
                 name="CanFinishWholeJob"
                 label="Enable Finish Whole Job feature"
                 checked={props.adminSettings.CanFinishWholeJob}
                 onPropertyChange={props.onPropertyChange}
-              />
+              /> */}
 
               <Grid container>
                 <Grid item lg={3}>
@@ -292,7 +292,7 @@ const AdminSettingsPage = (props) => {
                   <ESPTextField
                     name="NoClaimAllowance"
                     label="No Claim Allowance"
-                    helptext="Seconds No Claim Allowance Before Logout"
+                    helptext="Seconds No Claim Allowance Before Logout. (Zero= disable)"
                     type="number"
                     value={props.adminSettings.NoClaimAllowance}
                     onPropertyChange={props.onPropertyChange}

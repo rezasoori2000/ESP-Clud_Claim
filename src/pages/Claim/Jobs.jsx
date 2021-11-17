@@ -30,11 +30,15 @@ import CircularProgressWithLabel from "../../components/controls/CircularProgres
 import ClaimLogic from "../../components/logics/ClaimLogic";
 import Loading from "../loading";
 import Hidden from "@material-ui/core/Hidden";
+import HomeWorkIcon from "@mui/icons-material/HomeWork";
+
 export default function Jobs(props) {
   const classes = gridSearchStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [note, setNote] = useState([]);
-  const [activeButton, setactiveButton] = useState("prod");
+  const [activeButton, setactiveButton] = useState(
+    props.IsSitWorkGroup ? "site" : "prod"
+  );
   const [jobs, setJobs] = useState(props.jobs);
   const [preJobs, setPreJobs] = useState([]);
   const [postJobs, setPostJobs] = useState([]);
@@ -323,7 +327,7 @@ export default function Jobs(props) {
                     backgroundColor:
                       activeButton == "site" ? "#196dc4" : "white",
                   }}
-                  startIcon={<SubdirectoryArrowLeftOutlinedIcon />}
+                  startIcon={<HomeWorkIcon />}
                   size="small"
                   onClick={() => handleSiteWork()}
                   fullWidth

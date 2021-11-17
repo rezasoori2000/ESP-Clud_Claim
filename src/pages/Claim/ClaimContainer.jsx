@@ -438,7 +438,9 @@ class CalimContainer extends React.Component {
       loading: true,
     });
 
-    var r = await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3);
+    var r = this.state.settings.IsSitWorkGroup
+      ? await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3, true)
+      : await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3);
     const values = JSON.parse(r.data);
     this.setState({
       ...this.state,
@@ -676,6 +678,7 @@ class CalimContainer extends React.Component {
               handleLogOut={this.handleLogOut}
               handleJobLoaded={this.handleJobLoaded}
               menuIsOpen={this.props.menuSize == 240}
+              IsSitWorkGroup={this.state.settings.IsSitWorkGroup}
             />
           );
         }
@@ -737,6 +740,9 @@ class CalimContainer extends React.Component {
               isFullJob={this.state.isFullJob}
               handleSubmit={this.handleSubmitClaim}
               settings={this.props.settings}
+              workType={this.state.mainWorkTypes.find(
+                (x) => x.OId == this.state.worktypeId
+              )}
             />
           );
         }

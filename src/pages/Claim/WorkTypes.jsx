@@ -80,14 +80,14 @@ export default function Worktypes(props) {
                 xs={4}
                 style={{ textAlign: "right" }}
               >
-                <Button
+                {/* <Button
                   variant="outlined"
                   size="small"
                   onClick={props.handleFullJob}
                   startIcon={<PlaylistAddCheckIcon />}
                 >
                   FullJob
-                </Button>
+                </Button> */}
               </Grid>
             </Hidden>
             <Grid item lg={3} sm={12} xs={12}>
@@ -115,14 +115,14 @@ export default function Worktypes(props) {
             </Grid>
             <Hidden only={["sm", "xs"]}>
               <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
-                <Button
+                {/* <Button
                   variant="outlined"
                   size="small"
                   onClick={props.handleFullJob}
                   startIcon={<PlaylistAddCheckIcon />}
                 >
                   FullJob
-                </Button>
+                </Button> */}
               </Grid>
             </Hidden>
           </Grid>
