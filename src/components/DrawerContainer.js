@@ -21,9 +21,6 @@ import { Link } from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import VerticalStepper from "./controls/VerticalStepper";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import ArrowBackIosNewIcon from "@mui/icons-material/ArrowBackIosNew";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-
 import FormatIndentDecreaseIcon from "@mui/icons-material/FormatIndentDecrease";
 import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
 
@@ -217,7 +214,7 @@ const DrawerContainer = (props) => {
                 localStorage.removeItem("_claim");
                 window.location.reload(false);
               }}
-              startIcon={<ArrowBackIosNewIcon />}
+              startIcon={<MeetingRoomIcon />}
             >
               Logout
             </Button>

@@ -446,7 +446,7 @@ const AdminSettingsPage = (props) => {
         </CardContent>
       </Card>
       <hr />
-      {/*     
+
       <Card>
         <CardHeader
           title="Performance Statistics"
@@ -516,7 +516,6 @@ const AdminSettingsPage = (props) => {
           </Grid>
         </CardContent>
       </Card>
-     */}
     </div>
   );
 };

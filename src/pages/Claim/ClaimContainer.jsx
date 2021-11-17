@@ -40,7 +40,7 @@ class CalimContainer extends React.Component {
       dialogHeader: "",
       dialogText: "",
       dialogSave: null,
-      totalClaiminMinutes: 0,
+      totalPhyCalimgMinutes: 0,
       LabelText: [],
       isFullJob: false,
       logoutClicked: false,
@@ -89,7 +89,7 @@ class CalimContainer extends React.Component {
         mainJobItems: data.jobItems,
         finishedItems: data.finishedItems,
         canClaimWholeJob: data.canClaimWholeJob,
-        totalClaiminMinutes: data.totalPhyCalimMinutes,
+        totalPhyCalimgMinutes: data.totalPhyCalimgMinutes,
         totalProgress: data.totalProgress,
         page: 3,
         loading: false,
@@ -194,6 +194,7 @@ class CalimContainer extends React.Component {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
     this.props.setClaimingId(id);
+
     if (worker.IsLoggedIn) {
       this.loggedInWorkerClick(worker);
     } else {
@@ -374,7 +375,7 @@ class CalimContainer extends React.Component {
         mainJobItems: data.jobItems,
         finishedItems: data.finishedItems,
         canClaimWholeJob: data.canClaimWholeJob,
-        totalClaiminMinutes: data.totalPhyCalimMinutes,
+        totalPhyCalimgMinutes: data.totalPhyCalimgMinutes,
         totalProgress: data.totalProgress,
         page: 3,
         loading: false,
@@ -662,6 +663,7 @@ class CalimContainer extends React.Component {
           return (
             <Jobs
               claimingOId={this.state.claimingOId}
+              claimingName={this.state.claimingUser}
               searchJobs={this.searchJobs}
               jobs={this.state.mainJobs}
               adminJobs={this.state.adminJobs}
@@ -673,6 +675,7 @@ class CalimContainer extends React.Component {
               handleBack={this.handleBack}
               handleLogOut={this.handleLogOut}
               handleJobLoaded={this.handleJobLoaded}
+              menuIsOpen={this.props.menuSize == 240}
             />
           );
         }
@@ -710,7 +713,7 @@ class CalimContainer extends React.Component {
           return (
             <Summary
               claimingOId={this.state.claimingOId}
-              totalClaiminMinutes={this.state.totalClaiminMinutes}
+              totalPhyCalimgMinutes={this.state.totalPhyCalimgMinutes}
               claimingName={
                 this.state.mainWorkersList.find(
                   (x) => x.OId === this.state.claimingOId
@@ -733,6 +736,7 @@ class CalimContainer extends React.Component {
               handleBack={this.handleBack}
               isFullJob={this.state.isFullJob}
               handleSubmit={this.handleSubmitClaim}
+              settings={this.props.settings}
             />
           );
         }

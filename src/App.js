@@ -27,6 +27,7 @@ class App extends React.Component {
       isPublic: false,
       loading: true,
       claimingId: 0,
+      workerName: "",
       claims: {
         user_t: "",
         a: false,
@@ -75,6 +76,7 @@ class App extends React.Component {
       claimingId: id,
     });
   };
+
   changeStep = (j, texts, isAdmin = false) => {
     this.setState({
       ...this.state,
@@ -130,7 +132,7 @@ class App extends React.Component {
         fromPB: true,
       },
       () => {
-        this.props.history.push("/claim");
+        this.props.history.push("/claimpb");
       }
     );
   };
@@ -190,6 +192,7 @@ class App extends React.Component {
                     workTypeId={this.state.pbWorkTypeId}
                     page={this.state.page}
                     setClaimingId={this.setClaimingId}
+                    menuSize={this.state.menuSize}
                     {...props}
                   />
                 )}
@@ -201,18 +204,37 @@ class App extends React.Component {
                     public={isPublic}
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
+                    fromPB={false}
+                    logout={this.state.logout}
+                    jobId={this.state.pbJobId}
+                    workTypeId={this.state.pbWorkTypeId}
+                    changeStep={this.changeStep}
+                    workerId={w}
+                    menuSize={this.state.menuSize}
+                    page={this.state.page}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                path="/claimpb"
+                render={(props) => (
+                  <ClaimContainer
+                    public={isPublic}
+                    settings={this.state.settings}
+                    setClaimingId={this.setClaimingId}
                     fromPB={this.state.fromPB}
                     logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
                     changeStep={this.changeStep}
                     workerId={w}
+                    menuSize={this.state.menuSize}
                     page={this.state.page}
                     {...props}
                   />
                 )}
               />
-
               <Route
                 path="/productionBoard"
                 render={(props) => (
@@ -261,12 +283,33 @@ class App extends React.Component {
                     setClaimingId={this.setClaimingId}
                     changeStep={this.changeStep}
                     isUser={false}
+                    fromPB={false}
+                    logout={this.state.logout}
+                    jobId={this.state.pbJobId}
+                    workTypeId={this.state.pbWorkTypeId}
+                    page={this.state.page}
+                    workerId="0"
+                    menuSize={this.state.menuSize}
+                    {...props}
+                  />
+                )}
+              />
+              <Route
+                path="/claimpb"
+                render={(props) => (
+                  <ClaimContainer
+                    public={false}
+                    settings={this.state.settings}
+                    setClaimingId={this.setClaimingId}
+                    changeStep={this.changeStep}
+                    isUser={false}
                     fromPB={this.state.fromPB}
                     logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
                     page={this.state.page}
                     workerId="0"
+                    menuSize={this.state.menuSize}
                     {...props}
                   />
                 )}

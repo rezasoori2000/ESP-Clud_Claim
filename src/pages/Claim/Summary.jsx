@@ -22,6 +22,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Fragment } from "react";
 import Button from "@material-ui/core/Button";
 import Helper from "../../components/logics/Helper";
+import Hidden from "@material-ui/core/Hidden";
+import Barchart from "../../components/controls/Barchart";
 
 const useStyles = makeStyles({
   btn: {
@@ -44,7 +46,17 @@ const useStyles = makeStyles({
 export default function Summary(props) {
   const [comment, setComment] = useState("");
   const classes = useStyles();
-
+  var num = 0;
+  const totalminute =
+    props.totalPhyCalimgMinutes /
+    props.claimingItems.filter((x) => x.Progress100 !== x.Main_Progress100)
+      .length;
+  const chartData = [];
+  function space(n) {
+    var s = "";
+    for (var i = 0; i < n; i++) s += String.fromCharCode(0);
+    return s;
+  }
   return (
     <Fragment>
       {window.scrollTo(0, 0)}
@@ -145,7 +157,7 @@ export default function Summary(props) {
                           {
                             <div>
                               <span>(</span>
-                              {Helper.timeConvert(props.totalClaiminMinutes)}
+                              {Helper.timeConvert(props.totalPhyCalimgMinutes)}
                               <span>)</span>
                             </div>
                           }
@@ -170,22 +182,43 @@ export default function Summary(props) {
                       secondary={props.claimingItems
                         .filter((x) => x.Progress100 !== x.Main_Progress100)
                         .map((e) => (
-                          <Typography style={{ fontSize: "1rem" }}>
-                            {e.Name}: ({e.Main_Progress100}% to:
-                            {e.Progress100}% {")  ("}
-                            {Helper.timeConvert(
-                              props.totalClaiminMinutes /
-                                props.claimingItems.filter(
-                                  (x) => x.Progress100 !== x.Main_Progress100
-                                ).length
-                            )}
-                            {")"}
-                          </Typography>
+                          <Fragment>
+                            <Typography style={{ fontSize: "1rem" }}>
+                              {e.Name}: ({e.Main_Progress100}% to:
+                              {e.Progress100}% {") took: "}
+                              {Helper.timeConvert(totalminute)}
+                              {" - Std: "}
+                              {Helper.timeConvert(
+                                (e.StdTime * e.Progress100) / 6000
+                              )}
+                            </Typography>
+                            <span style={{ fontSize: "0.0rem" }}>
+                              {
+                                (num =
+                                  chartData.filter((x) => x.name == e.Name)
+                                    .length + 1)
+                              }
+                              {chartData.push({
+                                id: e.OId,
+                                name: e.Name,
+                                country: e.Name,
+                                country: num > 1 ? e.Name + space(num) : e.Name,
+                                actual: totalminute,
+                                std: (e.StdTime * e.Progress100) / 6000,
+                              })}
+                            </span>
+                          </Fragment>
                         ))}
                     />
                   </ListItem>
                 )}
               </List>
+              {props.settings.PSEnableIndividual && (
+                <Barchart Columns={chartData} Title="Performance" />
+              )}
+              {/* <Hidden only={["xs"]}>
+                 <Barchart Columns={data} Title="Performance" /> 
+              </Hidden> */}
             </Grid>
             <Grid item lg={5} sm={12} xs={12}>
               <TextareaAutosize

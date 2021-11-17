@@ -1,12 +1,8 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
-import IOSSwitch from "../../components/controls/IosSwitch";
-import FaceIcon from "@material-ui/icons/Face";
 import Box from "@material-ui/core/Box";
-import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import gridSearchStyles from "../../components/controls/Styles";
-import { BlurCircular } from "@material-ui/icons";
 import Input from "@material-ui/core/Input";
 import { InputLabel, Switch } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -19,6 +15,10 @@ export default function Login(props) {
   const personList = props.loggingOut
     ? props.items.filter((x) => x.IsLoggedIn)
     : props.items;
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   return (
     <Fragment>
       <div className={classes.search}>

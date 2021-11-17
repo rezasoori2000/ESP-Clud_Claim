@@ -281,6 +281,7 @@ class JobItems extends React.Component {
     });
   };
   clearSearch = () => {
+    this.setState([]);
     this.setState({
       ...this.state,
       jobItems: this.mainJobItems,

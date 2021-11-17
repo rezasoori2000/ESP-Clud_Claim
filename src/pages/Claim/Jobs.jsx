@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -68,6 +68,7 @@ export default function Jobs(props) {
   }
   function clearSearch() {
     setsearchVal("");
+    setJobs([]);
     setJobs(props.jobs);
   }
   function handlePreProduction() {
@@ -144,6 +145,7 @@ export default function Jobs(props) {
     setJobs(props.jobs);
     setactiveButton("prod");
   }
+
   return (
     <Fragment>
       <Card style={{ backgroundColor: "#ebedf1" }}>
@@ -224,7 +226,8 @@ export default function Jobs(props) {
               id="panel1a-header"
             >
               <Typography variant="h4" component="div">
-                Jobs <hr />
+                Jobs {props.menuIsOpen ? "" : "(" + props.claimingName + ")"}{" "}
+                <hr />
               </Typography>
             </AccordionSummary>
 
@@ -487,8 +490,8 @@ export default function Jobs(props) {
               id="panel1a-header"
             >
               <Typography variant="h4" component="div">
-                Admin Jobs
-                <hr />
+                Admin Jobs{" "}
+                {props.menuIsOpen ? "" : "(" + props.claimingName + ")"} <hr />
               </Typography>
             </AccordionSummary>
             <AccordionDetails></AccordionDetails>

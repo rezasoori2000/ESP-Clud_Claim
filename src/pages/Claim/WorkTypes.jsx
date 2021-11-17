@@ -39,6 +39,7 @@ export default function Worktypes(props) {
     setSearchItems(workTypes);
   }
   function clearSearch() {
+    setSearchItems([]);
     setSearchItems(props.workTypes);
     setSearcVal("");
   }
