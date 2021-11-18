@@ -470,7 +470,13 @@ const ProductionBoardPage = (props) => {
                               padding: 0,
                               verticalAlign: "middle",
                             }}
-                          ></td>
+                            onClick={(r) =>
+                              props.settings.ClaimOnPB &&
+                              props.claimOnPB(e.Oid, w.Oid)
+                            }
+                          >
+                            0%
+                          </td>
                         ) : (
                           <MuiThemeProvider theme={theme}>
                             <Tooltip
