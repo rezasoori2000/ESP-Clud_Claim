@@ -32,11 +32,19 @@ class ClaimLogic extends React.Component {
     );
   };
 
-  submitClaimInAPI = async (workerId, jobId, jobItems, comment, logout) => {
+  submitClaimInAPI = async (
+    workerId,
+    jobId,
+    jobItems,
+    groupPercent,
+    comment,
+    logout
+  ) => {
     var value = {
       workerId: workerId,
       jobId: jobId,
       jobItems: jobItems,
+      groupPercent: groupPercent,
       comment: comment,
       logout,
     };

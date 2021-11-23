@@ -28,6 +28,7 @@ class App extends React.Component {
       loading: true,
       claimingId: 0,
       workerName: "",
+      joblevel: false,
       claims: {
         user_t: "",
         a: false,
@@ -121,7 +122,7 @@ class App extends React.Component {
         return null;
       });
   };
-  claimOnPB = (jid, wid) => {
+  claimOnPB = (jid, wid, jl) => {
     this.setState(
       {
         ...this.state,
@@ -130,6 +131,7 @@ class App extends React.Component {
         pbWorkTypeId: wid,
         pbJobId: jid,
         fromPB: true,
+        joblevel: jl,
       },
       () => {
         this.props.history.push("/claimpb");
@@ -227,6 +229,7 @@ class App extends React.Component {
                     logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
+                    jobLevel={this.state.joblevel}
                     changeStep={this.changeStep}
                     workerId={w}
                     menuSize={this.state.menuSize}
@@ -307,6 +310,7 @@ class App extends React.Component {
                     logout={this.state.logout}
                     jobId={this.state.pbJobId}
                     workTypeId={this.state.pbWorkTypeId}
+                    jobLevel={this.state.joblevel}
                     page={this.state.page}
                     workerId="0"
                     menuSize={this.state.menuSize}

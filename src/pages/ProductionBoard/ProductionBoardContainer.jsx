@@ -45,8 +45,8 @@ class ProductionBoardContainer extends React.Component {
       alert(`Error in calling ESP API (production board)- ${err}`);
     }
   };
-  claimOnPB = async (jid, wid) => {
-    this.props.claimOnPB(jid, wid);
+  claimOnPB = async (jid, wid, jl) => {
+    this.props.claimOnPB(jid, wid, jl);
   };
   logoutFromPB = () => {
     this.props.logoutFromPB();

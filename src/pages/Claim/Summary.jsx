@@ -51,9 +51,9 @@ export default function Summary(props) {
   var changedItems = props.claimingItems.filter(
     (x) => x.Progress100 !== x.Main_Progress100
   ).length;
-  const workType = props.workType;
+
   const totalminute =
-    props.totalPhyCalimgMinutes / (workType.JobLevel ? 1 : changedItems);
+    props.totalPhyCalimgMinutes / (props.jobLevel ? 1 : changedItems);
   const chartData = [];
   function space(n) {
     var s = "";
@@ -63,40 +63,59 @@ export default function Summary(props) {
   return (
     <Fragment>
       {window.scrollTo(0, 0)}
-      <Grid container spacing={3}>
-        <Grid item lg={1} sm={2} xs={4}>
-          <Button
-            variant="outlined"
-            size="small"
-            onClick={() => {
-              props.handleBack(props.isFullJob ? 2 : props.isAdminJob ? 1 : 3);
-            }}
-            startIcon={<ArrowBack />}
-          ></Button>
-        </Grid>
-        <Grid item lg={10} sm={10} xs={8}>
-          <span style={{ fontSize: "24px", fontWeight: "bold" }}>
-            <b>Claim</b>
-          </span>
-        </Grid>
-      </Grid>
 
       <Card className={classes.root}>
-        <CardActions>
-          <div
-            style={{
-              backgroundColor: "white",
-
-              fontSize: "20px",
-              width: "91%",
-              marginTop: "20px",
-              padding: "10px",
-            }}
+        <Grid container spacing={3} style={{ margin: "30px" }}>
+          <Grid item lg={1} sm={2} xs={4}>
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={() => {
+                props.handleBack(
+                  props.isFullJob ? 2 : props.isAdminJob ? 1 : 3
+                );
+              }}
+              startIcon={<ArrowBack />}
+            ></Button>
+          </Grid>
+          <Grid item lg={10} sm={10} xs={8}>
+            <span style={{ fontSize: "24px", fontWeight: "bold" }}>
+              <b>Claim</b>
+            </span>
+          </Grid>
+        </Grid>
+        <hr />
+        <CardActions style={{ justifyContent: "flex-end" }}>
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.btn}
+            startIcon={<SaveIcon />}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob)}
           >
-            {" "}
-            <DirectionsWalkIcon />
-            <b>Job: </b> {props.jobName}
-          </div>
+            Save
+          </Button>
+          <Button
+            variant="contained"
+            size="small"
+            className={classes.btn}
+            style={{ color: "white", backgroundColor: "#196dc4" }}
+            startIcon={<MeetingRoomIcon />}
+            onClick={() => props.handleSubmit(comment, props.isAdminJob, true)}
+          >
+            Save & Logout
+          </Button>
+        </CardActions>
+        <CardActions>
+          <Grid container spacing={3}>
+            <Grid item lg={9} sm={12} xs={12}>
+              <DirectionsWalkIcon />
+              <span style={{ fontSize: "1rem" }}>
+                {" "}
+                <b>Job: </b> {props.jobName}
+              </span>
+            </Grid>
+          </Grid>
         </CardActions>
         <CardContent>
           <Grid container spacing={3}>
@@ -202,7 +221,7 @@ export default function Summary(props) {
                                   chartData.filter((x) => x.name == e.Name)
                                     .length + 1)
                               }
-                              {!workType.JobLevel &&
+                              {!props.jobLevel &&
                                 chartData.push({
                                   id: e.OId,
                                   name: e.Name,
@@ -211,7 +230,7 @@ export default function Summary(props) {
                                   actual: totalminute,
                                   std: (e.StdTime * e.Progress100) / 6000,
                                 })}
-                              {workType.JobLevel &&
+                              {props.jobLevel &&
                                 (avgStd += (e.StdTime * e.Progress100) / 6000)}
                             </span>
                           </Fragment>
@@ -220,10 +239,10 @@ export default function Summary(props) {
                   </ListItem>
                 )}
               </List>
-              {workType.JobLevel && (
+              {props.jobLevel && (
                 <span style={{ fontSize: "0.0rem" }}>
                   {chartData.push({
-                    country: workType.Name,
+                    country: props.worktypeName,
                     actual: totalminute,
                     std: avgStd,
                   })}

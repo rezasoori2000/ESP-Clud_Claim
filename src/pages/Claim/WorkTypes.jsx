@@ -68,7 +68,10 @@ export default function Worktypes(props) {
             </Grid>
             <Grid item lg={7} sm={4} xs={4}>
               <span style={{ fontSize: "22px", marginTop: "30px" }}>
-                <b>Work&nbsp;Type</b>
+                <b>
+                  Work&nbsp;Type{" "}
+                  {props.menuIsOpen ? "" : " (" + props.claimingName + ")"}{" "}
+                </b>
               </span>
             </Grid>
             <Hidden only={["xl", "lg", "md"]}>

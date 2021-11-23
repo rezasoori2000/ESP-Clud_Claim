@@ -214,25 +214,11 @@ class JobItems extends React.Component {
   handleGroupedChanged(v, btn = false) {
     if (v < 0) return false;
     if (v > 100) v = 100;
+    if (v < this.props.totalProgress) return false;
     const items = this.state.jobItems;
     v = btn ? this.roundNumber(v, this.state.groupPercent) : v;
 
-    this.state.jobItems
-      .filter((x) => x.Main_Progress100 <= v)
-      .map((e, i) => {
-        //if (items[i].Main_Progress100 <= v) {
-        items.find((x) => x.OId == e.OId).Progress100 = v;
-        //}
-      });
-    this.state.jobItems
-      .filter((x) => x.Main_Progress100 > v)
-      .map((e, i) => {
-        //if (items[i].Main_Progress100 <= v) {
-        items.find((x) => x.OId == e.OId).Progress100 = e.Main_Progress100;
-        //}
-      });
-
-    var changed = items.some((e) => e.Progress100 !== e.Main_Progress100);
+    var changed = v != this.props.totalProgress;
     this.setState({
       ...this.state,
       jobItems: items,
@@ -321,7 +307,12 @@ class JobItems extends React.Component {
                       </Grid>
                       <Grid item lg={7} sm={4} xs={5}>
                         <span style={{ fontSize: "24px", marginTop: "30px" }}>
-                          <b>Job&nbsp;Items</b>
+                          <b>
+                            Job&nbsp;Items{" "}
+                            {this.props.menuIsOpen
+                              ? ""
+                              : " (" + this.props.claimingName + ")"}{" "}
+                          </b>
                         </span>
                       </Grid>
 
@@ -365,7 +356,11 @@ class JobItems extends React.Component {
                           backgroundColor="#fff"
                           startIcon={<SaveIcon />}
                           onClick={() =>
-                            this.props.handleSave(this.state.jobItems)
+                            this.props.handleSave(
+                              this.state.jobItems,
+                              this.state.groupPercent,
+                              this.props.jobLevel
+                            )
                           }
                         >
                           Claim
@@ -627,7 +622,13 @@ class JobItems extends React.Component {
               disabled={!this.state.changed}
               backgroundColor="#fff"
               startIcon={<SaveIcon />}
-              onClick={() => this.props.handleSave(this.state.jobItems)}
+              onClick={() =>
+                this.props.handleSave(
+                  this.state.jobItems,
+                  this.state.groupPercent,
+                  this.props.jobLevel
+                )
+              }
             >
               Claim
             </Button>

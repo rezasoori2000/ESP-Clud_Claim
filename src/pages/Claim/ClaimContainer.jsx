@@ -47,6 +47,7 @@ class CalimContainer extends React.Component {
       totalProgress: 0,
       finishedItems: [],
       logoutChecked: false,
+      groupPercent: 0,
     };
   }
 
@@ -537,25 +538,29 @@ class CalimContainer extends React.Component {
 
   /*#region jobItem*/
 
-  handleSaveClaim = (changedClaimingItems, fullJob) => {
-    if (fullJob) {
-      this.setState({
+  handleSaveClaim = (
+    changedClaimingItems,
+    groupPercent = 0,
+    jobLevel = false
+  ) => {
+    // if (fullJob) {
+    //   this.setState({
+    //     ...this.state,
+    //     claimingFullJob: true,
+    //     page: 4,
+    //   });
+    // } else {
+    this.setState(
+      {
         ...this.state,
-        claimingFullJob: true,
+        changedClaimingItems,
+        groupPercent,
         page: 4,
-      });
-    } else {
-      this.setState(
-        {
-          ...this.state,
-          changedClaimingItems,
-          page: 4,
-        },
-        () => {
-          this.props.changeStep(5, this.state.LabelText, this.state.isAdminJob);
-        }
-      );
-    }
+      },
+      () => {
+        this.props.changeStep(5, this.state.LabelText, this.state.isAdminJob);
+      }
+    );
   };
 
   handleSubmitClaim = async (comment, isAdmin = false, logout = false) => {
@@ -585,12 +590,17 @@ class CalimContainer extends React.Component {
           }
         );
       } else {
+        var jobItems =
+          this.state.groupPercent > 0
+            ? this.state.jobItems
+            : this.state.jobItems.filter(
+                (x) => x.Progress100 !== x.Main_Progress100
+              );
         var e = await ClaimLogic.submitClaimInAPI(
           this.state.claimingOId,
           this.state.jobId,
-          this.state.jobItems.filter(
-            (x) => x.Progress100 !== x.Main_Progress100
-          ),
+          jobItems,
+          this.state.groupPercent,
           comment,
           logout
         );
@@ -658,6 +668,7 @@ class CalimContainer extends React.Component {
               settings={this.state.settings}
               logoutChecked={this.state.logoutChecked}
               loggingOut={this.props.logout}
+              fromPB={this.props.fromPB}
             />
           );
         }
@@ -692,6 +703,8 @@ class CalimContainer extends React.Component {
               handleWorkTypeClick={this.handleWorkTypeClick}
               handleFullJob={this.handleFullJob}
               jobCode={this.state.selectedJobCode}
+              claimingName={this.state.claimingUser}
+              menuIsOpen={this.props.menuSize == 240}
             />
           );
         }
@@ -709,6 +722,8 @@ class CalimContainer extends React.Component {
               settings={this.props.settings}
               canClaimWholeJob={this.state.canClaimWholeJob}
               jobLevel={this.state.jobLevel}
+              claimingName={this.state.claimingUser}
+              menuIsOpen={this.props.menuSize == 240}
             />
           );
         }
@@ -740,9 +755,13 @@ class CalimContainer extends React.Component {
               isFullJob={this.state.isFullJob}
               handleSubmit={this.handleSubmitClaim}
               settings={this.props.settings}
-              workType={this.state.mainWorkTypes.find(
-                (x) => x.OId == this.state.worktypeId
-              )}
+              jobLevel={
+                this.props.fromPB
+                  ? this.props.jobLevel
+                  : this.state.mainWorkTypes.find(
+                      (x) => x.OId == this.state.worktypeId
+                    ).jobLevel
+              }
             />
           );
         }
