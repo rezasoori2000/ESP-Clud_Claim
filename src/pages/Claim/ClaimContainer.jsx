@@ -467,7 +467,11 @@ class CalimContainer extends React.Component {
         labelText = labelText.slice(0, 2);
         break;
     }
-
+    //this.props.history.push("/productionBoard");
+    if (pageId == 2 && this.props.fromPB) {
+      pageId = 0;
+      labelText = [];
+    }
     this.setState(
       {
         ...this.state,
