@@ -8,8 +8,9 @@ import CheckIcon from "@mui/icons-material/Check";
 import { Button, IconButton } from "@material-ui/core";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import Hidden from "@material-ui/core/Hidden";
-
+import InputBase from "@mui/material/InputBase";
 import Tooltip from "@material-ui/core/Tooltip";
+import CancelIcon from "@mui/icons-material/Cancel";
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -40,6 +41,11 @@ const ProductionBoardPage = (props) => {
     fontSize: "1.8em",
     fontFamily: "sans-serif",
   };
+  function clearSearch() {
+    setsearchVal("");
+    setJobs([]);
+    setJobs(props.jobs);
+  }
   function searchJobs(event) {
     var txt = event.target.value;
     setsearchVal(txt);
@@ -252,7 +258,26 @@ const ProductionBoardPage = (props) => {
           </Hidden>
 
           <Grid item lg={2} sm={6} xs={6}>
-            <Input
+            <IconButton sx={{ p: "10px" }} aria-label="menu">
+              <SearchIcon />
+            </IconButton>
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              variant="outlined"
+              value={searchVal}
+              onChange={searchJobs}
+            />
+            <IconButton
+              color="primary"
+              sx={{ p: "10px" }}
+              aria-label="directions"
+              onClick={() => clearSearch()}
+            >
+              <CancelIcon />
+            </IconButton>
+
+            {/* <Input
               id="input-with-icon-adornment"
               startAdornment={
                 <InputAdornment position="start">
@@ -261,7 +286,7 @@ const ProductionBoardPage = (props) => {
               }
               value={searchVal}
               onChange={searchJobs}
-            />
+            /> */}
           </Grid>
           <Grid item xs={6} lg={2} md={4}>
             <Button
