@@ -472,7 +472,7 @@ const ProductionBoardPage = (props) => {
                             }}
                             onClick={(r) =>
                               props.settings.ClaimOnPB &&
-                              props.claimOnPB(e.Oid, w.Oid, w.JobLevel)
+                              props.claimOnPB(e.Oid, w.Oid, w.JobLevel, e.Code)
                             }
                           >
                             0%
@@ -502,7 +502,12 @@ const ProductionBoardPage = (props) => {
                                 }}
                                 onClick={(r) =>
                                   props.settings.ClaimOnPB &&
-                                  props.claimOnPB(e.Oid, w.Oid, w.JobLevel)
+                                  props.claimOnPB(
+                                    e.Oid,
+                                    w.Oid,
+                                    w.JobLevel,
+                                    e.Code
+                                  )
                                 }
                               >
                                 {pie && (
@@ -634,7 +639,7 @@ const ProductionBoardPage = (props) => {
                       <td
                         onClick={(r) =>
                           props.settings.ClaimOnPB &&
-                          props.claimOnPB(e.Oid, wt.Oid, wt.JobLevel)
+                          props.claimOnPB(e.Oid, wt.Oid, wt.JobLevel, e.Code)
                         }
                         colSpan="4"
                       >

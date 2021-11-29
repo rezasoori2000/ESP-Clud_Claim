@@ -79,7 +79,8 @@ class CalimContainer extends React.Component {
       this.state.claimingOId
     );
     var data = JSON.parse(r.data);
-    labelText.push(data.WorkType.Name);
+
+    labelText.push(this.props.fromPB ? this.props.jobCode : data.WorkType.Name);
     this.setState(
       {
         ...this.state,
@@ -728,6 +729,11 @@ class CalimContainer extends React.Component {
               jobLevel={this.state.jobLevel}
               claimingName={this.state.claimingUser}
               menuIsOpen={this.props.menuSize == 240}
+              jobName={
+                this.state.adminWorkType
+                  ? this.state.adminWorkType.Name
+                  : this.state.JobTitle
+              }
             />
           );
         }
