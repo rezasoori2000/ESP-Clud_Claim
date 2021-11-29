@@ -197,6 +197,7 @@ class App extends React.Component {
                     page={this.state.page}
                     setClaimingId={this.setClaimingId}
                     menuSize={this.state.menuSize}
+                    jobLevel={this.state.joblevel}
                     {...props}
                   />
                 )}
@@ -216,6 +217,7 @@ class App extends React.Component {
                     workerId={w}
                     menuSize={this.state.menuSize}
                     page={this.state.page}
+                    jobLevel={this.state.joblevel}
                     {...props}
                   />
                 )}
@@ -296,6 +298,7 @@ class App extends React.Component {
                     page={this.state.page}
                     workerId="0"
                     menuSize={this.state.menuSize}
+                    jobLevel={this.state.joblevel}
                     {...props}
                   />
                 )}

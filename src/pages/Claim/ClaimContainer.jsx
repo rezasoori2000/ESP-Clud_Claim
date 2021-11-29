@@ -766,7 +766,9 @@ class CalimContainer extends React.Component {
               handleSubmit={this.handleSubmitClaim}
               settings={this.props.settings}
               jobLevel={
-                this.props.fromPB
+                this.state.isAdminJob
+                  ? true
+                  : this.props.fromPB
                   ? this.props.jobLevel
                   : this.state.mainWorkTypes.find(
                       (x) => x.OId == this.state.worktypeId
