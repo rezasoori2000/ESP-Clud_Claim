@@ -18,12 +18,15 @@ class CalimContainer extends React.Component {
       mainWorkersList: [],
       workTypes: [],
       mainWorkTypes: [],
+      primaryWorktypeIds: [],
+      secondaryWorktypeIds: [],
       jobs: [],
       mainJobs: [],
       adminJobs: [],
       mainAdminJobs: [],
       claimingOId: 0,
       claimingUser: "",
+      claiminWorker: {},
       page: 0,
       loading: false,
       worktypeId: 0,
@@ -162,6 +165,7 @@ class CalimContainer extends React.Component {
         LabelText: labelText,
         claimingUser: worker.Name,
         claimingOId: worker.OId,
+        claiminWorker: worker,
       },
       () => {
         if (this.props.fromPB) {
@@ -520,6 +524,13 @@ class CalimContainer extends React.Component {
       var labelText = this.state.LabelText;
       labelText.push(selectedJob.Code);
 
+      var primaryWorktypeIds = this.state.claiminWorker.Skills.filter(
+        (x) => x.Primary
+      ).map((i) => i.WorkTypeId);
+      var secondaryWorktypeIds = this.state.claiminWorker.Skills.filter(
+        (x) => x.Secondary
+      ).map((i) => i.WorkTypeId);
+
       this.setState(
         {
           ...this.state,
@@ -528,6 +539,8 @@ class CalimContainer extends React.Component {
           // mainWorkTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
           workTypes: selectedJob.WorkTypes,
           mainWorkTypes: selectedJob.WorkTypes,
+          primaryWorktypeIds,
+          secondaryWorktypeIds,
           selectedJobCode: selectedJob.Code,
           page: 2,
           isAdminJob: false,
@@ -710,6 +723,8 @@ class CalimContainer extends React.Component {
               jobCode={this.state.selectedJobCode}
               claimingName={this.state.claimingUser}
               menuIsOpen={this.props.menuSize == 240}
+              primaryWorktypeIds={this.state.primaryWorktypeIds}
+              secondaryWorktypeIds={this.state.secondaryWorktypeIds}
             />
           );
         }

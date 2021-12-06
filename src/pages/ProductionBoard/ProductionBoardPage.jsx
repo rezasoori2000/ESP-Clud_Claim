@@ -497,6 +497,7 @@ const ProductionBoardPage = (props) => {
                             }}
                             onClick={(r) =>
                               props.settings.ClaimOnPB &&
+                              w.Progress != -1 &&
                               props.claimOnPB(e.Oid, w.Oid, w.JobLevel, e.Code)
                             }
                           >
@@ -527,6 +528,7 @@ const ProductionBoardPage = (props) => {
                                 }}
                                 onClick={(r) =>
                                   props.settings.ClaimOnPB &&
+                                  w.Progress != -1 &&
                                   props.claimOnPB(
                                     e.Oid,
                                     w.Oid,

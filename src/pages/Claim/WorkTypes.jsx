@@ -131,10 +131,83 @@ export default function Worktypes(props) {
           </Grid>
 
           <hr />
+          <h2>Primary</h2>
           <Grid container spacing={1}>
             {items &&
               items
-                .filter((x) => x.Progress < 100)
+                .filter(
+                  (x) =>
+                    x.Progress < 100 && props.primaryWorktypeIds.includes(x.OId)
+                )
+
+                .sort(function (a, b) {
+                  return a.CategoryOrder - b.CategoryOrder;
+                })
+                .map((e) => (
+                  <Grid
+                    item
+                    lg={2}
+                    sm={6}
+                    xs={12}
+                    key={e.OId}
+                    className={classes.bolding}
+                  >
+                    <Box
+                      p={4}
+                      borderRadius="5%"
+                      key={e.OId}
+                      className={classes.boxBolding}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        fontSize: "0.9rem",
+                        textAlign: "center",
+                        backgroundColor:
+                          e.CategoryName == "production"
+                            ? "#9abf47"
+                            : e.CategoryName == "preproduction"
+                            ? "#b3b31b"
+                            : e.CategoryName == "postproduction"
+                            ? "#adadad"
+                            : "white",
+                      }}
+                      onClick={() => {
+                        props.handleWorkTypeClick(e.OId);
+                      }}
+                      // onDelete={()=>{}}
+
+                      clickable
+                    >
+                      {e.Name}
+                      <hr />
+                      <Grid container>
+                        <Grid item lg={6} sm={5} xs={5} key={e.OId}>
+                          <IconButton color="inherit">
+                            <CommentIcon
+                              onClick={(w) => {
+                                handleWorktypeNoteClicked(e.OId, props.jobCode);
+                                w.stopPropagation();
+                              }}
+                            />
+                          </IconButton>
+                        </Grid>
+                        <Grid item lg={6} sm={6} xs={6} key={e.OId}>
+                          <CircularProgressWithLabel value={e.Progress} />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </Grid>
+                ))}
+          </Grid>
+          <h2>Secondary</h2>
+          <Grid container spacing={1}>
+            {items &&
+              items
+                .filter(
+                  (x) =>
+                    x.Progress < 100 &&
+                    props.secondaryWorktypeIds.includes(x.OId)
+                )
 
                 .sort(function (a, b) {
                   return a.CategoryOrder - b.CategoryOrder;

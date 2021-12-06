@@ -41,6 +41,44 @@ class AdminSettingsContainer extends React.Component {
       adSettings,
     });
   };
+  onGroupsSelectChange = (event) => {
+    var adSettings = this.state.adminSettings;
+    var newSelectedId = event.target.value;
+    let newValues = [];
+    adSettings["Groups"].map((item) => {
+      if (newSelectedId.includes(item.Text))
+        newValues.push({
+          Value: item.Value,
+          Text: item.Text,
+          Disabled: false,
+          Group: null,
+          Selected: true,
+        });
+      else
+        newValues.push({
+          Value: item.Value,
+          Text: item.Text,
+          Disabled: false,
+          Group: null,
+          Selected: false,
+        });
+    });
+    var changes = this.state.changes;
+
+    adSettings[event.target.name] = newValues;
+
+    adSettings["GroupsIds"] = newValues
+      .filter((x) => x.Selected)
+      .map((n) => {
+        return n.Value;
+      })
+      .join(",");
+
+    this.setState({
+      ...this.state,
+      adminSettings: adSettings,
+    });
+  };
   onSelectChange = (event) => {
     var adSettings = this.state.adminSettings;
     var newSelectedId = event.target.value;
@@ -121,17 +159,13 @@ class AdminSettingsContainer extends React.Component {
   getAdminSettingsByAPI = async () => {
     var response = {};
     try {
-      Helper.apiPost(`adminSettings/GetInfo`, {}, "")
-        .then((res) => {
-          response = JSON.parse(res.data);
-          this.setState({
-            ...this.state,
-            adminSettings: response,
-          });
-        })
-        .catch((err) => {
-          alert("Error in get Groups data");
-        });
+      var res = await Helper.apiPost(`adminSettings/GetInfo`, {}, "");
+
+      var response = JSON.parse(res.data);
+      this.setState({
+        ...this.state,
+        adminSettings: response,
+      });
     } catch (err) {
       alert(`Error in calling ESP API- ${err}`);
     }
@@ -162,6 +196,7 @@ class AdminSettingsContainer extends React.Component {
         adminSettings={this.state.adminSettings || null}
         onPropertyChange={this.handelPropertyChange}
         onSelectChange={this.onSelectChange}
+        onGroupsSelectChange={this.onGroupsSelectChange}
         onSave={this.saveAdminSettingsByAPI}
       />
     );
