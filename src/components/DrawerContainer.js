@@ -23,7 +23,7 @@ import VerticalStepper from "./controls/VerticalStepper";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import FormatIndentDecreaseIcon from "@mui/icons-material/FormatIndentDecrease";
 import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
-
+import { Redirect } from "react-router-dom";
 const DrawerContainer = (props) => {
   const drawerWidth = props.menuSize;
   const useStyles = makeStyles((theme: Theme) =>
@@ -89,7 +89,7 @@ const DrawerContainer = (props) => {
       <Divider />
       <List className="mt-5">
         <div style={{ textAlign: "center", background: "#000" }}>
-          <img src="/favicon.png" />
+          <img src="./favicon.png" />
         </div>
         <br />
         <br />
@@ -97,7 +97,10 @@ const DrawerContainer = (props) => {
         <br />
         {props.isSystemAdmin && (
           <div>
-            <Link to="/claim" style={{ textDecoration: "none", color: "#fff" }}>
+            <Link
+              to="./claim"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
               <ListItem button key="1">
                 <ListItemIcon style={{ color: "#fff" }}>
                   <InboxIcon />{" "}
@@ -111,7 +114,7 @@ const DrawerContainer = (props) => {
               </ListItem>
             </Link>
             <Link
-              to="/settings"
+              to="./settings"
               style={{ textDecoration: "none", color: "#fff" }}
             >
               <ListItem button key="2">
@@ -125,7 +128,7 @@ const DrawerContainer = (props) => {
               </ListItem>
             </Link>
             <Link
-              to="/ProductionBoard"
+              to="./ProductionBoard"
               style={{ textDecoration: "none", color: "#fff" }}
             >
               <ListItem button key="2">
@@ -138,7 +141,10 @@ const DrawerContainer = (props) => {
                 />
               </ListItem>
             </Link>
-            <Link to="/users" style={{ textDecoration: "none", color: "#fff" }}>
+            <Link
+              to="./users"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
               <ListItem button key="2">
                 <ListItemIcon style={{ color: "#fff" }}>
                   <SettingsIcon />{" "}
@@ -161,7 +167,8 @@ const DrawerContainer = (props) => {
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
                 localStorage.removeItem("_claim");
-                window.location.reload(false);
+                //window.location.reload(false);
+                <Redirect to="/." />;
               }}
               startIcon={<MeetingRoomIcon />}
             >
@@ -171,7 +178,10 @@ const DrawerContainer = (props) => {
         )}
         {!props.isSystemAdmin && (
           <div>
-            <Link to="/claim" style={{ textDecoration: "none", color: "#fff" }}>
+            <Link
+              to="./claim"
+              style={{ textDecoration: "none", color: "#fff" }}
+            >
               <ListItem button key="1">
                 <ListItemIcon style={{ color: "#fff" }}>
                   <InboxIcon />{" "}
@@ -186,7 +196,7 @@ const DrawerContainer = (props) => {
             </Link>
             {props.ShowProductionBoard && (
               <Link
-                to="/ProductionBoard"
+                to="./ProductionBoard"
                 style={{ textDecoration: "none", color: "#fff" }}
               >
                 <ListItem button key="2">
@@ -212,7 +222,8 @@ const DrawerContainer = (props) => {
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
                 localStorage.removeItem("_claim");
-                window.location.reload(false);
+                //window.location.reload(false);
+                <Redirect to="/." />;
               }}
               startIcon={<MeetingRoomIcon />}
             >

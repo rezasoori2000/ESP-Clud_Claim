@@ -136,7 +136,7 @@ class App extends React.Component {
         jobCode,
       },
       () => {
-        this.props.history.push("/claimpb");
+        this.props.history.push("/ESPCC-TCA/claimpb");
       }
     );
   };
@@ -150,7 +150,7 @@ class App extends React.Component {
         logout: true,
       },
       () => {
-        this.props.history.push("/claim");
+        this.props.history.push("/ESPCC-TCA/claim");
       }
     );
   };
@@ -182,8 +182,7 @@ class App extends React.Component {
               }}
             >
               <Route
-                exact
-                path="/"
+                path="/ESPCC-TCA/"
                 render={(props) => (
                   <ClaimContainer
                     public={isPublic}
@@ -203,7 +202,7 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/claim"
+                path="/ESPCC-TCA/claim"
                 render={(props) => (
                   <ClaimContainer
                     public={isPublic}
@@ -223,7 +222,7 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/claimpb"
+                path="/ESPCC-TCA/claimpb"
                 render={(props) => (
                   <ClaimContainer
                     public={isPublic}
@@ -244,7 +243,7 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/productionBoard"
+                path="/ESPCC-TCA/productionBoard"
                 render={(props) => (
                   <ProductionBoard
                     settings={this.state.settings}
@@ -281,9 +280,9 @@ class App extends React.Component {
                   drawerPaper: { width: this.state.menuSize },
                 }}
               />
-              <Route path="/" component={Welcome} />
+              <Route path="/ESPCC-TCA/" component={Welcome} />
               <Route
-                path="/claim"
+                path="/ESPCC-TCA/claim"
                 render={(props) => (
                   <ClaimContainer
                     public={false}
@@ -304,7 +303,7 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/claimpb"
+                path="/ESPCC-TCA/claimpb"
                 render={(props) => (
                   <ClaimContainer
                     public={false}
@@ -326,7 +325,7 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/settings"
+                path="/ESPCC-TCA/settings"
                 render={(props) => (
                   <Settings
                     changeStep={this.changeStep}
@@ -335,10 +334,13 @@ class App extends React.Component {
                   />
                 )}
               />
-              <Route path="/performanceState" component={Performance} />
-              <Route path="/users" component={UserManagement} />
               <Route
-                path="/productionBoard"
+                path="/ESPCC-TCA/performanceState"
+                component={Performance}
+              />
+              <Route path="/ESPCC-TCA/users" component={UserManagement} />
+              <Route
+                path="/ESPCC-TCA/productionBoard"
                 render={(props) => (
                   <ProductionBoard
                     claimingId={this.state.claimingId}

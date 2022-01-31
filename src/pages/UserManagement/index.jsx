@@ -23,6 +23,7 @@ import Helper from "../../components/logics/Helper";
 import CheckIcon from "@material-ui/icons/Check";
 import CloseIcon from "@material-ui/icons/Close";
 import { Fragment } from "react";
+import { Redirect } from "react-router-dom";
 class UserManagement extends React.Component {
   constructor() {
     super();
@@ -71,7 +72,8 @@ class UserManagement extends React.Component {
       })
         .then((r) => {
           alert("Successfuly added");
-          window.location.reload(false);
+          //window.location.reload(false);
+          <Redirect to="/" />;
         })
         .catch((err) => {
           alert("Error in adding user" + err);

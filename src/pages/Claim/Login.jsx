@@ -8,10 +8,12 @@ import { InputLabel, Switch } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Button from "@material-ui/core/Button";
+import { useHistory } from "react-router";
 
 export default function Login(props) {
   const classes = gridSearchStyles();
   const [logout, setLogout] = useState(props.logoutChecked);
+  const history = useHistory();
   const personList = props.loggingOut
     ? props.items.filter((x) => x.IsLoggedIn)
     : props.items;
@@ -36,7 +38,9 @@ export default function Login(props) {
                 size="small"
                 style={{ textAlign: "right" }}
                 onClick={() => {
-                  window.location = "/ProductionBoard";
+                  history.push({
+                    pathname: "/ESPCC-TCA/productionBoard",
+                  });
                 }}
                 startIcon={<ArrowBack />}
               ></Button>

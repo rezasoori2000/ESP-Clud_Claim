@@ -251,6 +251,14 @@ const AdminSettingsPage = (props) => {
                       onPropertyChange={props.onPropertyChange}
                     />
                   </Grid>
+                  <Grid item lg={5}>
+                    <ESPCheckbox
+                      name="DividJobs"
+                      label="Enable Dividing jobs"
+                      checked={props.adminSettings.DividJobs}
+                      onPropertyChange={props.onPropertyChange}
+                    />
+                  </Grid>
                 </Grid>
               </Grid>
               <Grid item lg={6}>

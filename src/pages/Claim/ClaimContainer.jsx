@@ -8,6 +8,7 @@ import Loginlogics from "../../components/logics/Login";
 import ClaimLogic from "../../components/logics/ClaimLogic";
 import Loading from "../loading.js";
 import FormDialog from "../../components/controls/FormDialog";
+import { Redirect } from "react-router-dom";
 
 class CalimContainer extends React.Component {
   constructor() {
@@ -51,6 +52,7 @@ class CalimContainer extends React.Component {
       finishedItems: [],
       logoutChecked: false,
       groupPercent: 0,
+      IsSitWorkGroup: false,
     };
   }
 
@@ -149,8 +151,8 @@ class CalimContainer extends React.Component {
         dialogOpen: false,
       },
       () => {
-        if (this.props.logout) window.location = "/ProductionBoard";
-        else window.location = "";
+        if (this.props.logout) <Redirect to="/ProductionBoard" />;
+        else <Redirect to="/" />;
       }
     );
   };
@@ -159,6 +161,13 @@ class CalimContainer extends React.Component {
     const page = 1;
     const labelText = [];
     labelText.push(worker.Name);
+    var primaryWorktypeIds = worker.Skills.filter((x) => x.Primary).map(
+      (i) => i.WorkTypeId
+    );
+    var secondaryWorktypeIds = worker.Skills.filter((x) => x.Secondary).map(
+      (i) => i.WorkTypeId
+    );
+
     this.setState(
       {
         ...this.state,
@@ -166,6 +175,9 @@ class CalimContainer extends React.Component {
         claimingUser: worker.Name,
         claimingOId: worker.OId,
         claiminWorker: worker,
+        primaryWorktypeIds,
+        secondaryWorktypeIds,
+        IsSitWorkGroup: worker.Skills.find((x) => x.IsSitework && x.Primary),
       },
       () => {
         if (this.props.fromPB) {
@@ -289,8 +301,8 @@ class CalimContainer extends React.Component {
       });
     } else {
       var response = await this.saveLogoutAPI(id, comment);
-      if (this.props.logout) window.location = "/ProductionBoard";
-      else window.location = "";
+      if (this.props.logout) <Redirect to="/ESPCC-TCA/ProductionBoard" />;
+      else <Redirect to="/ESPCC-TCA/claim" />;
     }
   };
 
@@ -444,7 +456,7 @@ class CalimContainer extends React.Component {
       loading: true,
     });
 
-    var r = this.state.settings.IsSitWorkGroup
+    var r = this.state.IsSitWorkGroup
       ? await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3, true)
       : await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3);
     const values = JSON.parse(r.data);
@@ -524,13 +536,6 @@ class CalimContainer extends React.Component {
       var labelText = this.state.LabelText;
       labelText.push(selectedJob.Code);
 
-      var primaryWorktypeIds = this.state.claiminWorker.Skills.filter(
-        (x) => x.Primary
-      ).map((i) => i.WorkTypeId);
-      var secondaryWorktypeIds = this.state.claiminWorker.Skills.filter(
-        (x) => x.Secondary
-      ).map((i) => i.WorkTypeId);
-
       this.setState(
         {
           ...this.state,
@@ -539,8 +544,7 @@ class CalimContainer extends React.Component {
           // mainWorkTypes: selectedJob.WorkTypes.filter((x) => x.HasJobItems),
           workTypes: selectedJob.WorkTypes,
           mainWorkTypes: selectedJob.WorkTypes,
-          primaryWorktypeIds,
-          secondaryWorktypeIds,
+
           selectedJobCode: selectedJob.Code,
           page: 2,
           isAdminJob: false,
@@ -633,7 +637,8 @@ class CalimContainer extends React.Component {
               : this.state.workersList,
           },
           () => {
-            if (this.props.fromPB) this.props.history.push("/productionBoard");
+            if (this.props.fromPB)
+              this.props.history.push("/ESPCC-TCA/productionBoard");
             else {
               if (this.props.role == "a" || this.props.public)
                 this.props.changeStep(1, [], this.state.isAdminJob);
@@ -696,10 +701,13 @@ class CalimContainer extends React.Component {
               claimingOId={this.state.claimingOId}
               claimingName={this.state.claimingUser}
               searchJobs={this.searchJobs}
+              divideJobs={this.state.settings.DividJobs}
               jobs={this.state.mainJobs}
               adminJobs={this.state.adminJobs}
               prejobs={this.state.prejobs}
               postjobs={this.state.postjobs}
+              primaryWorktypeIds={this.state.primaryWorktypeIds}
+              secondaryWorktypeIds={this.state.secondaryWorktypeIds}
               showPreProduction={this.state.settings.HidePreProductionJobs}
               showPostProduction={this.state.settings.HidePostProductionJobs}
               handleJobClick={this.handleJobClick}
@@ -707,7 +715,7 @@ class CalimContainer extends React.Component {
               handleLogOut={this.handleLogOut}
               handleJobLoaded={this.handleJobLoaded}
               menuIsOpen={this.props.menuSize == 240}
-              IsSitWorkGroup={this.state.settings.IsSitWorkGroup}
+              IsSitWorkGroup={this.state.IsSitWorkGroup}
             />
           );
         }
