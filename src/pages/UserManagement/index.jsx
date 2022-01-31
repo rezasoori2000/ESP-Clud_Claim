@@ -38,7 +38,7 @@ class UserManagement extends React.Component {
     this.usermanagementInitData();
   }
   usermanagementInitData = () => {
-    Helper.apiPost("Account/InitClaimUserManagement")
+    Helper.apiPost(`${this.props.apiRoute}Account/InitClaimUserManagement`)
       .then((r) => {
         var data = r.data;
         this.setState({
@@ -62,7 +62,7 @@ class UserManagement extends React.Component {
   };
   onSave = () => {
     if (!this.state.changePassword) {
-      Helper.apiPost("Account/Register", {
+      Helper.apiPost(`${this.props.apiRoute}Account/Register`, {
         Email: this.state.model.Email,
         Password: this.state.model.Password,
         ConfirmPassword: this.state.model.Password,
@@ -79,7 +79,7 @@ class UserManagement extends React.Component {
           alert("Error in adding user" + err);
         });
     } else {
-      Helper.apiPost("Account/SetPassword", {
+      Helper.apiPost(`${this.props.apiRoute}Account/SetPassword`, {
         Id: this.state.model.LoginId,
         NewPassword: this.state.model.Password,
         ConfirmPassword: this.state.model.Password,

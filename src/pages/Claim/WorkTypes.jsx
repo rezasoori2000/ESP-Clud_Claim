@@ -43,8 +43,8 @@ export default function Worktypes(props) {
     setSearchItems(props.workTypes);
     setSearcVal("");
   }
-  function handleWorktypeNoteClicked(id, code) {
-    const response = ClaimLogic.GetClaimedByAPI(code, id);
+  function handleWorktypeNoteClicked(id, code, route) {
+    const response = ClaimLogic.GetClaimedByAPI(code, id, route);
     response.then((e) => {
       setNote(JSON.parse(e.data));
       setOpenDialog(true);
@@ -185,7 +185,11 @@ export default function Worktypes(props) {
                           <IconButton color="inherit">
                             <CommentIcon
                               onClick={(w) => {
-                                handleWorktypeNoteClicked(e.OId, props.jobCode);
+                                handleWorktypeNoteClicked(
+                                  e.OId,
+                                  props.jobCode,
+                                  props.apiRoute
+                                );
                                 w.stopPropagation();
                               }}
                             />
@@ -254,7 +258,11 @@ export default function Worktypes(props) {
                           <IconButton color="inherit">
                             <CommentIcon
                               onClick={(w) => {
-                                handleWorktypeNoteClicked(e.OId, props.jobCode);
+                                handleWorktypeNoteClicked(
+                                  e.OId,
+                                  props.jobCode,
+                                  props.apiRoute
+                                );
                                 w.stopPropagation();
                               }}
                             />

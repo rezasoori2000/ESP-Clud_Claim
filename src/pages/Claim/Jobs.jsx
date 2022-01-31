@@ -110,7 +110,7 @@ export default function Jobs(props) {
     setLoading(true);
     setactiveButton("pre");
     if (!loadedJobs.includes("pre")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 2)
+      ClaimLogic.getJobsOfWorkerFromApi(props.apiRoute, props.claimingOId, 2)
         .then((r) => {
           const values = JSON.parse(r.data);
           setPreJobs(values.Item1);
@@ -133,7 +133,7 @@ export default function Jobs(props) {
     setLoading(true);
     setactiveButton("post");
     if (!loadedJobs.includes("post")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 4)
+      ClaimLogic.getJobsOfWorkerFromApi(props.apiRoute, props.claimingOId, 4)
         .then((r) => {
           const values = JSON.parse(r.data);
           setPostJobs(values.Item1);
@@ -156,7 +156,12 @@ export default function Jobs(props) {
     setLoading(true);
     setactiveButton("site");
     if (!loadedJobs.includes("site")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 4, true)
+      ClaimLogic.getJobsOfWorkerFromApi(
+        props.apiRoute,
+        props.claimingOId,
+        4,
+        true
+      )
         .then((r) => {
           const values = JSON.parse(r.data);
           setSiteJobs(values.Item1);
@@ -178,7 +183,12 @@ export default function Jobs(props) {
     setsearchVal("");
     setLoading(true);
     if (!loadedJobs.includes("prod")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 3, false)
+      ClaimLogic.getJobsOfWorkerFromApi(
+        props.apiRoute,
+        props.claimingOId,
+        3,
+        false
+      )
         .then((r) => {
           const values = JSON.parse(r.data);
           setSiteJobs(values.Item1);

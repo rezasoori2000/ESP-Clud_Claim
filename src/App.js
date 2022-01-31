@@ -38,15 +38,37 @@ class App extends React.Component {
         pa: 0,
       },
       menuSize: 240,
+      mainRoute: "",
+      apiRoute: "",
+      localSettings: {},
     };
   }
   componentDidMount() {
-    const token = Helper.getLocalToken();
-    if (localStorage.getItem("_claim")) this.getServerSettings();
+    fetch("data.json", {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        this.setState(
+          {
+            ...this.state,
+            localSettings: json,
+            mainRoute: json.route,
+            apiRoute: json.apiRoute,
+          },
+          () => {
+            const token = Helper.getLocalToken();
+            if (localStorage.getItem("_claim")) this.getServerSettings();
+          }
+        );
+      });
   }
   getServerSettings = () => {
     try {
-      var url = "AdminSettings/GetInfo";
+      var url = `${this.state.apiRoute}AdminSettings/GetInfo`;
       var claims = localStorage.getItem("_claim");
       Helper.apiPost(url, claims, "")
         .then((response) => {
@@ -100,7 +122,11 @@ class App extends React.Component {
       });
   };
   handleSignIn = (email, password) => {
-    var response = Helper.setAsyncApiToken(email, password);
+    var response = Helper.setAsyncApiToken(
+      email,
+      password,
+      this.state.apiRoute
+    );
     response
       .then((r) => {
         if (r && r.data && r.data.access_token) {
@@ -136,7 +162,7 @@ class App extends React.Component {
         jobCode,
       },
       () => {
-        this.props.history.push("/ESPCC-TCA/claimpb");
+        this.props.history.push(`${this.state.mainRoute}claimpb`);
       }
     );
   };
@@ -150,8 +176,13 @@ class App extends React.Component {
         logout: true,
       },
       () => {
-        this.props.history.push("/ESPCC-TCA/claim");
+        this.props.history.push(`${this.state.mainRoute}claim`);
       }
+    );
+  };
+  FadingRoute = ({ component: Component, ...rest }) => {
+    return (
+      <Route {...rest} render={(routeProps) => <Component {...routeProps} />} />
     );
   };
   render() {
@@ -181,11 +212,15 @@ class App extends React.Component {
                 paddingTop: "80px",
               }}
             >
+              {/* <FadingRoute path=`` component={Something} /> */}
+
               <Route
-                path="/ESPCC-TCA/"
+                path={`${this.state.mainRoute}`}
                 render={(props) => (
                   <ClaimContainer
                     public={isPublic}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     settings={this.state.settings}
                     changeStep={this.changeStep}
                     workerId={w}
@@ -202,10 +237,12 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/ESPCC-TCA/claim"
+                path={`${this.state.mainRoute}claim`}
                 render={(props) => (
                   <ClaimContainer
                     public={isPublic}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
                     fromPB={false}
@@ -222,12 +259,14 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/ESPCC-TCA/claimpb"
+                path={`${this.state.mainRoute}claimpb`}
                 render={(props) => (
                   <ClaimContainer
                     public={isPublic}
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     fromPB={this.state.fromPB}
                     logout={this.state.logout}
                     jobId={this.state.pbJobId}
@@ -243,10 +282,12 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/ESPCC-TCA/productionBoard"
+                path={`${this.state.mainRoute}productionBoard`}
                 render={(props) => (
                   <ProductionBoard
                     settings={this.state.settings}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     claimingId={this.state.claimingId}
                     claimOnPB={this.claimOnPB}
                     logoutFromPB={this.logoutFromPB}
@@ -280,12 +321,14 @@ class App extends React.Component {
                   drawerPaper: { width: this.state.menuSize },
                 }}
               />
-              <Route path="/ESPCC-TCA/" component={Welcome} />
+              <Route path={`${this.state.mainRoute}`} component={Welcome} />
               <Route
-                path="/ESPCC-TCA/claim"
+                path={`${this.state.mainRoute}claim`}
                 render={(props) => (
                   <ClaimContainer
                     public={false}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
                     changeStep={this.changeStep}
@@ -303,10 +346,12 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/ESPCC-TCA/claimpb"
+                path={`${this.state.mainRoute}claimpb`}
                 render={(props) => (
                   <ClaimContainer
                     public={false}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     settings={this.state.settings}
                     setClaimingId={this.setClaimingId}
                     changeStep={this.changeStep}
@@ -325,22 +370,32 @@ class App extends React.Component {
                 )}
               />
               <Route
-                path="/ESPCC-TCA/settings"
+                path={`${this.state.mainRoute}settings`}
                 render={(props) => (
                   <Settings
                     changeStep={this.changeStep}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                     // onChangeSettings={this.onChangeSettings}
                     {...props}
                   />
                 )}
               />
               <Route
-                path="/ESPCC-TCA/performanceState"
+                path={`${this.state.mainRoute}performanceState`}
                 component={Performance}
               />
-              <Route path="/ESPCC-TCA/users" component={UserManagement} />
               <Route
-                path="/ESPCC-TCA/productionBoard"
+                path={`${this.state.mainRoute}users`}
+                render={(props) => (
+                  <UserManagement
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
+                  />
+                )}
+              />
+              <Route
+                path={`${this.state.mainRoute}productionBoard`}
                 render={(props) => (
                   <ProductionBoard
                     claimingId={this.state.claimingId}
@@ -348,6 +403,8 @@ class App extends React.Component {
                     setClaimingId={this.setClaimingId}
                     claimOnPB={this.claimOnPB}
                     logoutFromPB={this.logoutFromPB}
+                    apiRoute={this.state.apiRoute}
+                    mainRoute={this.state.mainRoute}
                   />
                 )}
               />

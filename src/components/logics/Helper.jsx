@@ -1,6 +1,6 @@
 import React from "react";
 import axios from "axios";
-import config from "../../config";
+// import config from "../../config";
 
 class HelperLogic extends React.Component {
   getLocalToken = () => {
@@ -9,7 +9,7 @@ class HelperLogic extends React.Component {
     return claims.user_t;
   };
 
-  setAsyncApiToken = async (username, password) => {
+  setAsyncApiToken = async (username, password, route) => {
     var value = {
       grant_type: "password",
       username: username,
@@ -26,40 +26,7 @@ class HelperLogic extends React.Component {
       "Access-Control-Allow-Credentials": "true",
       "Access-Control-Allow-Methods": "*",
     };
-    return await axios.post(`${config.apiUrl}token`, data, headers);
-  };
-
-  getParamApi = async (url, value, errorName) => {
-    var response = {};
-    debugger;
-    try {
-      axios.defaults.headers.post["Authorization"] =
-        "bearer " + this.getLocalToken();
-      axios.defaults.headers.post["Content-type"] = "application/json";
-
-      response = await axios.get(`${config.apiUrl}${url}`, { params: value });
-      return response;
-    } catch (err) {
-      alert(`Error in calling ESP (${errorName}) API- ${err}`);
-    }
-  };
-  getApi = (url, errorName) => {
-    try {
-      axios.defaults.headers.post["Authorization"] =
-        "bearer " + this.getLocalToken();
-      axios.defaults.headers.post["Content-type"] = "application/json";
-
-      var headers = {
-        // "Access-Control-Allow-Origin": "*",
-        // "Access-Control-Allow-Credentials": "true",
-        // "Access-Control-Allow-Methods": "*",
-        Authorization: "bearer " + this.getLocalToken(),
-        "Content-type": "application/json",
-      };
-      return axios.get(`${config.apiUrl}${url}`, headers);
-    } catch (err) {
-      alert(`Error in calling ESP (${errorName}) API- ${err}`);
-    }
+    return await axios.post(`${route}token`, data, headers);
   };
 
   apiPost = async (url, value, errorName) => {
@@ -79,9 +46,9 @@ class HelperLogic extends React.Component {
       "Content-Type": "application/json; charset=UTF-8",
       Accept: "application/json",
     };
-    return await axios.post(`${config.apiUrl}${url}`, value, headers);
+    return await axios.post(`${url}`, value, headers);
   };
-
+  /*
   getAsyncApi = async (url, errorName) => {
     try {
       axios.defaults.headers.post["Authorization"] =
@@ -110,6 +77,8 @@ class HelperLogic extends React.Component {
       alert(` ${err.response.data}`);
     }
   };
+
+  */
   timeConvert = (n) => {
     var num = n;
     var hours = num / 60;

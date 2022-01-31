@@ -81,7 +81,8 @@ class CalimContainer extends React.Component {
     var r = await ClaimLogic.getJobItemsFromApi(
       jid,
       wid,
-      this.state.claimingOId
+      this.state.claimingOId,
+      this.props.apiRoute
     );
     var data = JSON.parse(r.data);
 
@@ -114,7 +115,10 @@ class CalimContainer extends React.Component {
   /* #region  Login Methods */
   loadWorkersList = async () => {
     try {
-      var r = await Loginlogics.getListOfWorkersFromApi(this.props.workerId);
+      var r = await Loginlogics.getListOfWorkersFromApi(
+        this.props.workerId,
+        this.props.apiRoute
+      );
       const response = JSON.parse(r.data);
       this.setState(
         {
@@ -143,8 +147,18 @@ class CalimContainer extends React.Component {
 
   onCommentSave = async (text, login = true) => {
     if (text)
-      if (login) await this.saveLoginInAPI(this.state.claimingOId, text);
-      else await this.saveLogoutAPI(this.state.claimingOId, text);
+      if (login)
+        await this.saveLoginInAPI(
+          this.state.claimingOId,
+          text,
+          this.props.apiRoute
+        );
+      else
+        await this.saveLogoutAPI(
+          this.state.claimingOId,
+          text,
+          this.props.apiRoute
+        );
     this.setState(
       {
         ...this.state,
@@ -237,7 +251,7 @@ class CalimContainer extends React.Component {
           LabelText: [worker.Name],
         });
       } else {
-        this.saveLoginInAPI(id, comment);
+        this.saveLoginInAPI(id, comment, this.props.apiRoute);
       }
     }
   };
@@ -245,7 +259,7 @@ class CalimContainer extends React.Component {
     const workersList = this.state.workersList;
     const worker = workersList.filter((x) => x.OId === id)[0];
     var labelText = [];
-    var r = await Loginlogics.saveLoginInAPI(id, comment);
+    var r = await Loginlogics.saveLoginInAPI(id, comment, this.props.apiRoute);
 
     if (!JSON.parse(r.data).Successful) {
       alert(r.Message);
@@ -300,9 +314,10 @@ class CalimContainer extends React.Component {
         LabelText: [worker.Name],
       });
     } else {
-      var response = await this.saveLogoutAPI(id, comment);
-      if (this.props.logout) <Redirect to="/ESPCC-TCA/ProductionBoard" />;
-      else <Redirect to="/ESPCC-TCA/claim" />;
+      var response = await this.saveLogoutAPI(id, comment, this.props.apiRoute);
+      if (this.props.logout)
+        <Redirect to={`${this.props.apiRoute}ProductionBoard`} />;
+      else <Redirect to={`${this.props.apiRoute}claim`} />;
     }
   };
 
@@ -324,7 +339,7 @@ class CalimContainer extends React.Component {
     );
   };
   saveLogoutAPI = async (id, comment) => {
-    var r = await Loginlogics.saveLogoutAPI(id, comment);
+    var r = await Loginlogics.saveLogoutAPI(id, comment, this.props.apiRoute);
 
     var obj = JSON.parse(r.data);
     if (!obj.Successful) {
@@ -381,7 +396,8 @@ class CalimContainer extends React.Component {
     var r = await ClaimLogic.getJobItemsFromApi(
       this.state.jobId,
       worktypeId,
-      this.state.claimingOId
+      this.state.claimingOId,
+      this.props.apiRoute
     );
     var data = JSON.parse(r.data);
     labelText.push(workType.Name);
@@ -457,8 +473,17 @@ class CalimContainer extends React.Component {
     });
 
     var r = this.state.IsSitWorkGroup
-      ? await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3, true)
-      : await ClaimLogic.getJobsOfWorkerFromApi(claimingOId, 3);
+      ? await ClaimLogic.getJobsOfWorkerFromApi(
+          this.props.apiRoute,
+          claimingOId,
+          3,
+          true
+        )
+      : await ClaimLogic.getJobsOfWorkerFromApi(
+          this.props.apiRoute,
+          claimingOId,
+          3
+        );
     const values = JSON.parse(r.data);
     this.setState({
       ...this.state,
@@ -596,7 +621,8 @@ class CalimContainer extends React.Component {
         var e = await ClaimLogic.submitFullJobClaimInAPI(
           this.state.claimingOId,
           this.state.jobId,
-          comment
+          comment,
+          this.props.apiRoute
         );
         this.setState(
           {
@@ -624,7 +650,8 @@ class CalimContainer extends React.Component {
           jobItems,
           this.state.groupPercent,
           comment,
-          logout
+          logout,
+          this.props.apiRoute
         );
         this.setState(
           {
@@ -638,7 +665,7 @@ class CalimContainer extends React.Component {
           },
           () => {
             if (this.props.fromPB)
-              this.props.history.push("/ESPCC-TCA/productionBoard");
+              this.props.history.push(`${this.props.mainRoute}productionBoard`);
             else {
               if (this.props.role == "a" || this.props.public)
                 this.props.changeStep(1, [], this.state.isAdminJob);
@@ -652,7 +679,8 @@ class CalimContainer extends React.Component {
         this.state.claimingOId,
         this.state.adminWorkType.OId,
         comment,
-        logout
+        logout,
+        this.props.apiRoute
       );
       this.setState(
         {
@@ -692,6 +720,7 @@ class CalimContainer extends React.Component {
               logoutChecked={this.state.logoutChecked}
               loggingOut={this.props.logout}
               fromPB={this.props.fromPB}
+              apiRoute={this.props.apiRoute}
             />
           );
         }
@@ -716,6 +745,7 @@ class CalimContainer extends React.Component {
               handleJobLoaded={this.handleJobLoaded}
               menuIsOpen={this.props.menuSize == 240}
               IsSitWorkGroup={this.state.IsSitWorkGroup}
+              apiRoute={this.props.apiRoute}
             />
           );
         }
@@ -733,6 +763,7 @@ class CalimContainer extends React.Component {
               menuIsOpen={this.props.menuSize == 240}
               primaryWorktypeIds={this.state.primaryWorktypeIds}
               secondaryWorktypeIds={this.state.secondaryWorktypeIds}
+              apiRoute={this.props.apiRoute}
             />
           );
         }
@@ -757,6 +788,7 @@ class CalimContainer extends React.Component {
                   ? this.state.adminWorkType.Name
                   : this.state.JobTitle
               }
+              apiRoute={this.props.apiRoute}
             />
           );
         }
@@ -797,6 +829,7 @@ class CalimContainer extends React.Component {
                       (x) => x.OId == this.state.worktypeId
                     ).jobLevel
               }
+              apiRoute={this.props.apiRoute}
             />
           );
         }

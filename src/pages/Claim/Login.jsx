@@ -39,7 +39,7 @@ export default function Login(props) {
                 style={{ textAlign: "right" }}
                 onClick={() => {
                   history.push({
-                    pathname: "/ESPCC-TCA/productionBoard",
+                    pathname: "/ESPCC/productionBoard",
                   });
                 }}
                 startIcon={<ArrowBack />}

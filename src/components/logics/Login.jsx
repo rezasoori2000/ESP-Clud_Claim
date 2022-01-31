@@ -4,9 +4,9 @@ import config from "../../config";
 import Helper from "./Helper";
 
 class LoginLogic extends React.Component {
-  getListOfWorkersFromApi = async (workerId) => {
+  getListOfWorkersFromApi = async (workerId, route) => {
     return await Helper.apiPost(
-      "Workers/GetListOfWorkers?workerId=" + workerId,
+      `${route}Workers/GetListOfWorkers?workerId=` + workerId,
       {},
       "Error in calling ESP (Get Workers List)"
     );
@@ -21,7 +21,7 @@ class LoginLogic extends React.Component {
       : mainWorkersList;
   };
 
-  saveLoginInAPI = async (id, comment) => {
+  saveLoginInAPI = async (id, comment, route) => {
     var response = {};
     var value = { OId: id, Code: comment };
 
@@ -29,10 +29,10 @@ class LoginLogic extends React.Component {
       "Content-Type": "application/json",
     };
 
-    return await Helper.apiPost("Workers/PostLoginWorker", value, "");
+    return await Helper.apiPost(`${route}Workers/PostLoginWorker`, value, "");
   };
 
-  saveLogoutAPI = async (id, comment) => {
+  saveLogoutAPI = async (id, comment, route) => {
     var response = {};
     var value = { OId: id, Code: comment };
 
@@ -41,7 +41,7 @@ class LoginLogic extends React.Component {
         "Content-Type": "application/json",
       };
 
-      return await Helper.apiPost("Workers/PostLogoutWorker", value);
+      return await Helper.apiPost(`${route}Workers/PostLogoutWorker`, value);
     } catch (err) {
       alert(`Error in calling ESP (Logout) API- ${err}`);
     }
@@ -77,7 +77,7 @@ class LoginLogic extends React.Component {
       axios.defaults.headers.post["Authorization"] = authStr;
       axios.defaults.headers.post["Content-type"] = "application/json";
       const response = await axios.post(
-        `${config.apiUrl}AdminSettings/GetInfo`,
+        `${this.props.apiRoute}AdminSettings/GetInfo`,
         null
       );
 

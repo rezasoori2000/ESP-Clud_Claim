@@ -22,7 +22,11 @@ class ProductionBoardContainer extends React.Component {
   getProductionBoardInfoByAPI = async () => {
     var response = {};
     try {
-      Helper.apiPost("ProductionBoard/GetProductionBoardInfo", {}, "")
+      Helper.apiPost(
+        `${this.props.apiRoute}ProductionBoard/GetProductionBoardInfo`,
+        {},
+        ""
+      )
         .then((res) => {
           response = JSON.parse(res.data);
           this.setState(

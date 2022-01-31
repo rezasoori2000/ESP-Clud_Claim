@@ -108,7 +108,7 @@ class AdminSettingsContainer extends React.Component {
       value: newSelectedId,
     });
     if (event.target.name === "Factories") {
-      this.getGroupsByAPI(newSelectedId);
+      this.getGroupsByAPI(newSelectedId, this.props.apiRoute);
     }
     adSettings[event.target.name] = newValues;
     adSettings[event.target.name + "Id"] = newSelectedId;
@@ -134,11 +134,11 @@ class AdminSettingsContainer extends React.Component {
       });
   };
 
-  getGroupsByAPI = async (oid) => {
+  getGroupsByAPI = async (oid, route) => {
     var response = {};
     var oldAdminSettings = this.state.adminSettings;
     try {
-      Helper.apiPost(`adminSettings/GetGroup?oid=` + oid, {}, "")
+      Helper.apiPost(`${route}adminSettings/GetGroup?oid=` + oid, {}, "")
         .then((res) => {
           response = JSON.parse(res.data);
           oldAdminSettings.Groups = response;
@@ -159,7 +159,11 @@ class AdminSettingsContainer extends React.Component {
   getAdminSettingsByAPI = async () => {
     var response = {};
     try {
-      var res = await Helper.apiPost(`adminSettings/GetInfo`, {}, "");
+      var res = await Helper.apiPost(
+        `${this.props.apiRoute}adminSettings/GetInfo`,
+        {},
+        ""
+      );
 
       var response = JSON.parse(res.data);
       this.setState({
@@ -176,9 +180,9 @@ class AdminSettingsContainer extends React.Component {
 
     //var data = JSON.stringify(state);
     try {
-      Helper.apiPost(`adminSettings/PostData`, state, "")
+      Helper.apiPost(`${this.props.apiRoute}adminSettings/PostData`, state, "")
         .then((res) => {
-          this.props.history.push("/ESPCC-TCA/");
+          this.props.history.push(`${this.props.mainRoute}`);
           //window.location.reload(false);
           // this.props.onChangeSettings();
         })
