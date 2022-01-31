@@ -27,6 +27,7 @@ import Box from "@material-ui/core/Box";
 import CardContent from "@material-ui/core/CardContent";
 
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
+import DividedJobs from "./DividedJobs";
 import ClaimLogic from "../../components/logics/ClaimLogic";
 import Loading from "../loading";
 import Hidden from "@material-ui/core/Hidden";
@@ -39,7 +40,9 @@ export default function Jobs(props) {
   const [activeButton, setactiveButton] = useState(
     props.IsSitWorkGroup ? "site" : "prod"
   );
-  const [jobs, setJobs] = useState(props.jobs);
+  const [primaryJobs, setPrimaryJobs] = useState([]);
+  const [secondaryJobs, setSecondaryJobs] = useState([]);
+  const [jobs, setJobs] = useState([]);
   const [preJobs, setPreJobs] = useState([]);
   const [postJobs, setPostJobs] = useState([]);
   const [siteJobs, setSiteJobs] = useState([]);
@@ -47,6 +50,33 @@ export default function Jobs(props) {
   const [loading, setLoading] = useState(false);
   const [searchVal, setsearchVal] = useState("");
 
+  function divideJobs(jobs) {
+    var pj = [];
+    var sj = [];
+    if (props.divideJobs) {
+      for (let i = 0; i < jobs.length; i++) {
+        const j = jobs[i];
+
+        var wtIds = j.WorkTypes.filter((x) => x.Progress < 100).map(
+          (w) => w.OId
+        );
+        const intersct = wtIds.filter((value) =>
+          props.primaryWorktypeIds.includes(value)
+        );
+        if (intersct.length > 0) {
+          pj.push(j);
+        } else sj.push(j);
+      }
+      setPrimaryJobs(pj);
+      setSecondaryJobs(sj);
+    }
+    setJobs(jobs);
+  }
+  useEffect(() => {
+    {
+      divideJobs(props.jobs);
+    }
+  }, []);
   function searchJobs(event) {
     var txt = event.target.value;
     setsearchVal(txt);
@@ -58,7 +88,7 @@ export default function Jobs(props) {
               t.Code.includes(txt)
           )
         : props.jobs;
-    setJobs(filterJobs);
+    divideJobs(filterJobs);
   }
   function chunkSubstr(str, size) {
     const numChunks = Math.ceil(str.length / size);
@@ -72,8 +102,8 @@ export default function Jobs(props) {
   }
   function clearSearch() {
     setsearchVal("");
-    setJobs([]);
-    setJobs(props.jobs);
+    divideJobs([]);
+    divideJobs(props.jobs);
   }
   function handlePreProduction() {
     setsearchVal("");
@@ -84,7 +114,7 @@ export default function Jobs(props) {
         .then((r) => {
           const values = JSON.parse(r.data);
           setPreJobs(values.Item1);
-          setJobs(values.Item1);
+          divideJobs(values.Item1);
           loadedJobs.push("pre");
           setLoadedJobs(loadedJobs);
           props.handleJobLoaded(values.Item1);
@@ -95,7 +125,7 @@ export default function Jobs(props) {
         });
     } else {
       setLoading(false);
-      setJobs(preJobs);
+      divideJobs(preJobs);
     }
   }
   function handlePostProduction() {
@@ -107,7 +137,7 @@ export default function Jobs(props) {
         .then((r) => {
           const values = JSON.parse(r.data);
           setPostJobs(values.Item1);
-          setJobs(values.Item1);
+          divideJobs(values.Item1);
           loadedJobs.push("post");
           setLoadedJobs(loadedJobs);
           props.handleJobLoaded(values.Item1);
@@ -118,7 +148,7 @@ export default function Jobs(props) {
         });
     } else {
       setLoading(false);
-      setJobs(postJobs);
+      divideJobs(postJobs);
     }
   }
   function handleSiteWork() {
@@ -130,7 +160,7 @@ export default function Jobs(props) {
         .then((r) => {
           const values = JSON.parse(r.data);
           setSiteJobs(values.Item1);
-          setJobs(values.Item1);
+          divideJobs(values.Item1);
           loadedJobs.push("site");
           setLoadedJobs(loadedJobs);
           props.handleJobLoaded(values.Item1);
@@ -141,12 +171,31 @@ export default function Jobs(props) {
         });
     } else {
       setLoading(false);
-      setJobs(siteJobs);
+      divideJobs(siteJobs);
     }
   }
   function handleProduction() {
     setsearchVal("");
-    setJobs(props.jobs);
+    setLoading(true);
+    if (!loadedJobs.includes("prod")) {
+      ClaimLogic.getJobsOfWorkerFromApi(props.claimingOId, 3, false)
+        .then((r) => {
+          const values = JSON.parse(r.data);
+          setSiteJobs(values.Item1);
+          divideJobs(values.Item1);
+          loadedJobs.push("prod");
+          setLoadedJobs(loadedJobs);
+          props.handleJobLoaded(values.Item1);
+          setLoading(false);
+        })
+        .catch((err) => {
+          alert("Error in retrieve Jobs list");
+        });
+    } else {
+      setLoading(false);
+      divideJobs(siteJobs);
+    }
+    divideJobs(props.jobs);
     setactiveButton("prod");
   }
 
@@ -336,157 +385,50 @@ export default function Jobs(props) {
                 </Button>
               </Grid>
             </AccordionDetails>
-            <Grid container spacing={1}>
-              <Grid ml={0} item lg={12} sm={12} xs={12} md={12}>
-                <hr />
-              </Grid>
-              {loading && <Loading />}
-              {!loading &&
-                jobs &&
-                jobs
-                  .sort(function (a, b) {
-                    return a.JobStageOrder - b.JobStageOrder;
-                  })
-                  .filter(
-                    (x) =>
-                      (activeButton == "post" &&
-                        x.JobStageName == "postproduction") ||
-                      (activeButton == "pre" &&
-                        x.JobStageName == "preproduction") ||
-                      (activeButton == "prod" &&
-                        x.JobStageName == "production") ||
-                      (activeButton == "site" && x.JobStageName == "SiteWork")
-                  )
-                  .filter(
-                    (x) =>
-                      (activeButton != "site" && x.WorkTypes.length > 0) ||
-                      activeButton == "site"
-                  )
-                  .map((e) => (
-                    <Grid
-                      item
-                      lg={jobs.length > 48 ? 1 : 2}
-                      sm={6}
-                      xs={12}
-                      key={e.OId}
-                      className={classes.bolding}
-                    >
-                      <Box
-                        borderRadius="5%"
-                        p={1}
-                        key={e.OId}
-                        boxShadow={4}
-                        color="white"
-                        className={classes.boxBolding}
-                        style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                        bgcolor={
-                          e.JobStageName == "production"
-                            ? "#9abf47"
-                            : e.JobStageName == "preproduction"
-                            ? "#b3b31b"
-                            : e.JobStageName == "postproduction"
-                            ? "#b4bebf"
-                            : "white"
-                        }
-                        spacing={3}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          fontSize: "0.8rem",
-                          textAlign: "center",
-                        }}
-                        onClick={() => {
-                          props.handleJobClick(e.OId);
-                        }}
-                      >
-                        <Grid container style={{ color: "black" }}>
-                          <Hidden only={["sm", "md", "xl", "lg"]}>
-                            <Grid item lg={4} xs={4} sm={4} md={4}>
-                              {e.Note !== "" && e.Note.length > 0 && (
-                                <IconButton
-                                  color="inherit"
-                                  onClick={(w) => {
-                                    // alert(e.Note);
-                                    setNote(e.Note);
-                                    setOpenDialog(true);
-                                    w.stopPropagation();
-                                  }}
-                                >
-                                  <CommentIcon />
-                                </IconButton>
-                              )}
-                            </Grid>
-                            <Grid item lg={4} xs={4} sm={4} md={4}>
-                              <span style={{ fontSize: "large" }}>
-                                {e.Code}
-                              </span>
-                            </Grid>
-
-                            <Grid item lg={4} xs={4} sm={4} md={4}>
-                              <CircularProgressWithLabel value={e.Progress} />
-                            </Grid>
-                          </Hidden>
-                          <Hidden only={["xs"]}>
-                            <Grid
-                              item
-                              lg={6}
-                              xs={6}
-                              sm={6}
-                              md={6}
-                              style={{ backgroundColor: "#718d35" }}
-                            >
-                              {e.Note !== "" && e.Note.length > 0 && (
-                                <IconButton
-                                  color="inherit"
-                                  onClick={(w) => {
-                                    // alert(e.Note);
-                                    setNote(e.Note);
-                                    setOpenDialog(true);
-                                    w.stopPropagation();
-                                  }}
-                                >
-                                  <CommentIcon />
-                                </IconButton>
-                              )}
-                            </Grid>
-
-                            <Grid
-                              item
-                              lg={6}
-                              xs={6}
-                              sm={6}
-                              md={6}
-                              style={{ backgroundColor: "#718d35" }}
-                            >
-                              <CircularProgressWithLabel value={e.Progress} />
-                            </Grid>
-                            <Grid item lg={12} xs={12} sm={12} md={12}>
-                              <hr />
-                            </Grid>
-                            <Grid item lg={12} xs={12} sm={12} md={12}>
-                              <Grid item lg={12} xs={12} sm={12} md={12}>
-                                <span style={{ fontSize: "large" }}>
-                                  {e.Code}
-                                </span>
-                              </Grid>
-                            </Grid>
-                          </Hidden>
-
-                          <Grid item lg={12} xs={12} sm={12} md={12}>
-                            <hr />
-                          </Grid>
-                          <Grid item lg={12} xs={12} sm={12} md={12}>
-                            <div style={{ fontSize: "small" }}> {e.Title}</div>
-                          </Grid>
-                          {/* <Grid item lg={6} xs={6} sm={6} md={6}>
-                            <CircularProgressWithLabel value={e.Progress} />
-                          </Grid> */}
-                        </Grid>
-                      </Box>
-                    </Grid>
-                  ))}
-            </Grid>
+            {props.divideJobs && (
+              <div>
+                <DividedJobs
+                  label="Primary Jobs"
+                  menuIsOpen={props.menuIsOpen}
+                  claimingName={props.claimingName}
+                  loading={loading}
+                  jobs={primaryJobs}
+                  handleJobClick={props.handleJobClick}
+                  setNote={setNote}
+                  setOpenDialog={setOpenDialog}
+                  classes={classes}
+                  activeButton={activeButton}
+                />
+                <DividedJobs
+                  label="Secondary Jobs"
+                  menuIsOpen={props.menuIsOpen}
+                  claimingName={props.claimingName}
+                  loading={loading}
+                  jobs={secondaryJobs}
+                  handleJobClick={props.handleJobClick}
+                  setNote={setNote}
+                  setOpenDialog={setOpenDialog}
+                  classes={classes}
+                  activeButton={activeButton}
+                />
+              </div>
+            )}
+            {!props.divideJobs && (
+              <DividedJobs
+                label="Jobs"
+                menuIsOpen={props.menuIsOpen}
+                claimingName={props.claimingName}
+                loading={loading}
+                jobs={jobs}
+                handleJobClick={props.handleJobClick}
+                setNote={setNote}
+                setOpenDialog={setOpenDialog}
+                classes={classes}
+                activeButton={activeButton}
+              />
+            )}
           </Accordion>
+
           <Accordion defaultExpanded={true}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -534,6 +476,7 @@ export default function Jobs(props) {
                 ))}
             </Grid>
           </Accordion>
+
           <FullScreenDialog
             header="Job Notes"
             uls={note}
