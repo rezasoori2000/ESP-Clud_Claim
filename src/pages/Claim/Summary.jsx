@@ -165,7 +165,7 @@ export default function Summary(props) {
                 )}
 
                 <Divider variant="inset" component="li" />
-                {props.isFullJob && (
+                {/* {props.isFullJob && (
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar>
@@ -187,8 +187,43 @@ export default function Summary(props) {
                       }
                     />
                   </ListItem>
+                )} */}
+                {!props.isAdminJob && props.jobLevel && (
+                  // const avgPrg=props.claimingItems.map((e) => (e.
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <DoneAllIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography variant="h6" style={{ fontSize: "1rem" }}>
+                          Claiming
+                        </Typography>
+                      }
+                      secondary={
+                        <Fragment>
+                          <Typography style={{ fontSize: "1rem" }}>
+                            {props.mainPercent}% to:
+                            {props.groupPercent}% {" took: "}
+                            {Helper.timeConvert(totalminute)}
+                            {" - Std: "}
+                            {Helper.timeConvert(
+                              (props.claimingItems.reduce(
+                                (a, v) => (a = a + v.StdTime),
+                                0
+                              ) *
+                                (props.groupPercent - props.mainPercent)) /
+                                6000
+                            )}
+                          </Typography>
+                        </Fragment>
+                      }
+                    />
+                  </ListItem>
                 )}
-                {!(props.isAdminJob || props.isFullJob) && (
+                {!props.isAdminJob && !props.jobLevel && (
                   <ListItem>
                     <ListItemAvatar>
                       <Avatar>
@@ -211,7 +246,9 @@ export default function Summary(props) {
                               {Helper.timeConvert(totalminute)}
                               {" - Std: "}
                               {Helper.timeConvert(
-                                (e.StdTime * e.Progress100) / 6000
+                                (e.StdTime *
+                                  (e.Progress100 - e.Main_Progress100)) /
+                                  6000
                               )}
                             </Typography>
 
@@ -228,10 +265,11 @@ export default function Summary(props) {
                                   country:
                                     num > 1 ? e.Name + space(num) : e.Name,
                                   actual: totalminute,
-                                  std: (e.StdTime * e.Progress100) / 6000,
+                                  std:
+                                    (e.StdTime *
+                                      (e.Progress100 - e.Main_Progress100)) /
+                                    6000,
                                 })}
-                              {props.jobLevel &&
-                                (avgStd += (e.StdTime * e.Progress100) / 6000)}
                             </span>
                           </Fragment>
                         ))}
@@ -244,7 +282,13 @@ export default function Summary(props) {
                   {chartData.push({
                     country: props.worktypeName,
                     actual: totalminute,
-                    std: avgStd,
+                    std:
+                      (props.claimingItems.reduce(
+                        (a, v) => (a = a + v.StdTime),
+                        0
+                      ) *
+                        (props.groupPercent - props.mainPercent)) /
+                      6000,
                   })}
                 </span>
               )}

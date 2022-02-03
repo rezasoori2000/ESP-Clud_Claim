@@ -17,7 +17,7 @@ class App extends React.Component {
     super();
     this.state = {
       step: 0,
-      page: 0,
+      page: -1,
       fromPB: false,
       logout: false,
       settings: null,
@@ -176,7 +176,7 @@ class App extends React.Component {
       {
         ...this.state,
         step: 1,
-        page: 0,
+        page: -1,
         fromPB: false,
         logout: true,
       },
@@ -219,7 +219,7 @@ class App extends React.Component {
             >
               {/* <FadingRoute path=`` component={Something} /> */}
 
-              <Route
+              {/* <Route
                 path={`${this.state.mainRoute}`}
                 render={(props) => (
                   <ClaimContainer
@@ -240,7 +240,7 @@ class App extends React.Component {
                     {...props}
                   />
                 )}
-              />
+              /> */}
               <Route
                 path={`${this.state.mainRoute}claim`}
                 render={(props) => (
@@ -326,7 +326,7 @@ class App extends React.Component {
                   drawerPaper: { width: this.state.menuSize },
                 }}
               />
-              <Route path={`${this.state.mainRoute}`} component={Welcome} />
+              {/* <Route path={`${this.state.mainRoute}`} component={Welcome} /> */}
               <Route
                 path={`${this.state.mainRoute}claim`}
                 render={(props) => (

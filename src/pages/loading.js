@@ -1,9 +1,9 @@
 import React from "react";
 
-export default function Loading() {
+export default function Loading(props) {
   return (
     <img
-      src={`/ESPCC/loading.gif`}
+      src={`${props.mainRoute}loading.gif`}
       alt="LOADING..."
       style={{ display: "block", marginLeft: "auto", marginRight: "auto" }}
     />

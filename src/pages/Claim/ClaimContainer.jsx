@@ -4,11 +4,13 @@ import WorkTypes from "./WorkTypes";
 import JobItems from "./JobItems";
 import Summary from "./Summary";
 import Jobs from "./Jobs";
+import Start from "./Start";
 import Loginlogics from "../../components/logics/Login";
 import ClaimLogic from "../../components/logics/ClaimLogic";
 import Loading from "../loading.js";
 import FormDialog from "../../components/controls/FormDialog";
 import { Redirect } from "react-router-dom";
+import Button from "@material-ui/core/Button";
 
 class CalimContainer extends React.Component {
   constructor() {
@@ -28,7 +30,7 @@ class CalimContainer extends React.Component {
       claimingOId: 0,
       claimingUser: "",
       claiminWorker: {},
-      page: 0,
+      page: -1,
       loading: false,
       worktypeId: 0,
       workTypeName: "",
@@ -57,15 +59,19 @@ class CalimContainer extends React.Component {
   }
 
   componentWillMount() {
-    this.setState(
-      {
-        ...this.state,
-        loading: true,
-      },
-      () => {
-        this.loadWorkersList();
-      }
-    );
+    // this.setState(
+    //   {
+    //     ...this.state,
+    //     loading: true,
+    //   },
+    //   () => {
+    //     this.loadWorkersList();
+    //   }
+    // );
+    this.setState({
+      ...this.state,
+      page: -1,
+    });
   }
 
   componentDidMount() {}
@@ -113,6 +119,18 @@ class CalimContainer extends React.Component {
   /* #region Claim From PB */
 
   /* #region  Login Methods */
+
+  start = async () => {
+    this.setState(
+      {
+        ...this.state,
+        loading: true,
+      },
+      () => {
+        this.loadWorkersList();
+      }
+    );
+  };
   loadWorkersList = async () => {
     try {
       var r = await Loginlogics.getListOfWorkersFromApi(
@@ -128,6 +146,7 @@ class CalimContainer extends React.Component {
           loading: false,
           settings: this.props.settings,
           LabelText: [],
+          page: 0,
         },
         () => {
           this.props.changeStep(2, [], this.state.isAdminJob);
@@ -415,6 +434,7 @@ class CalimContainer extends React.Component {
         loading: false,
         worktypeId: worktypeId,
         LabelText: labelText,
+        workTypeName: workType.Name,
       },
       () => {
         this.props.changeStep(5, labelText, this.state.isAdminJob);
@@ -574,6 +594,7 @@ class CalimContainer extends React.Component {
           page: 2,
           isAdminJob: false,
           LabelText: labelText,
+          JobTitle: selectedJob.Code,
         },
         () => {
           this.props.changeStep(4, labelText, this.state.isAdminJob);
@@ -628,7 +649,7 @@ class CalimContainer extends React.Component {
           {
             ...this.state,
             loading: false,
-            page: this.props.role == "a" || this.props.public ? 0 : 1,
+            page: this.props.role == "a" || this.props.public ? -1 : 1,
             LabelText: [],
           },
           () => {
@@ -657,7 +678,7 @@ class CalimContainer extends React.Component {
           {
             ...this.state,
             loading: false,
-            page: 0,
+            page: -1,
             LabelText: [],
             workersList: logout
               ? this.setWorkerLOgout(this.state.claimingOId)
@@ -686,7 +707,7 @@ class CalimContainer extends React.Component {
         {
           ...this.state,
           loading: false,
-          page: 0,
+          page: -1,
           LabelText: [],
           workersList: logout
             ? this.setWorkerLOgout(this.state.claimingOId)
@@ -707,9 +728,14 @@ class CalimContainer extends React.Component {
   render() {
     const renderConditionaly = () => {
       if (this.state.loading) {
-        return <Loading />;
+        return <Loading mainRoute={this.props.mainRoute} />;
       }
       switch (this.state.page) {
+        case -1: {
+          return (
+            <Start mainRoute={this.props.mainRoute} start={this.start}></Start>
+          );
+        }
         case 0: {
           return (
             <Login
@@ -820,6 +846,8 @@ class CalimContainer extends React.Component {
               isFullJob={this.state.isFullJob}
               handleSubmit={this.handleSubmitClaim}
               settings={this.props.settings}
+              groupPercent={this.state.groupPercent}
+              mainPercent={this.state.totalProgress}
               jobLevel={
                 this.state.isAdminJob
                   ? true
@@ -827,7 +855,7 @@ class CalimContainer extends React.Component {
                   ? this.props.jobLevel
                   : this.state.mainWorkTypes.find(
                       (x) => x.OId == this.state.worktypeId
-                    ).jobLevel
+                    ).JobLevel
               }
               apiRoute={this.props.apiRoute}
             />
