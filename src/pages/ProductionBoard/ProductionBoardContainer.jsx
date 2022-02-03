@@ -46,7 +46,12 @@ class ProductionBoardContainer extends React.Component {
           alert("Error in get production board data");
         });
     } catch (err) {
-      alert(`Error in calling ESP API (production board)- ${err}`);
+      if (err.response)
+        alert(
+          `Error in calling ESP API (production board)- ${err.response.data}`
+        );
+      else alert(`Error in calling ESP API (production board)- ${err}`);
+      window.location.href = ".";
     }
   };
   claimOnPB = async (jid, wid, jl, jobCode) => {

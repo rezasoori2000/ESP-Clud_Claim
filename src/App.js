@@ -88,10 +88,15 @@ class App extends React.Component {
           );
         })
         .catch((err) => {
-          alert(`Error in calling ESP (Admin Settings) API- ${err}`);
+          if (err.response)
+            alert(
+              `Error in calling ESP (Admin Settings) API- ${err.response.data}`
+            );
+          else alert(`Error in calling ESP (Admin Settings) API- ${err}`);
         });
     } catch (err) {
       alert(`Error in calling ESP (Admin Settings) API- ${err}`);
+      window.location.href = ".";
     }
   };
   setClaimingId = (id) => {

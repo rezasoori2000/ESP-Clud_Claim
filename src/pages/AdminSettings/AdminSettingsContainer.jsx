@@ -152,7 +152,9 @@ class AdminSettingsContainer extends React.Component {
           alert("Error in get Groups data");
         });
     } catch (err) {
-      alert(`Error in calling ESP API- ${err}`);
+      if (err.response) alert(`Error in calling ESP API- ${err.response.data}`);
+      else alert(`Error in calling ESP API- ${err}`);
+      window.location.href = ".";
     }
   };
 
@@ -171,7 +173,8 @@ class AdminSettingsContainer extends React.Component {
         adminSettings: response,
       });
     } catch (err) {
-      alert(`Error in calling ESP API- ${err}`);
+      if (err.response) alert(`Error in calling ESP API- ${err.response.data}`);
+      else alert(`Error in calling ESP API- ${err}`);
     }
   };
 
@@ -190,7 +193,9 @@ class AdminSettingsContainer extends React.Component {
           alert("Error in get Groups data");
         });
     } catch (err) {
-      alert(`Error in calling ESP API- ${err}`);
+      if (err.response) alert(`Error in calling ESP API- ${err.response.data}`);
+      else alert(`Error in calling ESP API- ${err}`);
+      window.location.href = ".";
     }
   };
 

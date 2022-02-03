@@ -15,8 +15,16 @@ class ClaimLogic extends React.Component {
         },
         ""
       );
-    } catch (err) {
-      alert(`Error in calling ESP (Claim / Get Job items) API- ${err}`);
+    } catch (ex) {
+      if (ex.response)
+        alert(
+          `Error in calling ESP (Claim / Get Job items) API- ${ex.response.data}`
+        );
+      else
+        alert(
+          `Error in calling ESP (Claim / Get Job items) API- ${ex.message}`
+        );
+      window.location.href = ".";
     }
   };
 

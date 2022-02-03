@@ -76,7 +76,9 @@ class UserManagement extends React.Component {
           <Redirect to="/" />;
         })
         .catch((err) => {
-          alert("Error in adding user" + err);
+          if (err.response) alert("Error in adding user" + err.response.data);
+          else alert("Error in adding user" + err);
+          window.location.href = ".";
         });
     } else {
       Helper.apiPost(`${this.props.apiRoute}Account/SetPassword`, {
@@ -105,7 +107,9 @@ class UserManagement extends React.Component {
           });
         })
         .catch((err) => {
-          alert("Error in saving new password" + err);
+          if (err.response)
+            alert("Error in saving new password" + err.response.data);
+          else alert("Error in saving new password" + err);
         });
     }
   };

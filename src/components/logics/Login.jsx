@@ -43,7 +43,10 @@ class LoginLogic extends React.Component {
 
       return await Helper.apiPost(`${route}Workers/PostLogoutWorker`, value);
     } catch (err) {
-      alert(`Error in calling ESP (Logout) API- ${err}`);
+      if (err.response)
+        alert(`Error in calling ESP (Logout) API- ${err.response.data}`);
+      else alert(`Error in calling ESP (Logout) API- ${err}`);
+      window.location.href = ".";
     }
   };
 

@@ -1,4 +1,4 @@
 {
     "route": "/ESPCC/",
-    "apiRoute": "http://localhost/ESPCC-API/api/"
+    "apiRoute": "http://localhost:51804/api/"
 }
