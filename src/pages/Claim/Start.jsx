@@ -12,27 +12,45 @@ export default function Start(props) {
       style={{ minHeight: "100vh" }}
     >
       <Grid item xs={3}>
-        <Button
-          id="btnStart"
-          name="btnStart"
-          className="click"
-          style={{
-            backgroundImage: `url(\"${props.mainRoute}StartButton.png\")`,
-            // hover: {
-            //  ,
-            //   transform: "scale(0.6)",
-            //   transitionDuration: "0.5s",
-            // },
-            backgroundRepeat: "no-repeat",
-            width: "385px",
-            height: "385px",
+        <div>
+          <h1
+            style={{
+              color: "grey",
+              alignItems: "center",
+              justifyContent: "center",
+              paddingLeft: "35%",
+            }}
+          >
+            Claim&nbsp;Job
+          </h1>
+          <Button
+            id="btnStart"
+            name="btnStart"
+            className="click"
+            style={{
+              backgroundImage: `url(\"${props.mainRoute}start.png\")`,
+              backgroundColor: "#fff",
+              backgroundPosition: "center",
+              // hover: {
+              //  ,
+              //   transform: "scale(0.6)",
+              //   transitionDuration: "0.5s",
+              // },
+              backgroundRepeat: "no-repeat",
+              paddingTop: "-30px",
 
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          onClick={props.start}
-        ></Button>
+              width: "430px",
+              height: "240px",
+
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              borderRadius: "38px",
+              fontSize: "40px",
+            }}
+            onClick={props.start}
+          ></Button>
+        </div>
       </Grid>
     </Grid>
   );

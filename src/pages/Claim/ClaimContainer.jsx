@@ -68,10 +68,22 @@ class CalimContainer extends React.Component {
     //     this.loadWorkersList();
     //   }
     // );
-    this.setState({
-      ...this.state,
-      page: -1,
-    });
+    if (this.props.fromPB) {
+      this.setState(
+        {
+          ...this.state,
+          loading: true,
+        },
+        () => {
+          this.loadWorkersList();
+        }
+      );
+    } else {
+      this.setState({
+        ...this.state,
+        page: -1,
+      });
+    }
   }
 
   componentDidMount() {}
@@ -747,6 +759,7 @@ class CalimContainer extends React.Component {
               loggingOut={this.props.logout}
               fromPB={this.props.fromPB}
               apiRoute={this.props.apiRoute}
+              mainRoute={this.props.mainRoute}
             />
           );
         }
