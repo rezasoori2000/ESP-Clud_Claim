@@ -40,3 +40,6 @@
   transform: scale(1.1);
   transition-duration: 2.2s;
 }
+.react-datepicker-popper {
+  z-index: 9999 !important;
+}

@@ -255,18 +255,20 @@ const DrawerContainer = (props) => {
           </IconButton>
           <Grid container spacing={3}>
             <Grid item lg={1}>
-              <Button
-                onClick={() => {
-                  props.changeMenuSize();
-                }}
-                startIcon={
-                  props.menuSize == 240 ? (
-                    <FormatIndentDecreaseIcon />
-                  ) : (
-                    <FormatIndentIncreaseIcon />
-                  )
-                }
-              ></Button>
+              <Hidden only={("xs", "sm")}>
+                <Button
+                  onClick={() => {
+                    props.changeMenuSize();
+                  }}
+                  startIcon={
+                    props.menuSize == 240 ? (
+                      <FormatIndentDecreaseIcon />
+                    ) : (
+                      <FormatIndentIncreaseIcon />
+                    )
+                  }
+                ></Button>
+              </Hidden>
             </Grid>
             <Grid item lg={10}>
               <Typography noWrap>ESP-Cloud Claim</Typography>

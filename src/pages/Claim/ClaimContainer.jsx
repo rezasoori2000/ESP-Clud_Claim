@@ -21,8 +21,6 @@ class CalimContainer extends React.Component {
       mainWorkersList: [],
       workTypes: [],
       mainWorkTypes: [],
-      primaryWorktypeIds: [],
-      secondaryWorktypeIds: [],
       jobs: [],
       mainJobs: [],
       adminJobs: [],
@@ -39,6 +37,8 @@ class CalimContainer extends React.Component {
       adminWorkType: null,
       jobItems: [],
       mainJobItems: [],
+      primaryJobs: [],
+      secondaryJobs: [],
       changedClaimingItems: [],
       canClaimWholeJob: false,
       claimingFullJob: false,
@@ -55,6 +55,7 @@ class CalimContainer extends React.Component {
       logoutChecked: false,
       groupPercent: 0,
       IsSitWorkGroup: false,
+      doSaving: true,
     };
   }
 
@@ -243,7 +244,6 @@ class CalimContainer extends React.Component {
     if (isOnLeave) {
       this.setState({
         ...this.state,
-
         dialogOpen: true,
         dialogHeader: "Cannot Login",
         dialogText:
@@ -281,6 +281,26 @@ class CalimContainer extends React.Component {
           alert: false,
           LabelText: [worker.Name],
         });
+      }
+      if (worker.LastDayNotLoggedOut) {
+        this.setState({
+          ...this.state,
+          claimingOId: id,
+          claimingUser: worker.Name,
+
+          logoutClicked: false,
+          dialogHeader: "Missing logout",
+          dialogText:
+            " You did not logout yesterday please advise your manager",
+
+          doSaving: true,
+          alert: true,
+          LabelText: [worker.Name],
+
+          dialogOpen: true,
+          dialogSave: this.onCommentSave,
+        });
+        this.saveLoginInAPI(id, comment, this.props.apiRoute);
       } else {
         this.saveLoginInAPI(id, comment, this.props.apiRoute);
       }
@@ -498,6 +518,7 @@ class CalimContainer extends React.Component {
       }
     );
   };
+
   goToJobsPage = async (page, claimingOId) => {
     this.setState({
       ...this.state,
@@ -517,6 +538,7 @@ class CalimContainer extends React.Component {
           3
         );
     const values = JSON.parse(r.data);
+
     this.setState({
       ...this.state,
       jobs: values.Item1,
@@ -614,6 +636,7 @@ class CalimContainer extends React.Component {
       );
     }
   };
+
   /* #endregion */
 
   /*#region jobItem*/
@@ -769,15 +792,13 @@ class CalimContainer extends React.Component {
               claimingOId={this.state.claimingOId}
               claimingName={this.state.claimingUser}
               searchJobs={this.searchJobs}
-              divideJobs={this.state.settings.DividJobs}
               jobs={this.state.mainJobs}
               adminJobs={this.state.adminJobs}
+              primaryJobs={this.state.primaryJobs}
+              secondaryJobs={this.state.secondaryJobs}
               prejobs={this.state.prejobs}
               postjobs={this.state.postjobs}
-              primaryWorktypeIds={this.state.primaryWorktypeIds}
-              secondaryWorktypeIds={this.state.secondaryWorktypeIds}
-              showPreProduction={this.state.settings.HidePreProductionJobs}
-              showPostProduction={this.state.settings.HidePostProductionJobs}
+              settings={this.state.settings}
               handleJobClick={this.handleJobClick}
               handleBack={this.handleBack}
               handleLogOut={this.handleLogOut}
@@ -785,6 +806,8 @@ class CalimContainer extends React.Component {
               menuIsOpen={this.props.menuSize == 240}
               IsSitWorkGroup={this.state.IsSitWorkGroup}
               apiRoute={this.props.apiRoute}
+              divideJobs={this.state.settings.DividJobs}
+              primaryWorktypeIds={this.state.primaryWorktypeIds}
             />
           );
         }
@@ -888,6 +911,7 @@ class CalimContainer extends React.Component {
           open={this.state.dialogOpen}
           onCommentSave={this.state.dialogSave}
           alert={this.state.alert}
+          doSaving={this.state.doSaving}
         />
         <div
           style={{

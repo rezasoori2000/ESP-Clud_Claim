@@ -66,6 +66,13 @@ class App extends React.Component {
         );
       });
   }
+  setSettings = (settings) => {
+    this.setState({
+      ...this.state,
+      loggedIn: true,
+      settings: settings,
+    });
+  };
   getServerSettings = () => {
     try {
       var url = `${this.state.apiRoute}AdminSettings/GetInfo`;
@@ -212,7 +219,7 @@ class App extends React.Component {
             <main
               style={{
                 flexGrow: 1,
-                paddingLeft: "10px",
+                paddingLeft: "30px",
                 paddingRight: "10px",
                 paddingTop: "80px",
               }}
@@ -315,7 +322,7 @@ class App extends React.Component {
             <main
               style={{
                 flexGrow: 1,
-                paddingLeft: "0px",
+                paddingLeft: "30px",
                 paddingRight: "0px",
                 paddingTop: "80px",
                 marginLeft: this.state.menuSize == 0 ? "-100px" : "0px",
@@ -381,7 +388,8 @@ class App extends React.Component {
                     changeStep={this.changeStep}
                     apiRoute={this.state.apiRoute}
                     mainRoute={this.state.mainRoute}
-                    // onChangeSettings={this.onChangeSettings}
+                    getServerSettings
+                    onChangeSettings={this.setSettings}
                     {...props}
                   />
                 )}

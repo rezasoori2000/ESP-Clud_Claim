@@ -242,24 +242,6 @@ const AdminSettingsPage = (props) => {
                     />
                   </Grid>
                 </Grid>
-                <Grid container>
-                  <Grid item lg={5}>
-                    <ESPCheckbox
-                      name="HidePreProductionJobs"
-                      label="Hide PreProduction Jobs"
-                      checked={props.adminSettings.HidePreProductionJobs}
-                      onPropertyChange={props.onPropertyChange}
-                    />
-                  </Grid>
-                  <Grid item lg={5}>
-                    <ESPCheckbox
-                      name="DividJobs"
-                      label="Enable Dividing jobs"
-                      checked={props.adminSettings.DividJobs}
-                      onPropertyChange={props.onPropertyChange}
-                    />
-                  </Grid>
-                </Grid>
               </Grid>
               <Grid item lg={6}>
                 {/* <ESPSelect
@@ -353,6 +335,32 @@ const AdminSettingsPage = (props) => {
                       onPropertyChange={props.onPropertyChange}
                     />
                   </Grid>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item lg={4}>
+                  <ESPCheckbox
+                    name="HidePreProductionJobs"
+                    label="Hide PreProduction Jobs"
+                    checked={props.adminSettings.HidePreProductionJobs}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={4}>
+                  <ESPCheckbox
+                    name="DividJobs"
+                    label="Enable Dividing jobs"
+                    checked={props.adminSettings.DividJobs}
+                    onPropertyChange={props.onPropertyChange}
+                  />
+                </Grid>
+                <Grid item lg={4}>
+                  <ESPCheckbox
+                    name="TrackNotLoggedOut"
+                    label="Alert not logged out worker"
+                    checked={props.adminSettings.TrackNotLoggedOut}
+                    onPropertyChange={props.onPropertyChange}
+                  />
                 </Grid>
               </Grid>
             </Grid>

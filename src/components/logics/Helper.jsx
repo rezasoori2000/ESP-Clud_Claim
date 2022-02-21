@@ -48,21 +48,19 @@ class HelperLogic extends React.Component {
     };
     return await axios.post(`${url}`, value, headers);
   };
-  /*
-  getAsyncApi = async (url, errorName) => {
+
+  apiGet = async (url, errorName) => {
     try {
       axios.defaults.headers.post["Authorization"] =
         "bearer " + this.getLocalToken();
       axios.defaults.headers.post["Content-type"] = "application/json";
 
-      await axios.get(`${config.apiUrl}${url}`).then((r) => {
-        return r;
-      });
+      await axios.get(url);
     } catch (err) {
       alert(`Error in calling ESP (${errorName}) API- ${err}`);
     }
   };
-
+  /*
   apiAsyncPost = async (url, value, errorName) => {
     var response = {};
     var data = JSON.stringify(value);

@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect, forwardRef } from "react";
 import Grid from "@material-ui/core/Grid";
 
 import SearchIcon from "@mui/icons-material/Search";
@@ -11,6 +11,7 @@ import CommentIcon from "@material-ui/icons/Comment";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import InputBase from "@mui/material/InputBase";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
@@ -29,30 +30,93 @@ import CardContent from "@material-ui/core/CardContent";
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 import DividedJobs from "./DividedJobs";
 import ClaimLogic from "../../components/logics/ClaimLogic";
-import Loading from "../loading";
+import Barchart from "../../components/controls/Barchart";
 import Hidden from "@material-ui/core/Hidden";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Jobs(props) {
+  Date.prototype.addDays = function (days) {
+    var date = new Date(this.valueOf());
+    date.setDate(date.getDate() + days);
+    return date;
+  };
   const classes = gridSearchStyles();
   const [openDialog, setOpenDialog] = useState(false);
   const [note, setNote] = useState([]);
   const [activeButton, setactiveButton] = useState(
     props.IsSitWorkGroup ? "site" : "prod"
   );
-  const [primaryJobs, setPrimaryJobs] = useState([]);
-  const [secondaryJobs, setSecondaryJobs] = useState([]);
-  const [jobs, setJobs] = useState([]);
+
+  const [jobs, setJobs] = useState(props.jobs);
+  const [isLoading, setisLoading] = useState(true);
   const [preJobs, setPreJobs] = useState([]);
   const [postJobs, setPostJobs] = useState([]);
   const [siteJobs, setSiteJobs] = useState([]);
   const [loadedJobs, setLoadedJobs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchVal, setsearchVal] = useState("");
+  const [perfstat, setPerfstat] = useState(false);
+  const [perfstatReady, setPerfstatReady] = useState(true);
+  const [dateFrom, setDateFrom] = useState(new Date().addDays(-7));
+  const [dateTo, setDateTo] = useState(new Date());
+  const [chartData, setChartData] = useState([]);
+  const [primaryJobs, setPrimaryJobs] = useState([]);
+  const [secondaryJobs, setSecondaryJobs] = useState([]);
+  const ExampleCustomInput = forwardRef(({ value, onClick }, ref) => (
+    <OutlinedInput
+      sx={{ ml: 1, flex: 1 }}
+      onClick={onClick}
+      ref={ref}
+      value={value}
+    />
+  ));
+  // useEffect(() => {
+  //   if (primaryJobs.length <= 0) divideJobs(props.jobs);
+  // });
+  useEffect(() => {
+    // if (isLoading) {
+    divideJobs(props.jobs);
+    //     setisLoading(false);
+    //   }
+  }, []);
+  async function getPerfStatAPI(fromBtn) {
+    if (fromBtn && perfstat) {
+      setPerfstat(false);
+      return;
+    }
+    try {
+      var result = await ClaimLogic.GetPerfStatByAPI(
+        props.claimingOId,
+        dateFrom.toLocaleDateString("en-US"),
+        dateTo.toLocaleDateString("en-US"),
+        props.apiRoute
+      );
+      var data = JSON.parse(result.data);
+      var result = [];
+      result.push({
+        country: data.PointName,
+        name: data.PointName,
+        actual: data.Actual,
+        std: data.Std,
+      });
+      setChartData(result);
 
+      setPerfstat(true);
+      setPerfstatReady(true);
+    } catch (ex) {
+      if (ex.response)
+        alert(`Error in calling Get performance stat. API- ${ex.response}`);
+      else alert(`Error in calling Get performance stat. API- ${ex.message}`);
+    }
+  }
   function divideJobs(jobs) {
     var pj = [];
     var sj = [];
+    setPrimaryJobs([]);
+    setSecondaryJobs([]);
+    setJobs([]);
     if (props.divideJobs) {
       for (let i = 0; i < jobs.length; i++) {
         const j = jobs[i];
@@ -69,14 +133,11 @@ export default function Jobs(props) {
       }
       setPrimaryJobs(pj);
       setSecondaryJobs(sj);
+    } else {
+      setJobs(jobs);
     }
-    setJobs(jobs);
   }
-  useEffect(() => {
-    {
-      divideJobs(props.jobs);
-    }
-  }, []);
+
   function searchJobs(event) {
     var txt = event.target.value;
     setsearchVal(txt);
@@ -105,108 +166,41 @@ export default function Jobs(props) {
     divideJobs([]);
     divideJobs(props.jobs);
   }
-  function handlePreProduction() {
+
+  function handleJobsButtonClicked(section) {
+    var jobType =
+      section === "post"
+        ? 4
+        : section === "pre"
+        ? 2
+        : section === "prod"
+        ? 3
+        : section === "site"
+        ? 4
+        : 3;
+
+    divideJobs([]);
     setsearchVal("");
     setLoading(true);
-    setactiveButton("pre");
-    if (!loadedJobs.includes("pre")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.apiRoute, props.claimingOId, 2)
-        .then((r) => {
-          const values = JSON.parse(r.data);
-          setPreJobs(values.Item1);
-          divideJobs(values.Item1);
-          loadedJobs.push("pre");
-          setLoadedJobs(loadedJobs);
-          props.handleJobLoaded(values.Item1);
-          setLoading(false);
-        })
-        .catch((err) => {
-          alert("Error in retrieve Jobs list");
-        });
-    } else {
-      setLoading(false);
-      divideJobs(preJobs);
-    }
-  }
-  function handlePostProduction() {
-    setsearchVal("");
-    setLoading(true);
-    setactiveButton("post");
-    if (!loadedJobs.includes("post")) {
-      ClaimLogic.getJobsOfWorkerFromApi(props.apiRoute, props.claimingOId, 4)
-        .then((r) => {
-          const values = JSON.parse(r.data);
-          setPostJobs(values.Item1);
-          divideJobs(values.Item1);
-          loadedJobs.push("post");
-          setLoadedJobs(loadedJobs);
-          props.handleJobLoaded(values.Item1);
-          setLoading(false);
-        })
-        .catch((err) => {
-          alert("Error in retrieve Jobs list");
-        });
-    } else {
-      setLoading(false);
-      divideJobs(postJobs);
-    }
-  }
-  function handleSiteWork() {
-    setsearchVal("");
-    setLoading(true);
-    setactiveButton("site");
-    if (!loadedJobs.includes("site")) {
-      ClaimLogic.getJobsOfWorkerFromApi(
-        props.apiRoute,
-        props.claimingOId,
-        4,
-        true
-      )
-        .then((r) => {
-          const values = JSON.parse(r.data);
-          setSiteJobs(values.Item1);
-          divideJobs(values.Item1);
-          loadedJobs.push("site");
-          setLoadedJobs(loadedJobs);
-          props.handleJobLoaded(values.Item1);
-          setLoading(false);
-        })
-        .catch((err) => {
-          alert("Error in retrieve Jobs list");
-        });
-    } else {
-      setLoading(false);
-      divideJobs(siteJobs);
-    }
-  }
-  function handleProduction() {
-    setsearchVal("");
-    setLoading(true);
-    if (!loadedJobs.includes("prod")) {
-      ClaimLogic.getJobsOfWorkerFromApi(
-        props.apiRoute,
-        props.claimingOId,
-        3,
-        false
-      )
-        .then((r) => {
-          const values = JSON.parse(r.data);
-          setSiteJobs(values.Item1);
-          divideJobs(values.Item1);
-          loadedJobs.push("prod");
-          setLoadedJobs(loadedJobs);
-          props.handleJobLoaded(values.Item1);
-          setLoading(false);
-        })
-        .catch((err) => {
-          alert("Error in retrieve Jobs list");
-        });
-    } else {
-      setLoading(false);
-      divideJobs(siteJobs);
-    }
-    divideJobs(props.jobs);
-    setactiveButton("prod");
+    ClaimLogic.getJobsOfWorkerFromApi(
+      props.apiRoute,
+      props.claimingOId,
+      jobType,
+      section === "site"
+    )
+      .then((r) => {
+        const values = JSON.parse(r.data);
+        setSiteJobs(values.Item1);
+        divideJobs(values.Item1);
+        loadedJobs.push(section);
+        setLoadedJobs(loadedJobs);
+        props.handleJobLoaded(values.Item1);
+        setLoading(false);
+      })
+      .catch((err) => {
+        alert("Error in retrieve Jobs list");
+      });
+    setactiveButton(section);
   }
 
   return (
@@ -214,7 +208,7 @@ export default function Jobs(props) {
       <Card style={{ backgroundColor: "#ebedf1" }}>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid ml={0} item lg={1} sm={4} xs={3}>
+            <Grid item ml={0} item lg={1} sm={2} xs={2}>
               <Button
                 variant="outlined"
                 size="small"
@@ -225,31 +219,12 @@ export default function Jobs(props) {
                 startIcon={<ArrowBack />}
               ></Button>
             </Grid>
-            <Grid item lg={7} sm={4} xs={5}>
+            <Grid item lg={2} sm={9} xs={9}>
               <span style={{ fontSize: "18px", marginTop: "30px" }}>
                 <b>Job&nbsp;Selection</b>
               </span>
             </Grid>
-            <Hidden only={["xl", "lg", "md"]}>
-              <Grid
-                ml={0}
-                item
-                lg={1}
-                sm={4}
-                xs={4}
-                style={{ textAlign: "right" }}
-              >
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => props.handleLogOut(props.claimingOId)}
-                  startIcon={<MeetingRoomIcon />}
-                >
-                  Logout
-                </Button>
-              </Grid>
-            </Hidden>
-            <Grid item lg={3} sm={12} xs={12}>
+            <Grid item lg={7} md={12} sm={12} xs={12}>
               <IconButton sx={{ p: "10px" }} aria-label="menu">
                 <SearchIcon />
               </IconButton>
@@ -269,224 +244,315 @@ export default function Jobs(props) {
                 <CancelIcon />
               </IconButton>
             </Grid>
-            <Hidden only={["sm", "xs"]}>
-              <Grid ml={0} item lg={1} sm={1} style={{ textAlign: "right" }}>
+
+            <Grid
+              item
+              ml={0}
+              item
+              lg={1}
+              sm={6}
+              md={6}
+              xs={6}
+              style={{ textAlign: "right" }}
+            >
+              {props.settings.PSEnableIndividual && (
                 <Button
                   variant="outlined"
                   size="small"
-                  onClick={() => props.handleLogOut(props.claimingOId)}
-                  startIcon={<MeetingRoomIcon />}
+                  onClick={() => getPerfStatAPI(true)}
                 >
-                  Logout
+                  Performance
                 </Button>
-              </Grid>
-            </Hidden>
+              )}
+            </Grid>
+
+            <Grid
+              item
+              ml={0}
+              item
+              lg={1}
+              md={6}
+              sm={6}
+              xs={6}
+              style={{ textAlign: "right" }}
+            >
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => props.handleLogOut(props.claimingOId)}
+                startIcon={<MeetingRoomIcon />}
+              >
+                Logout
+              </Button>
+            </Grid>
           </Grid>
-          <Accordion defaultExpanded={true}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography variant="h4" component="div">
-                Jobs {props.menuIsOpen ? "" : "(" + props.claimingName + ")"}{" "}
-                <hr />
-              </Typography>
-            </AccordionSummary>
 
-            <AccordionDetails>
-              <Grid ml={0} item lg={2} sm={0} xs={0}></Grid>
-              <Grid
-                ml={0}
-                item
-                lg={2}
-                sm={3}
-                xs={3}
-                style={{ textAlign: "right" }}
-              >
-                {!props.showPreProduction && (
-                  <Button
-                    variant={activeButton == "pre" ? "contained" : "outlined"}
-                    style={{
-                      color: activeButton == "pre" ? "white" : "black",
-                      backgroundColor:
-                        activeButton == "pre" ? "#196dc4" : "white",
-                    }}
-                    size="small"
-                    onClick={() => handlePreProduction()}
-                    startIcon={<CallMadeOutlinedIcon />}
-                    fullWidth
-                  >
-                    Pre&nbsp;Prod.
-                  </Button>
-                )}
-              </Grid>
-              <Grid
-                ml={0}
-                item
-                lg={2}
-                sm={3}
-                xs={3}
-                style={{ textAlign: "right" }}
-              >
-                <Button
-                  variant={activeButton == "prod" ? "contained" : "outlined"}
-                  style={{
-                    color: activeButton == "prod" ? "white" : "black",
-                    backgroundColor:
-                      activeButton == "prod" ? "#196dc4" : "white",
-                  }}
-                  size="small"
-                  onClick={() => handleProduction()}
-                  startIcon={<SettingsIcon />}
-                  fullWidth
+          {!perfstat && (
+            <Fragment>
+              <Accordion defaultExpanded={true}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
                 >
-                  <span>
-                    &nbsp;&nbsp;&nbsp;Prod.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  </span>
-                </Button>
-              </Grid>
-              <Grid
-                ml={0}
-                item
-                lg={2}
-                sm={3}
-                xs={3}
-                style={{ textAlign: "right" }}
-              >
-                {!props.showPostProduction && (
-                  <Button
-                    variant={activeButton == "post" ? "contained" : "outlined"}
-                    style={{
-                      color: activeButton == "post" ? "white" : "black",
-                      backgroundColor:
-                        activeButton == "post" ? "#196dc4" : "white",
-                    }}
-                    startIcon={<SubdirectoryArrowLeftOutlinedIcon />}
-                    size="small"
-                    onClick={() => handlePostProduction()}
-                    fullWidth
-                  >
-                    Post&nbsp;Prod.
-                  </Button>
-                )}
-              </Grid>
-              <Grid
-                ml={0}
-                item
-                lg={2}
-                sm={3}
-                xs={3}
-                style={{ textAlign: "right" }}
-              >
-                <Button
-                  variant={activeButton == "site" ? "contained" : "outlined"}
-                  style={{
-                    color: activeButton == "site" ? "white" : "black",
-                    backgroundColor:
-                      activeButton == "site" ? "#196dc4" : "white",
-                  }}
-                  startIcon={<HomeWorkIcon />}
-                  size="small"
-                  onClick={() => handleSiteWork()}
-                  fullWidth
-                >
-                  Site&nbsp;Work.
-                </Button>
-              </Grid>
-            </AccordionDetails>
-            {props.divideJobs && (
-              <div>
-                <DividedJobs
-                  label="Primary Jobs"
-                  menuIsOpen={props.menuIsOpen}
-                  claimingName={props.claimingName}
-                  loading={loading}
-                  jobs={primaryJobs}
-                  handleJobClick={props.handleJobClick}
-                  setNote={setNote}
-                  setOpenDialog={setOpenDialog}
-                  classes={classes}
-                  activeButton={activeButton}
-                />
-                <DividedJobs
-                  label="Secondary Jobs"
-                  menuIsOpen={props.menuIsOpen}
-                  claimingName={props.claimingName}
-                  loading={loading}
-                  jobs={secondaryJobs}
-                  handleJobClick={props.handleJobClick}
-                  setNote={setNote}
-                  setOpenDialog={setOpenDialog}
-                  classes={classes}
-                  activeButton={activeButton}
-                />
-              </div>
-            )}
-            {!props.divideJobs && (
-              <DividedJobs
-                label="Jobs"
-                menuIsOpen={props.menuIsOpen}
-                claimingName={props.claimingName}
-                loading={loading}
-                jobs={jobs}
-                handleJobClick={props.handleJobClick}
-                setNote={setNote}
-                setOpenDialog={setOpenDialog}
-                classes={classes}
-                activeButton={activeButton}
-              />
-            )}
-          </Accordion>
+                  <Typography variant="h4" component="div">
+                    Jobs{" "}
+                    {props.menuIsOpen ? "" : "(" + props.claimingName + ")"}{" "}
+                    <hr />
+                  </Typography>
+                </AccordionSummary>
 
-          <Accordion defaultExpanded={true}>
-            <AccordionSummary
-              expandIcon={<ExpandMoreIcon />}
-              aria-controls="panel1a-content"
-              id="panel1a-header"
-            >
-              <Typography variant="h4" component="div">
-                Admin Jobs{" "}
-                {props.menuIsOpen ? "" : "(" + props.claimingName + ")"} <hr />
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails></AccordionDetails>
-            <Grid container spacing={1}>
-              {props.jobs &&
-                props.adminJobs.map((e) => (
+                <AccordionDetails>
+                  <Grid ml={1} item lg={2} sm={1} xs={1}></Grid>
                   <Grid
+                    ml={0}
                     item
                     lg={2}
-                    sm={6}
-                    xs={12}
-                    key={e.OId}
-                    className={classes.bolding}
+                    sm={3}
+                    xs={3}
+                    style={{ textAlign: "right" }}
                   >
-                    <Box
-                      borderRadius="5%"
-                      p={4}
-                      key={e.OId}
-                      boxShadow={4}
-                      color="black"
-                      spacing={3}
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        fontSize: "0.9rem",
-                        textAlign: "center",
-                        backgroundColor: "#efefef",
-                      }}
-                      onClick={() => {
-                        props.handleJobClick(e.OId, true);
-                      }}
-                    >
-                      <div>{e.Name}</div>
-                    </Box>
+                    {!props.settings.HidePreProductionJobs && (
+                      <Button
+                        variant={
+                          activeButton == "pre" ? "contained" : "outlined"
+                        }
+                        style={{
+                          color: activeButton == "pre" ? "white" : "black",
+                          backgroundColor:
+                            activeButton == "pre" ? "#196dc4" : "white",
+                        }}
+                        size="small"
+                        onClick={() => handleJobsButtonClicked("pre")}
+                        startIcon={<CallMadeOutlinedIcon />}
+                        fullWidth
+                      >
+                        Pre&nbsp;Prod.
+                      </Button>
+                    )}
                   </Grid>
-                ))}
-            </Grid>
-          </Accordion>
+                  <Grid
+                    ml={0}
+                    item
+                    lg={2}
+                    sm={3}
+                    xs={3}
+                    style={{ textAlign: "right" }}
+                  >
+                    <Button
+                      variant={
+                        activeButton == "prod" ? "contained" : "outlined"
+                      }
+                      style={{
+                        color: activeButton == "prod" ? "white" : "black",
+                        backgroundColor:
+                          activeButton == "prod" ? "#196dc4" : "white",
+                      }}
+                      size="small"
+                      onClick={() => handleJobsButtonClicked("prod")}
+                      startIcon={<SettingsIcon />}
+                      fullWidth
+                    >
+                      <span>
+                        &nbsp;&nbsp;&nbsp;Prod.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      </span>
+                    </Button>
+                  </Grid>
+                  <Grid
+                    ml={0}
+                    item
+                    lg={2}
+                    sm={3}
+                    xs={3}
+                    style={{ textAlign: "right" }}
+                  >
+                    {!props.settings.HidePostProductionJobs && (
+                      <Button
+                        variant={
+                          activeButton == "post" ? "contained" : "outlined"
+                        }
+                        style={{
+                          color: activeButton == "post" ? "white" : "black",
+                          backgroundColor:
+                            activeButton == "post" ? "#196dc4" : "white",
+                        }}
+                        startIcon={<SubdirectoryArrowLeftOutlinedIcon />}
+                        size="small"
+                        onClick={() => handleJobsButtonClicked("post")}
+                        fullWidth
+                      >
+                        Post&nbsp;Prod.
+                      </Button>
+                    )}
+                  </Grid>
+                  <Grid
+                    ml={0}
+                    item
+                    lg={2}
+                    sm={3}
+                    xs={3}
+                    style={{ textAlign: "right" }}
+                  >
+                    <Button
+                      variant={
+                        activeButton == "site" ? "contained" : "outlined"
+                      }
+                      style={{
+                        color: activeButton == "site" ? "white" : "black",
+                        backgroundColor:
+                          activeButton == "site" ? "#196dc4" : "white",
+                      }}
+                      startIcon={<HomeWorkIcon />}
+                      size="small"
+                      onClick={() => handleJobsButtonClicked("site")}
+                      fullWidth
+                    >
+                      Site&nbsp;Work.
+                    </Button>
+                  </Grid>
+                </AccordionDetails>
+                {props.settings.DividJobs && (
+                  <div>
+                    <DividedJobs
+                      label="Primary Jobs"
+                      menuIsOpen={props.menuIsOpen}
+                      claimingName={props.claimingName}
+                      loading={loading}
+                      jobs={primaryJobs}
+                      handleJobClick={props.handleJobClick}
+                      setNote={setNote}
+                      setOpenDialog={setOpenDialog}
+                      classes={classes}
+                      activeButton={activeButton}
+                    />
+                    <DividedJobs
+                      label="Secondary Jobs"
+                      menuIsOpen={props.menuIsOpen}
+                      claimingName={props.claimingName}
+                      loading={loading}
+                      jobs={secondaryJobs}
+                      handleJobClick={props.handleJobClick}
+                      setNote={setNote}
+                      setOpenDialog={setOpenDialog}
+                      classes={classes}
+                      activeButton={activeButton}
+                    />
+                  </div>
+                )}
+                {!props.divideJobs && (
+                  <DividedJobs
+                    label="Jobs"
+                    menuIsOpen={props.menuIsOpen}
+                    claimingName={props.claimingName}
+                    loading={loading}
+                    jobs={jobs}
+                    handleJobClick={props.handleJobClick}
+                    setNote={setNote}
+                    setOpenDialog={setOpenDialog}
+                    classes={classes}
+                    activeButton={activeButton}
+                  />
+                )}
+              </Accordion>
 
+              <Accordion defaultExpanded={true}>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography variant="h4" component="div">
+                    Admin Jobs{" "}
+                    {props.menuIsOpen ? "" : "(" + props.claimingName + ")"}{" "}
+                    <hr />
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails></AccordionDetails>
+                <Grid container spacing={1}>
+                  {props.jobs &&
+                    props.adminJobs.map((e) => (
+                      <Grid
+                        item
+                        lg={2}
+                        sm={6}
+                        xs={12}
+                        key={e.OId}
+                        className={classes.bolding}
+                      >
+                        <Box
+                          borderRadius="5%"
+                          p={4}
+                          key={e.OId}
+                          boxShadow={4}
+                          color="black"
+                          spacing={3}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            fontSize: "0.9rem",
+                            textAlign: "center",
+                            backgroundColor: "#efefef",
+                          }}
+                          onClick={() => {
+                            props.handleJobClick(e.OId, true);
+                          }}
+                        >
+                          <div>{e.Name}</div>
+                        </Box>
+                      </Grid>
+                    ))}
+                </Grid>
+              </Accordion>
+            </Fragment>
+          )}
+          {perfstat && (
+            <div>
+              <Grid
+                container
+                style={{
+                  marginBottom: "20px",
+                  marginTop: "40px",
+                  textAlign: "right",
+                }}
+              >
+                <Grid item lg={12} sm={12} xs={12}>
+                  <hr />
+                </Grid>
+                <Grid item lg={8} sm={4} xs={12} style={{ marginTop: "30px" }}>
+                  <Button
+                    variant="contained"
+                    onClick={() => getPerfStatAPI(false)}
+                  >
+                    Show
+                  </Button>
+                </Grid>
+                <Grid item lg={2} sm={4} xs={6}>
+                  <div>
+                    <label>From</label>
+                    <DatePicker
+                      style={{ zIndex: "10000" }}
+                      selected={dateFrom}
+                      onChange={(e) => setDateFrom(e)}
+                      customInput={<ExampleCustomInput />}
+                    />
+                  </div>
+                </Grid>
+                <Grid item lg={2} sm={4} xs={6}>
+                  <div>
+                    <label className="datePickerLabel">To</label>
+                    <DatePicker
+                      customInput={<ExampleCustomInput />}
+                      selected={dateTo}
+                      onChange={(e) => setDateTo(e)}
+                      style={{ zIndex: "10000" }}
+                    />
+                  </div>
+                </Grid>
+              </Grid>
+
+              <Barchart Columns={chartData} Title="Performance" />
+            </div>
+          )}
           <FullScreenDialog
             header="Job Notes"
             uls={note}

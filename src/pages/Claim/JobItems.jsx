@@ -305,7 +305,7 @@ class JobItems extends React.Component {
                           startIcon={<ArrowBack />}
                         ></Button>
                       </Grid>
-                      <Grid item lg={7} sm={4} xs={5}>
+                      <Grid item lg={7} sm={8} xs={8}>
                         <span style={{ fontSize: "24px", marginTop: "30px" }}>
                           <b>
                             Job&nbsp;Items{" "}
@@ -316,7 +316,7 @@ class JobItems extends React.Component {
                         </span>
                       </Grid>
 
-                      <Grid item lg={3} sm={8} xs={8}>
+                      <Grid item lg={3} sm={12} xs={12}>
                         <IconButton sx={{ p: "10px" }} aria-label="menu">
                           <SearchIcon />
                         </IconButton>

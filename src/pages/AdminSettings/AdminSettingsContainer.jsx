@@ -168,10 +168,15 @@ class AdminSettingsContainer extends React.Component {
       );
 
       var response = JSON.parse(res.data);
-      this.setState({
-        ...this.state,
-        adminSettings: response,
-      });
+      this.setState(
+        {
+          ...this.state,
+          adminSettings: response,
+        },
+        () => {
+          this.props.onChangeSettings(response);
+        }
+      );
     } catch (err) {
       if (err.response) alert(`Error in calling ESP API- ${err.response.data}`);
       else alert(`Error in calling ESP API- ${err}`);
@@ -186,8 +191,9 @@ class AdminSettingsContainer extends React.Component {
       Helper.apiPost(`${this.props.apiRoute}adminSettings/PostData`, state, "")
         .then((res) => {
           this.props.history.push(`${this.props.mainRoute}`);
-          //window.location.reload(false);
-          // this.props.onChangeSettings();
+          this.getAdminSettingsByAPI();
+          window.location.reload(true);
+          window.location.href = `${this.props.mainRoute}`;
         })
         .catch((err) => {
           alert("Error in get Groups data");
@@ -195,7 +201,6 @@ class AdminSettingsContainer extends React.Component {
     } catch (err) {
       if (err.response) alert(`Error in calling ESP API- ${err.response.data}`);
       else alert(`Error in calling ESP API- ${err}`);
-      window.location.href = ".";
     }
   };
 

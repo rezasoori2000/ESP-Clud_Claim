@@ -9,6 +9,7 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router";
+import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 
 export default function Login(props) {
   const classes = gridSearchStyles();
@@ -17,7 +18,23 @@ export default function Login(props) {
   const personList = props.loggingOut
     ? props.items.filter((x) => x.IsLoggedIn)
     : props.items;
+  function getLabel(e) {
+    var name = e.Name + (e.IsOnLeave ? "(on leave)" : "");
 
+    return e.LastClaimTime != null ? (
+      <Tooltip title={`Your last claim/ login was ${e.LastClaimTime} ago`}>
+        <span>
+          {name}{" "}
+          <span style={{ fontSize: "small" }}>
+            <br />
+            &nbsp;&nbsp;({e.LastClaimTime})
+          </span>
+        </span>
+      </Tooltip>
+    ) : (
+      <div>{name}</div>
+    );
+  }
   useEffect(() => {
     window.scrollTo(0, 0);
   });
@@ -122,13 +139,7 @@ export default function Login(props) {
                   props.handleLogin(e.OId, e.IsOnLeave, logout);
                 }}
               >
-                {/* {e.IsLoggedIn && (
-                  <div>
-                    <DoneIcon />
-                    <FaceIcon />{" "}
-                  </div>
-                )} */}
-                {e.Name + (e.IsOnLeave ? "(on leave)" : "")}
+                {getLabel(e)}
               </Box>
             </Grid>
           ))}

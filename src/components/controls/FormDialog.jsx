@@ -18,7 +18,9 @@ export default function FormDialog(props) {
     setComment(e.target.value);
   };
   const handleSave = () => {
-    props.onCommentSave(comment, !props.logout);
+    if (props.doSaving) {
+      props.onCommentSave(comment, !props.logout);
+    }
     setAllow(true);
   };
   const handleKeyDown = (event) => {

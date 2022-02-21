@@ -111,7 +111,18 @@ class ClaimLogic extends React.Component {
       "Get Work Type Claimed by"
     );
   };
-
+  GetPerfStatByAPI = async (id, from, to, route) => {
+    var value = {
+      id,
+      from,
+      to,
+    };
+    return Helper.apiPost(
+      `${route}PerformanceStat/GetWorkerPS?id=${id}&from=${from}&to=${to}`,
+      value,
+      "Get performance stat"
+    );
+  };
   render() {
     return <din></din>;
   }
