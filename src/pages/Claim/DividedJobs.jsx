@@ -72,6 +72,7 @@ export default function DividedJobs(props) {
                 (props.activeButton != "site" && x.WorkTypes.length > 0) ||
                 props.activeButton == "site"
             )
+            .filter((x) => x.WorkTypes.some((w) => w.Progress < 100))
 
             .map((e) => (
               <Grid
@@ -85,7 +86,6 @@ export default function DividedJobs(props) {
                 <Box
                   borderRadius="5%"
                   p={1}
-                  key={e.OId}
                   boxShadow={4}
                   color="white"
                   className={props.classes.boxBolding}

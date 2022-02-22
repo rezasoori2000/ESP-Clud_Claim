@@ -99,7 +99,7 @@ export default function Worktypes(props) {
               </IconButton>
               <InputBase
                 sx={{ ml: 1, flex: 1 }}
-                Id="worktypeSearchVal"
+                id="worktypeSearchVal"
                 placeholder="Search"
                 variant="outlined"
                 value={searchVal}
@@ -155,7 +155,6 @@ export default function Worktypes(props) {
                     <Box
                       p={4}
                       borderRadius="5%"
-                      key={e.OId}
                       className={classes.boxBolding}
                       style={{
                         width: "100%",
@@ -181,7 +180,7 @@ export default function Worktypes(props) {
                       {e.Name}
                       <hr />
                       <Grid container>
-                        <Grid item lg={6} sm={5} xs={5} key={e.OId}>
+                        <Grid item lg={6} sm={5} xs={5}>
                           <IconButton color="inherit">
                             <CommentIcon
                               onClick={(w) => {
@@ -195,7 +194,7 @@ export default function Worktypes(props) {
                             />
                           </IconButton>
                         </Grid>
-                        <Grid item lg={6} sm={6} xs={6} key={e.OId}>
+                        <Grid item lg={6} sm={6} xs={6}>
                           <CircularProgressWithLabel value={e.Progress} />
                         </Grid>
                       </Grid>
@@ -228,7 +227,6 @@ export default function Worktypes(props) {
                     <Box
                       p={4}
                       borderRadius="5%"
-                      key={e.OId}
                       className={classes.boxBolding}
                       style={{
                         width: "100%",
@@ -254,7 +252,7 @@ export default function Worktypes(props) {
                       {e.Name}
                       <hr />
                       <Grid container>
-                        <Grid item lg={6} sm={5} xs={5} key={e.OId}>
+                        <Grid item lg={6} sm={5} xs={5}>
                           <IconButton color="inherit">
                             <CommentIcon
                               onClick={(w) => {
@@ -268,7 +266,7 @@ export default function Worktypes(props) {
                             />
                           </IconButton>
                         </Grid>
-                        <Grid item lg={6} sm={6} xs={6} key={e.OId}>
+                        <Grid item lg={6} sm={6} xs={6}>
                           <CircularProgressWithLabel value={e.Progress} />
                         </Grid>
                       </Grid>

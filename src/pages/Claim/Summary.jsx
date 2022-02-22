@@ -240,7 +240,7 @@ export default function Summary(props) {
                         .filter((x) => x.Progress100 !== x.Main_Progress100)
                         .map((e) => (
                           <Fragment>
-                            <Typography style={{ fontSize: "1rem" }}>
+                            <Typography key={e.id} style={{ fontSize: "1rem" }}>
                               {e.Name}: ({e.Main_Progress100}% to:
                               {e.Progress100}% {") took: "}
                               {Helper.timeConvert(totalminute)}

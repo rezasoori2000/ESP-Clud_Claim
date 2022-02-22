@@ -322,7 +322,7 @@ class JobItems extends React.Component {
                         </IconButton>
                         <InputBase
                           sx={{ ml: 1, flex: 1 }}
-                          Id="worktypeSearchVal"
+                          id="worktypeSearchVal"
                           placeholder="Search"
                           variant="outlined"
                           value={this.state.searchVal}
@@ -449,7 +449,6 @@ class JobItems extends React.Component {
                                 }
                                 type="number"
                                 name={`pgs`}
-                                key={1}
                                 fullWidth
                               />
                             </Grid>

@@ -37,19 +37,19 @@ function getSteps() {
   ];
 }
 
-function getStepContent(index, p) {
-  return "";
-  switch (index) {
-    case 0:
-      return "";
-    case 1:
-      return "";
-    case 2:
-      return ``;
-    default:
-      return "";
-  }
-}
+// function getStepContent(index, p) {
+//   return "";
+//   switch (index) {
+//     case 0:
+//       return "";
+//     case 1:
+//       return "";
+//     case 2:
+//       return ``;
+//     default:
+//       return "";
+//   }
+// }
 function getLabel(label, text) {
   if (text && text.length > 1) return `(${text})`;
   //return label;

@@ -1,7 +1,5 @@
 import React from "react";
 import AdminSettingsPage from "./AdminSettingsPage";
-import config from "../../config";
-import axios from "axios";
 import Helper from "../../components/logics/Helper";
 
 class AdminSettingsContainer extends React.Component {
@@ -63,7 +61,6 @@ class AdminSettingsContainer extends React.Component {
           Selected: false,
         });
     });
-    var changes = this.state.changes;
 
     adSettings[event.target.name] = newValues;
 
@@ -167,7 +164,7 @@ class AdminSettingsContainer extends React.Component {
         ""
       );
 
-      var response = JSON.parse(res.data);
+      response = JSON.parse(res.data);
       this.setState(
         {
           ...this.state,

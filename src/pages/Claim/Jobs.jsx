@@ -72,14 +72,8 @@ export default function Jobs(props) {
       value={value}
     />
   ));
-  // useEffect(() => {
-  //   if (primaryJobs.length <= 0) divideJobs(props.jobs);
-  // });
   useEffect(() => {
-    // if (isLoading) {
     divideJobs(props.jobs);
-    //     setisLoading(false);
-    //   }
   }, []);
   async function getPerfStatAPI(fromBtn) {
     if (fromBtn && perfstat) {
@@ -141,15 +135,38 @@ export default function Jobs(props) {
   function searchJobs(event) {
     var txt = event.target.value;
     setsearchVal(txt);
-    var filterJobs =
-      event.target.value.length > 0
-        ? props.jobs.filter(
-            (t) =>
-              t.Title.toLowerCase().includes(txt.toLowerCase()) ||
-              t.Code.includes(txt)
-          )
-        : props.jobs;
-    divideJobs(filterJobs);
+
+    if (props.divideJobs) {
+      setPrimaryJobs(
+        event.target.value.length > 0
+          ? primaryJobs.filter(
+              (t) =>
+                t.Title.toLowerCase().includes(txt.toLowerCase()) ||
+                t.Code.includes(txt)
+            )
+          : primaryJobs
+      );
+
+      setSecondaryJobs(
+        event.target.value.length > 0
+          ? secondaryJobs.filter(
+              (t) =>
+                t.Title.toLowerCase().includes(txt.toLowerCase()) ||
+                t.Code.includes(txt)
+            )
+          : secondaryJobs
+      );
+    } else {
+      var filterJobs =
+        event.target.value.length > 0
+          ? jobs.filter(
+              (t) =>
+                t.Title.toLowerCase().includes(txt.toLowerCase()) ||
+                t.Code.includes(txt)
+            )
+          : jobs;
+      divideJobs(filterJobs);
+    }
   }
   function chunkSubstr(str, size) {
     const numChunks = Math.ceil(str.length / size);
@@ -224,7 +241,7 @@ export default function Jobs(props) {
                 <b>Job&nbsp;Selection</b>
               </span>
             </Grid>
-            <Grid item lg={7} md={12} sm={12} xs={12}>
+            <Grid item lg={5} md={12} sm={12} xs={12}>
               <IconButton sx={{ p: "10px" }} aria-label="menu">
                 <SearchIcon />
               </IconButton>
@@ -249,7 +266,7 @@ export default function Jobs(props) {
               item
               ml={0}
               item
-              lg={1}
+              lg={2}
               sm={6}
               md={6}
               xs={6}
@@ -270,7 +287,7 @@ export default function Jobs(props) {
               item
               ml={0}
               item
-              lg={1}
+              lg={2}
               md={6}
               sm={6}
               xs={6}
@@ -482,7 +499,6 @@ export default function Jobs(props) {
                         <Box
                           borderRadius="5%"
                           p={4}
-                          key={e.OId}
                           boxShadow={4}
                           color="black"
                           spacing={3}

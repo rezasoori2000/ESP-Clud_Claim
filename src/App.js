@@ -5,7 +5,6 @@ import { Route } from "react-router-dom";
 import Performance from "./pages/Performance";
 import Settings from "./pages/AdminSettings/AdminSettingsContainer";
 import ProductionBoard from "./pages/ProductionBoard/ProductionBoardContainer";
-import Welcome from "./pages/Welcome";
 import ClaimContainer from "./pages/Claim/ClaimContainer";
 import Helper from "./components/logics/Helper";
 import SignIn from "./pages/SignIn";
@@ -60,7 +59,6 @@ class App extends React.Component {
             apiRoute: json.apiRoute,
           },
           () => {
-            const token = Helper.getLocalToken();
             if (localStorage.getItem("_claim")) this.getServerSettings();
           }
         );
@@ -122,7 +120,7 @@ class App extends React.Component {
     });
   };
   changeMenuSize = () => {
-    if (this.state.menuSize == 0)
+    if (this.state.menuSize === 0)
       this.setState({
         ...this.state,
         menuSize: 240,
@@ -325,7 +323,7 @@ class App extends React.Component {
                 paddingLeft: "30px",
                 paddingRight: "0px",
                 paddingTop: "80px",
-                marginLeft: this.state.menuSize == 0 ? "-100px" : "0px",
+                marginLeft: this.state.menuSize === 0 ? "-100px" : "0px",
               }}
             >
               <div

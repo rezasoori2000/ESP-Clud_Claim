@@ -13,7 +13,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@mui/material/MenuItem";
 import Checkbox from "@mui/material/Checkbox";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
+import Select from "@mui/material/Select";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import ListItemText from "@mui/material/ListItemText";
 import FormControl from "@material-ui/core/FormControl";
@@ -65,9 +65,7 @@ const AdminSettingsPage = (props) => {
 
   const classes = useStyles();
   useEffect(() => {
-    {
-      window.scrollTo(0, 0);
-    }
+    window.scrollTo(0, 0);
   }, []);
   return (
     props.adminSettings.Groups !== undefined && (

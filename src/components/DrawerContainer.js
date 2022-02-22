@@ -13,7 +13,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import BusinessIcon from "@material-ui/icons/Business";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -89,7 +88,7 @@ const DrawerContainer = (props) => {
       <Divider />
       <List className="mt-5">
         <div style={{ textAlign: "center", background: "#000" }}>
-          <img src="./favicon.png" />
+          <img src="./favicon.png" alt="APL" />
         </div>
         <br />
         <br />
@@ -261,7 +260,7 @@ const DrawerContainer = (props) => {
                     props.changeMenuSize();
                   }}
                   startIcon={
-                    props.menuSize == 240 ? (
+                    props.menuSize === 240 ? (
                       <FormatIndentDecreaseIcon />
                     ) : (
                       <FormatIndentIncreaseIcon />
