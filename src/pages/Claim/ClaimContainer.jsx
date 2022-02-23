@@ -367,9 +367,17 @@ class CalimContainer extends React.Component {
     } else {
       var response = await this.saveLogoutAPI(id, comment, this.props.apiRoute);
       if (this.props.logout)
-        <Redirect to={`${this.props.mainRoute}ProductionBoard`} />;
+        <Redirect to={`${this.props.apiRoute}ProductionBoard`} />;
       else {
-        window.location.href = `${this.props.mainRoute}claim`;
+        this.setState(
+          {
+            ...this.state,
+            page: -1,
+          },
+          () => {
+            <Redirect to={`${this.props.apiRoute}claim`} />;
+          }
+        );
       }
     }
   };
