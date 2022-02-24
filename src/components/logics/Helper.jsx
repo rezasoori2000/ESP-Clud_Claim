@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
-// import config from "../../config";
+import Cookies from "universal-cookie";
 
 class HelperLogic extends React.Component {
   getLocalToken = () => {
-    if (!localStorage.getItem("_claim")) return {};
-    var claims = JSON.parse(localStorage.getItem("_claim"));
+    const cookies = new Cookies();
+    var claims = cookies.get("_claim");
+
     return claims.user_t;
   };
 

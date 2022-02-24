@@ -10,10 +10,12 @@ import Helper from "./components/logics/Helper";
 import SignIn from "./pages/SignIn";
 import UserManagement from "./pages/UserManagement";
 import Loading from "../src/pages/loading";
+import Cookies from "universal-cookie";
 
 class App extends React.Component {
   constructor() {
     super();
+
     this.state = {
       step: 0,
       page: -1,
@@ -59,7 +61,7 @@ class App extends React.Component {
             apiRoute: json.apiRoute,
           },
           () => {
-            if (localStorage.getItem("_claim")) this.getServerSettings();
+            if (new Cookies().get("_claim")) this.getServerSettings();
           }
         );
       });
@@ -74,7 +76,7 @@ class App extends React.Component {
   getServerSettings = () => {
     try {
       var url = `${this.state.apiRoute}AdminSettings/GetInfo`;
-      var claims = localStorage.getItem("_claim");
+      var claims = new Cookies().get("_claim");
       Helper.apiPost(url, claims, "")
         .then((response) => {
           this.setState(
@@ -82,7 +84,7 @@ class App extends React.Component {
               ...this.state,
               loggedIn: true,
               settings: JSON.parse(response.data),
-              claims: JSON.parse(localStorage.getItem("_claim")),
+              claims,
             },
             () => {
               this.setState({
@@ -147,7 +149,7 @@ class App extends React.Component {
             w: r.data.w,
             pa: r.data.pa,
           };
-          localStorage.setItem("_claim", JSON.stringify(model));
+          new Cookies().set("_claim", JSON.stringify(model), { path: "/" });
 
           this.getServerSettings();
         }

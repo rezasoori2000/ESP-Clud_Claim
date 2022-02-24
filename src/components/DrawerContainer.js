@@ -23,6 +23,7 @@ import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import FormatIndentDecreaseIcon from "@mui/icons-material/FormatIndentDecrease";
 import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
 import { Redirect } from "react-router-dom";
+import Cookies from "universal-cookie";
 const DrawerContainer = (props) => {
   const drawerWidth = props.menuSize;
   const useStyles = makeStyles((theme: Theme) =>
@@ -74,7 +75,7 @@ const DrawerContainer = (props) => {
   );
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-
+  const cookies = new Cookies();
   //const { forwardRef, useRef, useImperativeHandle } = React;
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -165,7 +166,9 @@ const DrawerContainer = (props) => {
               size="small"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
-                localStorage.removeItem("_claim");
+                this.cookies.set("myCat", null, { path: "/" });
+                document.cookie =
+                  "_claim=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 //window.location.reload(false);
                 <Redirect to="/." />;
               }}
@@ -220,7 +223,9 @@ const DrawerContainer = (props) => {
               color="white"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
-                localStorage.removeItem("_claim");
+                this.cookies.set("myCat", null, { path: "/" });
+                document.cookie =
+                  "_claim=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 //window.location.reload(false);
                 <Redirect to="/." />;
               }}
