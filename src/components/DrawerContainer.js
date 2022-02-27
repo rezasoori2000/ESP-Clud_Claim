@@ -166,11 +166,11 @@ const DrawerContainer = (props) => {
               size="small"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
-                this.cookies.set("myCat", null, { path: "/" });
+                new Cookies().set("_claim", null, { path: "/" });
                 document.cookie =
                   "_claim=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                //window.location.reload(false);
-                <Redirect to="/." />;
+                window.location.reload(true);
+                window.location.href = `${this.props.mainRoute}`;
               }}
               startIcon={<MeetingRoomIcon />}
             >
@@ -223,11 +223,11 @@ const DrawerContainer = (props) => {
               color="white"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
-                this.cookies.set("myCat", null, { path: "/" });
+                new Cookies().set("_claim", null, { path: "/" });
                 document.cookie =
                   "_claim=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-                //window.location.reload(false);
-                <Redirect to="/." />;
+                window.location.reload(true);
+                window.location.href = `${this.props.mainRoute}`;
               }}
               startIcon={<MeetingRoomIcon />}
             >
