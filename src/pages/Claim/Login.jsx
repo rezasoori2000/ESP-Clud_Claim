@@ -37,9 +37,12 @@ export default function Login(props) {
   }
   useEffect(() => {
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      props.goBackToStart(0);
+    }, 60000);
   });
   return (
-    <Fragment>
+    <div>
       <div className={classes.search}>
         <Grid container spacing={1} style={{ backgroundColor: "#ebedf1" }}>
           {(props.loggingOut || props.fromPB) && (
@@ -144,6 +147,6 @@ export default function Login(props) {
             </Grid>
           ))}
       </Grid>
-    </Fragment>
+    </div>
   );
 }

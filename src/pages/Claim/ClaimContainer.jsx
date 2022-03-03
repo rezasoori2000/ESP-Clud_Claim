@@ -133,6 +133,13 @@ class CalimContainer extends React.Component {
 
   /* #region  Login Methods */
 
+  goBackToStart = (pageId) => {
+    if (this.state.page === pageId)
+      this.setState({
+        ...this.state,
+        page: -1,
+      });
+  };
   start = async () => {
     this.setState(
       {
@@ -793,6 +800,7 @@ class CalimContainer extends React.Component {
               fromPB={this.props.fromPB}
               apiRoute={this.props.apiRoute}
               mainRoute={this.props.mainRoute}
+              goBackToStart={this.goBackToStart}
             />
           );
         }
