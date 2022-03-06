@@ -122,7 +122,7 @@ class App extends React.Component {
     });
   };
   changeMenuSize = () => {
-    if (this.state.menuSize === 0)
+    if (this.state.menuSize === 10)
       this.setState({
         ...this.state,
         menuSize: 240,
@@ -130,7 +130,7 @@ class App extends React.Component {
     else
       this.setState({
         ...this.state,
-        menuSize: 0,
+        menuSize: 10,
       });
   };
   handleSignIn = (email, password) => {

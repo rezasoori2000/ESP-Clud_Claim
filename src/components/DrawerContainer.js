@@ -259,7 +259,7 @@ const DrawerContainer = (props) => {
           </IconButton>
           <Grid container spacing={3}>
             <Grid item lg={1}>
-              <Hidden only={("xs", "sm")}>
+              <Hidden only={"xs"}>
                 <Button
                   onClick={() => {
                     props.changeMenuSize();

@@ -340,20 +340,23 @@ class JobItems extends React.Component {
                       <Grid
                         item
                         lg={1}
-                        sm={4}
-                        xs={4}
+                        sm={12}
+                        xs={12}
                         style={{
-                          justifyContent: "flex-end",
+                          justifyContent: "end",
 
                           display: "flex",
-                          alignItems: "flex-end",
+                          alignItems: "center",
                         }}
                       >
                         <Button
                           variant="contained"
                           size="small"
                           disabled={!this.state.changed}
-                          backgroundColor="#fff"
+                          style={{
+                            color: "#196dc4",
+                            backgroundColor: "#fff",
+                          }}
                           startIcon={<SaveIcon />}
                           onClick={() =>
                             this.props.handleSave(
@@ -619,7 +622,10 @@ class JobItems extends React.Component {
               variant="contained"
               size="small"
               disabled={!this.state.changed}
-              backgroundColor="#fff"
+              style={{
+                color: "#196dc4",
+                backgroundColor: "#fff",
+              }}
               startIcon={<SaveIcon />}
               onClick={() =>
                 this.props.handleSave(
