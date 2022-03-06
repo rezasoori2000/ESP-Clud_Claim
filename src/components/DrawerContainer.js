@@ -275,7 +275,24 @@ const DrawerContainer = (props) => {
               </Hidden>
             </Grid>
             <Grid item lg={10}>
-              <Typography noWrap>ESP-Cloud Claim</Typography>
+              <p>
+                <span
+                  style={{
+                    fontSize: "20px",
+                    fontWeight: "bolder",
+                    textShadow: "1px 2px 3px #666",
+                    color: "#000000",
+                    background: "#FFFFFF",
+                  }}
+                >
+                  ESPCC
+                </span>
+                <span style={{ paddingLeft: 10 }}>
+                  ({process.env.REACT_APP_BUILDMAJOR}.
+                  {process.env.REACT_APP_BUILDMINOR}.
+                  {process.env.REACT_APP_BUILDREVISION})
+                </span>
+              </p>
             </Grid>
             <Grid item lg={1}></Grid>
           </Grid>
