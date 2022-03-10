@@ -63,7 +63,7 @@ class ProductionBoardContainer extends React.Component {
   render(props) {
     return (
       <Fragment>
-        {!this.state.loaded && <Loading />}
+        {!this.state.loaded && <Loading mainRoute={this.props.mainRoute} />}
         {this.state.loaded && (
           <ProductionBoard
             jobs={this.state.jobs}

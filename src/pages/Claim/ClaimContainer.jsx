@@ -825,6 +825,7 @@ class CalimContainer extends React.Component {
               IsSitWorkGroup={this.state.IsSitWorkGroup}
               apiRoute={this.props.apiRoute}
               divideJobs={this.state.settings.DividJobs}
+              mainRoute={this.props.mainRoute}
               primaryWorktypeIds={this.state.primaryWorktypeIds}
             />
           );

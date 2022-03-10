@@ -1,7 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../App.css";
 import { Button, Grid, Hidden } from "@material-ui/core";
 export default function Start(props) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  });
   return (
     <div>
       <Hidden only={["xs", "sm"]}>

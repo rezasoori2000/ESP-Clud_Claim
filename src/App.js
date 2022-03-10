@@ -203,7 +203,9 @@ class App extends React.Component {
     const w = this.state.claims.w;
     return (
       <div style={{ backgroundColor: "#ebedf1" }}>
-        {this.state.loading && this.state.loggedIn && <Loading />}
+        {this.state.loading && this.state.loggedIn && (
+          <Loading mainRoute={this.state.mainRoute} />
+        )}
         {!this.state.loggedIn && <SignIn handleSignIn={this.handleSignIn} />}
         {this.state.loggedIn && role === "u" && (
           <div style={{ display: "flex" }}>

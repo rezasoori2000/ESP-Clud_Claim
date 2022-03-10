@@ -50,7 +50,7 @@ export default function DividedJobs(props) {
         <Grid ml={0} item lg={12} sm={12} xs={12} md={12}>
           <hr />
         </Grid>
-        {props.loading && <Loading />}
+        {props.loading && <Loading mainRoute={props.mainRoute} />}
         {!props.loading &&
           props.jobs &&
           props.jobs

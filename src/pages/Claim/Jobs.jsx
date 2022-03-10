@@ -225,7 +225,7 @@ export default function Jobs(props) {
       <Card style={{ backgroundColor: "#ebedf1" }}>
         <CardContent>
           <Grid container spacing={2}>
-            <Grid item ml={0} item lg={1} sm={2} xs={2}>
+            <Grid item ml={0} lg={1} sm={2} xs={2}>
               <Button
                 variant="outlined"
                 size="small"
@@ -265,7 +265,6 @@ export default function Jobs(props) {
             <Grid
               item
               ml={0}
-              item
               lg={2}
               sm={6}
               md={6}
@@ -286,7 +285,6 @@ export default function Jobs(props) {
             <Grid
               item
               ml={0}
-              item
               lg={2}
               md={6}
               sm={6}
@@ -441,6 +439,7 @@ export default function Jobs(props) {
                       setOpenDialog={setOpenDialog}
                       classes={classes}
                       activeButton={activeButton}
+                      mainRoute={props.mainRoute}
                     />
                     <DividedJobs
                       label="Secondary Jobs"
@@ -453,6 +452,7 @@ export default function Jobs(props) {
                       setOpenDialog={setOpenDialog}
                       classes={classes}
                       activeButton={activeButton}
+                      mainRoute={props.mainRoute}
                     />
                   </div>
                 )}
@@ -468,6 +468,7 @@ export default function Jobs(props) {
                     setOpenDialog={setOpenDialog}
                     classes={classes}
                     activeButton={activeButton}
+                    mainRoute={props.mainRoute}
                   />
                 )}
               </Accordion>
