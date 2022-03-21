@@ -309,9 +309,11 @@ class JobItems extends React.Component {
                         <span style={{ fontSize: "24px", marginTop: "30px" }}>
                           <b>
                             Job&nbsp;Items{" "}
-                            {this.props.menuIsOpen
-                              ? ""
-                              : " (" + this.props.claimingName + ")"}{" "}
+                            {" (" +
+                              this.props.claimingName +
+                              "- " +
+                              this.props.worktypeName +
+                              ")"}{" "}
                           </b>
                         </span>
                       </Grid>

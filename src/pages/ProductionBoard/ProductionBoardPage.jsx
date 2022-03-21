@@ -1,5 +1,15 @@
 import React, { Fragment, useState } from "react";
-import { Grid, Input, InputAdornment, InputLabel } from "@material-ui/core";
+import {
+  Grid,
+  Input,
+  InputAdornment,
+  InputLabel,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+} from "@material-ui/core";
 import { PieChart } from "react-minimal-pie-chart";
 import IOSSwitch from "../../components/controls/IosSwitch";
 import SearchIcon from "@material-ui/icons/Search";
@@ -25,6 +35,9 @@ const ProductionBoardPage = (props) => {
   const [jobs, setJobs] = useState(props.jobs);
   const [wt, setWt] = useState(true);
   const [pie, setPie] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [preItems, setPreItems] = useState([]);
+  const [currentJob, setCurrentJob] = useState({});
 
   const theme = createMuiTheme({
     overrides: {
@@ -74,7 +87,8 @@ const ProductionBoardPage = (props) => {
     return tempArray;
   }
   function getChart() {}
-  function beginTr(code, wts) {
+  function beginTr(code, wortTYpes) {
+    var wts = wortTYpes.filter((x) => !x.IsPreProduction);
     var chuncked = chunkArray(wts, 4);
 
     var items = [];
@@ -157,6 +171,82 @@ const ProductionBoardPage = (props) => {
     items.push(<table>{trs}</table>);
 
     return items;
+  }
+
+  function getWtItem(ClaimOnPBStting, claimOnPB, w, e) {
+    return (
+      <MuiThemeProvider theme={theme}>
+        <Tooltip
+          title={w.ChartObj.filter((x) => x.value > 0).map((t) => (
+            <tr>
+              <td style={{ backgroundColor: t.color }}> </td>
+              <td>
+                <h1> {t.value}</h1>
+              </td>
+            </tr>
+          ))}
+          placement="top"
+        >
+          <td
+            style={{
+              paddingRight: "5px",
+              paddingLeft: "2px",
+              verticalAlign: "middle",
+            }}
+            onClick={(r) =>
+              ClaimOnPBStting &&
+              w.Progress != -1 &&
+              claimOnPB(e.Oid, w.Oid, w.JobLevel, e.Code)
+            }
+          >
+            {pie && (
+              <PieChart
+                style={{
+                  margin: 0,
+                  padding: 0,
+                  marginLeft: "10px",
+                  fontSize: "1.2em",
+                }}
+                data={w.ChartObj.filter((x) => x.value > 0)}
+                radius={PieChart.defaultProps.radius - 10}
+                segmentsShift={(index) => (index === 0 ? 10 : 0.5)}
+                label={({ dataEntry }) => dataEntry.value}
+                labelStyle={{
+                  ...defaultLabelStyle,
+                }}
+              />
+            )}
+            {!pie && (
+              <table
+                style={{
+                  padding: 0,
+                  margin: 0,
+                  width: "100%",
+                  height: "100%",
+                }}
+              >
+                <tr>
+                  {w.ChartObj.filter((x) => x.value > 0).map((t) => (
+                    <td
+                      style={{
+                        width: t.value,
+                        marginLeft: "3px",
+                        marginRight: "3px",
+                        backgroundColor: t.color,
+                        fontSize: "1.2em",
+                        // padding: "2px",
+                      }}
+                    >
+                      {t.value}
+                    </td>
+                  ))}
+                </tr>
+              </table>
+            )}
+          </td>
+        </Tooltip>
+      </MuiThemeProvider>
+    );
   }
 
   return (
@@ -418,9 +508,9 @@ const ProductionBoardPage = (props) => {
                 {jobs &&
                   jobs[0] &&
                   jobs[0].WorkTypes &&
-                  jobs[0].WorkTypes.map((w) => (
-                    <th style={{ minWidth: "65px" }}>{w.Name}</th>
-                  ))}
+                  jobs[0].WorkTypes.filter((x) => !x.IsPreProduction).map(
+                    (w) => <th style={{ minWidth: "65px" }}>{w.Name}</th>
+                  )}
               </tr>
             </thead>
             <tbody>
@@ -450,6 +540,35 @@ const ProductionBoardPage = (props) => {
                         </Button>
                       )}
                       {e.Comments.length == 0 && e.Code}
+                      {e.WorkTypes.filter(
+                        (x) =>
+                          x.IsPreProduction &&
+                          x.Progress >= 0 &&
+                          x.Progress < 100
+                      ).length > 0 && (
+                        <div>
+                          <hr />
+                          <Button
+                            variant="outlined"
+                            size="small"
+                            style={{ textAlign: "right", color: "red" }}
+                            onClick={(w) => {
+                              setPreItems(
+                                e.WorkTypes.filter(
+                                  (x) =>
+                                    x.IsPreProduction &&
+                                    x.Progress >= 0 &&
+                                    x.Progress < 100
+                                )
+                              );
+                              setCurrentJob(e);
+                              setDialogOpen(true);
+                            }}
+                          >
+                            Pre.P.
+                          </Button>
+                        </div>
+                      )}
                     </td>
                     {props.settings.PBCustomerColumn && <td>{e.Customer}</td>}
                     {props.settings.PBTitleColumn && (
@@ -477,7 +596,7 @@ const ProductionBoardPage = (props) => {
                     {props.settings.ShowColour && <td>{e.Colour}</td>}
                     <td>{e.Progress}%</td>
                     {e.WorkTypes &&
-                      e.WorkTypes.map((w) =>
+                      e.WorkTypes.filter((x) => !x.IsPreProduction).map((w) =>
                         w.Progress == 100 ? (
                           <td
                             style={{
@@ -504,90 +623,12 @@ const ProductionBoardPage = (props) => {
                             0%
                           </td>
                         ) : (
-                          <MuiThemeProvider theme={theme}>
-                            <Tooltip
-                              title={w.ChartObj.filter((x) => x.value > 0).map(
-                                (t) => (
-                                  <tr>
-                                    <td style={{ backgroundColor: t.color }}>
-                                      {" "}
-                                    </td>
-                                    <td>
-                                      <h1> {t.value}</h1>
-                                    </td>
-                                  </tr>
-                                )
-                              )}
-                              placement="top"
-                            >
-                              <td
-                                style={{
-                                  paddingRight: "5px",
-                                  paddingLeft: "2px",
-                                  verticalAlign: "middle",
-                                }}
-                                onClick={(r) =>
-                                  props.settings.ClaimOnPB &&
-                                  w.Progress != -1 &&
-                                  props.claimOnPB(
-                                    e.Oid,
-                                    w.Oid,
-                                    w.JobLevel,
-                                    e.Code
-                                  )
-                                }
-                              >
-                                {pie && (
-                                  <PieChart
-                                    style={{
-                                      margin: 0,
-                                      padding: 0,
-                                      marginLeft: "10px",
-                                      fontSize: "1.2em",
-                                    }}
-                                    data={w.ChartObj.filter((x) => x.value > 0)}
-                                    radius={PieChart.defaultProps.radius - 10}
-                                    segmentsShift={(index) =>
-                                      index === 0 ? 10 : 0.5
-                                    }
-                                    label={({ dataEntry }) => dataEntry.value}
-                                    labelStyle={{
-                                      ...defaultLabelStyle,
-                                    }}
-                                  />
-                                )}
-                                {!pie && (
-                                  <table
-                                    style={{
-                                      padding: 0,
-                                      margin: 0,
-                                      width: "100%",
-                                      height: "100%",
-                                    }}
-                                  >
-                                    <tr>
-                                      {w.ChartObj.filter(
-                                        (x) => x.value > 0
-                                      ).map((t) => (
-                                        <td
-                                          style={{
-                                            width: t.value,
-                                            marginLeft: "3px",
-                                            marginRight: "3px",
-                                            backgroundColor: t.color,
-                                            fontSize: "1.2em",
-                                            // padding: "2px",
-                                          }}
-                                        >
-                                          {t.value}
-                                        </td>
-                                      ))}
-                                    </tr>
-                                  </table>
-                                )}
-                              </td>
-                            </Tooltip>
-                          </MuiThemeProvider>
+                          getWtItem(
+                            props.settings.ClaimOnPB,
+                            props.claimOnPB,
+                            w,
+                            e
+                          )
                         )
                       )}
                   </tr>
@@ -690,6 +731,47 @@ const ProductionBoardPage = (props) => {
           handleClose={() => setOpenDialog(false)}
         />
       </div>
+      <Dialog fullWidth open={dialogOpen} aria-labelledby="form-dialog-title">
+        <DialogTitle id="form-dialog-title">
+          Pre-Production Work Items
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText></DialogContentText>
+          <div>
+            {preItems.map((w) => (
+              <div>
+                <td
+                  style={{
+                    marginTop: "30px",
+                    paddingTop: "10px",
+                    fontWeight: "bolder",
+                  }}
+                >
+                  {w.Name}
+                  {" :"}
+                </td>
+                {getWtItem(
+                  props.settings.ClaimOnPB,
+                  props.claimOnPB,
+                  w,
+                  currentJob
+                )}
+              </div>
+            ))}
+            <hr />
+          </div>
+        </DialogContent>
+        <DialogActions>
+          {" "}
+          <Button
+            onClick={() => {
+              setDialogOpen(false);
+            }}
+          >
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Fragment>
   );
 };

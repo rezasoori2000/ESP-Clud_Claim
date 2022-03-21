@@ -46,7 +46,7 @@ export default function Jobs(props) {
   const [openDialog, setOpenDialog] = useState(false);
   const [note, setNote] = useState([]);
   const [activeButton, setactiveButton] = useState(
-    props.IsSitWorkGroup ? "site" : "prod"
+    props.IsSitWorkGroup ? "site" : props.stage
   );
 
   const [jobs, setJobs] = useState(props.jobs);

@@ -55,6 +55,7 @@ class CalimContainer extends React.Component {
       logoutChecked: false,
       groupPercent: 0,
       IsSitWorkGroup: false,
+      stage: "",
       doSaving: true,
     };
   }
@@ -231,6 +232,7 @@ class CalimContainer extends React.Component {
         primaryWorktypeIds,
         secondaryWorktypeIds,
         IsSitWorkGroup: worker.Skills.find((x) => x.IsSitework && x.Primary),
+        stage: worker.Stage,
       },
       () => {
         if (this.props.fromPB) {
@@ -541,18 +543,25 @@ class CalimContainer extends React.Component {
       ...this.state,
       loading: true,
     });
-
+    var jobStage =
+      this.state.stage == "prod"
+        ? 3
+        : this.state.stage == "pre"
+        ? 2
+        : this.state.stage == "post"
+        ? 4
+        : 3;
     var r = this.state.IsSitWorkGroup
       ? await ClaimLogic.getJobsOfWorkerFromApi(
           this.props.apiRoute,
           claimingOId,
-          3,
+          jobStage,
           true
         )
       : await ClaimLogic.getJobsOfWorkerFromApi(
           this.props.apiRoute,
           claimingOId,
-          3
+          jobStage
         );
     const values = JSON.parse(r.data);
 
@@ -823,6 +832,7 @@ class CalimContainer extends React.Component {
               handleJobLoaded={this.handleJobLoaded}
               menuIsOpen={this.props.menuSize == 240}
               IsSitWorkGroup={this.state.IsSitWorkGroup}
+              stage={this.state.stage}
               apiRoute={this.props.apiRoute}
               divideJobs={this.state.settings.DividJobs}
               mainRoute={this.props.mainRoute}
@@ -864,6 +874,13 @@ class CalimContainer extends React.Component {
               jobLevel={this.state.jobLevel}
               claimingName={this.state.claimingUser}
               menuIsOpen={this.props.menuSize == 240}
+              worktypeName={
+                this.state.isFullJob
+                  ? "Full Job"
+                  : this.state.adminWorkType
+                  ? "Admin Work"
+                  : this.state.workTypeName
+              }
               jobName={
                 this.state.adminWorkType
                   ? this.state.adminWorkType.Name
