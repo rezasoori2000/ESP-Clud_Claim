@@ -837,6 +837,7 @@ class CalimContainer extends React.Component {
               divideJobs={this.state.settings.DividJobs}
               mainRoute={this.props.mainRoute}
               primaryWorktypeIds={this.state.primaryWorktypeIds}
+              goBackToStart={this.goBackToStart}
             />
           );
         }
@@ -855,6 +856,7 @@ class CalimContainer extends React.Component {
               primaryWorktypeIds={this.state.primaryWorktypeIds}
               secondaryWorktypeIds={this.state.secondaryWorktypeIds}
               apiRoute={this.props.apiRoute}
+              goBackToStart={this.goBackToStart}
             />
           );
         }
@@ -874,6 +876,7 @@ class CalimContainer extends React.Component {
               jobLevel={this.state.jobLevel}
               claimingName={this.state.claimingUser}
               menuIsOpen={this.props.menuSize == 240}
+              goBackToStart={this.goBackToStart}
               worktypeName={
                 this.state.isFullJob
                   ? "Full Job"
@@ -900,6 +903,7 @@ class CalimContainer extends React.Component {
                   (x) => x.OId === this.state.claimingOId
                 ).Name
               }
+              goBackToStart={this.goBackToStart}
               worktypeName={
                 this.state.isFullJob
                   ? "Full Job"

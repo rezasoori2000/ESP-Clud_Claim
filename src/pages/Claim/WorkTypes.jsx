@@ -20,6 +20,9 @@ export default function Worktypes(props) {
   const classes = gridSearchStyles();
   useEffect(() => {
     window.scrollTo(0, 0);
+    setTimeout(() => {
+      props.goBackToStart(2);
+    }, 60000);
   });
   const [note, setNote] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);

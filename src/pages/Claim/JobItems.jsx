@@ -139,6 +139,9 @@ class JobItems extends React.Component {
       groupPercent: this.props.totalProgress,
     });
     this.mainJobItems = this.state.jobItems;
+    setTimeout(() => {
+      this.props.goBackToStart(3);
+    }, 60000);
   }
   componentDidMount() {}
   checkChange = (item) => {

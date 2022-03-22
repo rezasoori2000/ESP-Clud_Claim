@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -46,6 +46,12 @@ const useStyles = makeStyles({
 export default function Summary(props) {
   const [comment, setComment] = useState("");
   const classes = useStyles();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    setTimeout(() => {
+      props.goBackToStart(4);
+    }, 60000);
+  });
   var num = 0;
   var avgStd = 0;
   var changedItems = props.claimingItems.filter(

@@ -74,6 +74,9 @@ export default function Jobs(props) {
   ));
   useEffect(() => {
     divideJobs(props.jobs);
+    setTimeout(() => {
+      props.goBackToStart(1);
+    }, 60000);
   }, []);
   async function getPerfStatAPI(fromBtn) {
     if (fromBtn && perfstat) {
