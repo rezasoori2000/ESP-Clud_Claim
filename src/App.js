@@ -59,9 +59,11 @@ class App extends React.Component {
             localSettings: json,
             mainRoute: json.route,
             apiRoute: json.apiRoute,
+            cookieId: json.name,
           },
           () => {
-            if (new Cookies().get("_claim")) this.getServerSettings();
+            if (new Cookies().get(this.state.cookieId))
+              this.getServerSettings();
           }
         );
       });
@@ -76,7 +78,7 @@ class App extends React.Component {
   getServerSettings = () => {
     try {
       var url = `${this.state.apiRoute}AdminSettings/GetInfo`;
-      var claims = new Cookies().get("_claim");
+      var claims = new Cookies().get(this.state.cookieId);
       Helper.apiPost(url, claims, "")
         .then((response) => {
           this.setState(
@@ -149,7 +151,9 @@ class App extends React.Component {
             w: r.data.w,
             pa: r.data.pa,
           };
-          new Cookies().set("_claim", JSON.stringify(model), { path: "/" });
+          new Cookies().set(this.state.cookieId, JSON.stringify(model), {
+            path: "/",
+          });
 
           this.getServerSettings();
         }
@@ -217,6 +221,7 @@ class App extends React.Component {
               ShowProductionBoard={this.state.settings.PBShowProductionBoard}
               menuSize={this.state.menuSize}
               changeMenuSize={this.changeMenuSize}
+              cookieId={this.state.cookieId}
             />
             <main
               style={{
@@ -226,30 +231,6 @@ class App extends React.Component {
                 paddingTop: "80px",
               }}
             >
-              {/* <FadingRoute path=`` component={Something} /> */}
-
-              {/* <Route
-                path={`${this.state.mainRoute}`}
-                render={(props) => (
-                  <ClaimContainer
-                    public={isPublic}
-                    apiRoute={this.state.apiRoute}
-                    mainRoute={this.state.mainRoute}
-                    settings={this.state.settings}
-                    changeStep={this.changeStep}
-                    workerId={w}
-                    fromPB={this.state.fromPB}
-                    logout={this.state.logout}
-                    jobId={this.state.pbJobId}
-                    workTypeId={this.state.pbWorkTypeId}
-                    page={this.state.page}
-                    setClaimingId={this.setClaimingId}
-                    menuSize={this.state.menuSize}
-                    jobLevel={this.state.joblevel}
-                    {...props}
-                  />
-                )}
-              /> */}
               <Route
                 path={`${this.state.mainRoute}claim`}
                 render={(props) => (
@@ -320,6 +301,7 @@ class App extends React.Component {
               isSystemAdmin={true}
               menuSize={this.state.menuSize}
               changeMenuSize={this.changeMenuSize}
+              cookieId={this.state.cookieId}
             />
             <main
               style={{

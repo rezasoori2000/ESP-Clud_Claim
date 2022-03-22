@@ -3,9 +3,11 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 class HelperLogic extends React.Component {
-  getLocalToken = () => {
+  getLocalToken = async () => {
+    var claim = await this.apiGetClaimName();
+
     const cookies = new Cookies();
-    var claims = cookies.get("_claim");
+    var claims = cookies.get(claim.name);
 
     return claims.user_t;
   };
@@ -34,7 +36,7 @@ class HelperLogic extends React.Component {
     var response = {};
     // var data = JSON.stringify(value);
     axios.defaults.headers.post["Authorization"] =
-      "bearer " + this.getLocalToken();
+      "bearer " + (await this.getLocalToken());
     axios.defaults.headers.post["Content-Type"] =
       "application/json; charset=UTF-8";
     axios.defaults.headers.post["Accept"] = "application/json";
@@ -43,7 +45,7 @@ class HelperLogic extends React.Component {
       // "Access-Control-Allow-Origin": "*",
       // "Access-Control-Allow-Credentials": "true",
       // "Access-Control-Allow-Methods": "*",
-      Authorization: "bearer " + this.getLocalToken(),
+      Authorization: "bearer " + (await this.getLocalToken()),
       "Content-Type": "application/json; charset=UTF-8",
       Accept: "application/json",
     };
@@ -53,13 +55,24 @@ class HelperLogic extends React.Component {
   apiGet = async (url, errorName) => {
     try {
       axios.defaults.headers.post["Authorization"] =
-        "bearer " + this.getLocalToken();
+        "bearer " + (await this.getLocalToken());
       axios.defaults.headers.post["Content-type"] = "application/json";
 
       await axios.get(url);
     } catch (err) {
       alert(`Error in calling ESP (${errorName}) API- ${err}`);
     }
+  };
+
+  apiGetClaimName = async () => {
+    try {
+      return await fetch("./data.json", {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+      }).then((res) => res.json());
+    } catch (err) {}
   };
   /*
   apiAsyncPost = async (url, value, errorName) => {

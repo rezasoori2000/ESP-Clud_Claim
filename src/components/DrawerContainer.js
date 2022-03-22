@@ -166,11 +166,12 @@ const DrawerContainer = (props) => {
               size="small"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
-                new Cookies().set("_claim", null, { path: "/" });
+                new Cookies().set(props.cookieId, null, { path: "/" });
                 document.cookie =
-                  "_claim=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                  props.cookieId +
+                  "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 window.location.reload(true);
-                window.location.href = `${this.props.mainRoute}`;
+                window.location.href = `${props.mainRoute}`;
               }}
               startIcon={<MeetingRoomIcon />}
             >
@@ -223,11 +224,12 @@ const DrawerContainer = (props) => {
               color="white"
               style={{ color: "#fff", marginTop: "30px" }}
               onClick={() => {
-                new Cookies().set("_claim", null, { path: "/" });
+                new Cookies().set(props.cookieId, null, { path: "/" });
                 document.cookie =
-                  "_claim=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                  props.cookieId +
+                  "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 window.location.reload(true);
-                window.location.href = `${this.props.mainRoute}`;
+                window.location.href = `${props.mainRoute}`;
               }}
               startIcon={<MeetingRoomIcon />}
             >
@@ -290,7 +292,7 @@ const DrawerContainer = (props) => {
                 <span style={{ paddingLeft: 10 }}>
                   ({process.env.REACT_APP_BUILDMAJOR}.
                   {process.env.REACT_APP_BUILDMINOR}.
-                  {process.env.REACT_APP_BUILDREVISION})
+                  {process.env.REACT_APP_BUILDREVISION}) - {props.cookieId}
                 </span>
               </p>
             </Grid>
