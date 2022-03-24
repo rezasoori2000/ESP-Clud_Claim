@@ -222,6 +222,7 @@ class App extends React.Component {
               menuSize={this.state.menuSize}
               changeMenuSize={this.changeMenuSize}
               cookieId={this.state.cookieId}
+              mainRoute={this.state.mainRoute}
             />
             <main
               style={{
@@ -302,6 +303,7 @@ class App extends React.Component {
               menuSize={this.state.menuSize}
               changeMenuSize={this.changeMenuSize}
               cookieId={this.state.cookieId}
+              mainRoute={this.state.mainRoute}
             />
             <main
               style={{

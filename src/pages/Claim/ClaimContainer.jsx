@@ -77,7 +77,7 @@ class CalimContainer extends React.Component {
           loading: true,
         },
         () => {
-          this.loadWorkersList();
+          this.loadWorkersList(this.props.workTypeId);
         }
       );
     } else {
@@ -152,13 +152,23 @@ class CalimContainer extends React.Component {
       }
     );
   };
-  loadWorkersList = async () => {
+  loadWorkersList = async (workTypeId = 0) => {
     try {
       var r = await Loginlogics.getListOfWorkersFromApi(
         this.props.workerId,
         this.props.apiRoute
       );
-      const response = JSON.parse(r.data);
+      const values = JSON.parse(r.data);
+      var response = [];
+      if (workTypeId != 0) {
+        values.map((x) => {
+          if (x.Skills.some((t) => t.WorkTypeId == workTypeId)) {
+            if (x != undefined) response.push(x);
+          }
+        });
+      } else {
+        response = values;
+      }
       this.setState(
         {
           ...this.state,

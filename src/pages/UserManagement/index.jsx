@@ -256,7 +256,9 @@ class UserManagement extends React.Component {
                     !(
                       this.state.model.Email &&
                       this.state.model.Password &&
-                      (this.state.model.EspUserId || this.state.model.IsPublic)
+                      (this.state.model.EspUserId ||
+                        this.state.model.IsPublic ||
+                        this.state.model.IsAdmin)
                     )
                   }
                 >
