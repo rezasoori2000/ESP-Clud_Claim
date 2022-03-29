@@ -10,7 +10,6 @@ import ClaimLogic from "../../components/logics/ClaimLogic";
 import Loading from "../loading.js";
 import FormDialog from "../../components/controls/FormDialog";
 import { Redirect } from "react-router-dom";
-import Button from "@material-ui/core/Button";
 
 class CalimContainer extends React.Component {
   constructor() {
@@ -57,6 +56,8 @@ class CalimContainer extends React.Component {
       IsSitWorkGroup: false,
       stage: "",
       doSaving: true,
+      holdReturnToStart: false,
+      isReturnHasSet: false,
     };
   }
 
@@ -133,9 +134,11 @@ class CalimContainer extends React.Component {
   /* #region Claim From PB */
 
   /* #region  Login Methods */
-
+  setIsReturnHasSet = (val) => {
+    this.setState({ ...this.state, isReturnHasSet: val });
+  };
   goBackToStart = (pageId) => {
-    if (this.state.page === pageId)
+    if (this.state.page === pageId && !this.state.holdReturnToStart)
       this.setState({
         ...this.state,
         page: -1,
@@ -146,6 +149,7 @@ class CalimContainer extends React.Component {
       {
         ...this.state,
         loading: true,
+        isReturnHasSet: false,
       },
       () => {
         this.loadWorkersList();
@@ -160,10 +164,10 @@ class CalimContainer extends React.Component {
       );
       const values = JSON.parse(r.data);
       var response = [];
-      if (workTypeId != 0) {
+      if (workTypeId !== 0) {
         values.map((x) => {
-          if (x.Skills.some((t) => t.WorkTypeId == workTypeId)) {
-            if (x != undefined) response.push(x);
+          if (x.Skills.some((t) => t.WorkTypeId === workTypeId)) {
+            if (x !== undefined) response.push(x);
           }
         });
       } else {
@@ -182,7 +186,7 @@ class CalimContainer extends React.Component {
         () => {
           this.props.changeStep(2, [], this.state.isAdminJob);
           if (this.props.workerId !== 0) {
-            var worker = response.find((x) => x.OId == this.props.workerId);
+            var worker = response.find((x) => x.OId === this.props.workerId);
             if (worker && worker.IsLoggedIn) {
               this.loggedInWorkerClick(worker);
             }
@@ -257,7 +261,6 @@ class CalimContainer extends React.Component {
   handleLogin = (sid, isOnLeave, logout) => {
     if (logout || this.props.logout) {
       this.handleLogOut(sid);
-
       return;
     }
     if (isOnLeave) {
@@ -265,6 +268,7 @@ class CalimContainer extends React.Component {
         ...this.state,
         dialogOpen: true,
         dialogHeader: "Cannot Login",
+        holdReturnToStart: true,
         dialogText:
           "You are currenly on leave.Please, log in during your working hours",
         dialogSave: this.onCommentSave,
@@ -294,6 +298,7 @@ class CalimContainer extends React.Component {
           claimingUser: worker.Name,
           dialogOpen: true,
           logoutClicked: false,
+          holdReturnToStart: true,
           dialogHeader: "Late Login",
           dialogText: "Please, specify the reason to late log in.",
           dialogSave: this.onCommentSave,
@@ -306,7 +311,7 @@ class CalimContainer extends React.Component {
           ...this.state,
           claimingOId: id,
           claimingUser: worker.Name,
-
+          holdReturnToStart: true,
           logoutClicked: false,
           dialogHeader: "Missing logout",
           dialogText:
@@ -351,6 +356,7 @@ class CalimContainer extends React.Component {
         claimingUser: worker.Name,
         workersList,
         LabelText: labelText,
+        holdReturnToStart: false,
       },
       () => {
         if (this.props.fromPB) {
@@ -471,7 +477,7 @@ class CalimContainer extends React.Component {
       ...this.state,
       loading: true,
     });
-    const workType = this.state.mainWorkTypes.find((x) => x.OId == worktypeId);
+    const workType = this.state.mainWorkTypes.find((x) => x.OId === worktypeId);
     var labelText = this.state.LabelText;
     var r = await ClaimLogic.getJobItemsFromApi(
       this.state.jobId,
@@ -554,11 +560,11 @@ class CalimContainer extends React.Component {
       loading: true,
     });
     var jobStage =
-      this.state.stage == "prod"
+      this.state.stage === "prod"
         ? 3
-        : this.state.stage == "pre"
+        : this.state.stage === "pre"
         ? 2
-        : this.state.stage == "post"
+        : this.state.stage === "post"
         ? 4
         : 3;
     var r = this.state.IsSitWorkGroup
@@ -600,7 +606,7 @@ class CalimContainer extends React.Component {
         break;
     }
     //this.props.history.push("/productionBoard");
-    if (pageId == 2 && this.props.fromPB) {
+    if (pageId === 2 && this.props.fromPB) {
       pageId = 0;
       labelText = [];
     }
@@ -720,11 +726,11 @@ class CalimContainer extends React.Component {
           {
             ...this.state,
             loading: false,
-            page: this.props.role == "a" || this.props.public ? -1 : 1,
+            page: this.props.role === "a" || this.props.public ? -1 : 1,
             LabelText: [],
           },
           () => {
-            if (this.props.role == "a" || this.props.public)
+            if (this.props.role === "a" || this.props.public)
               this.props.changeStep(1, [], this.state.isAdminJob);
             else this.props.changeStep(2, [], this.state.isAdminJob);
           }
@@ -736,7 +742,7 @@ class CalimContainer extends React.Component {
             : this.state.jobItems.filter(
                 (x) => x.Progress100 !== x.Main_Progress100
               );
-        var e = await ClaimLogic.submitClaimInAPI(
+        await ClaimLogic.submitClaimInAPI(
           this.state.claimingOId,
           this.state.jobId,
           jobItems,
@@ -759,7 +765,7 @@ class CalimContainer extends React.Component {
             if (this.props.fromPB)
               this.props.history.push(`${this.props.mainRoute}productionBoard`);
             else {
-              if (this.props.role == "a" || this.props.public)
+              if (this.props.role === "a" || this.props.public)
                 this.props.changeStep(1, [], this.state.isAdminJob);
               else this.props.changeStep(2, [], this.state.isAdminJob);
             }
@@ -785,7 +791,7 @@ class CalimContainer extends React.Component {
             : this.state.workersList,
         },
         () => {
-          if (this.props.role == "a" || this.props.public)
+          if (this.props.role === "a" || this.props.public)
             this.props.changeStep(1, [], this.state.isAdminJob);
           else this.props.changeStep(2, [], this.state.isAdminJob);
         }
@@ -820,6 +826,8 @@ class CalimContainer extends React.Component {
               apiRoute={this.props.apiRoute}
               mainRoute={this.props.mainRoute}
               goBackToStart={this.goBackToStart}
+              isReturnHasSet={this.state.isReturnHasSet}
+              setIsReturnHasSet={this.setIsReturnHasSet}
             />
           );
         }
@@ -840,7 +848,7 @@ class CalimContainer extends React.Component {
               handleBack={this.handleBack}
               handleLogOut={this.handleLogOut}
               handleJobLoaded={this.handleJobLoaded}
-              menuIsOpen={this.props.menuSize == 240}
+              menuIsOpen={this.props.menuSize === 240}
               IsSitWorkGroup={this.state.IsSitWorkGroup}
               stage={this.state.stage}
               apiRoute={this.props.apiRoute}
@@ -862,7 +870,7 @@ class CalimContainer extends React.Component {
               handleFullJob={this.handleFullJob}
               jobCode={this.state.selectedJobCode}
               claimingName={this.state.claimingUser}
-              menuIsOpen={this.props.menuSize == 240}
+              menuIsOpen={this.props.menuSize === 240}
               primaryWorktypeIds={this.state.primaryWorktypeIds}
               secondaryWorktypeIds={this.state.secondaryWorktypeIds}
               apiRoute={this.props.apiRoute}
@@ -885,7 +893,7 @@ class CalimContainer extends React.Component {
               canClaimWholeJob={this.state.canClaimWholeJob}
               jobLevel={this.state.jobLevel}
               claimingName={this.state.claimingUser}
-              menuIsOpen={this.props.menuSize == 240}
+              menuIsOpen={this.props.menuSize === 240}
               goBackToStart={this.goBackToStart}
               worktypeName={
                 this.state.isFullJob
@@ -940,7 +948,7 @@ class CalimContainer extends React.Component {
                   : this.props.fromPB
                   ? this.props.jobLevel
                   : this.state.mainWorkTypes.find(
-                      (x) => x.OId == this.state.worktypeId
+                      (x) => x.OId === this.state.worktypeId
                     ).JobLevel
               }
               apiRoute={this.props.apiRoute}

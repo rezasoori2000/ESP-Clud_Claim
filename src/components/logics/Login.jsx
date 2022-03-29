@@ -1,6 +1,5 @@
 import React from "react";
 import axios from "axios";
-import config from "../../config";
 import Helper from "./Helper";
 
 class LoginLogic extends React.Component {
@@ -22,25 +21,15 @@ class LoginLogic extends React.Component {
   };
 
   saveLoginInAPI = async (id, comment, route) => {
-    var response = {};
     var value = { OId: id, Code: comment };
-
-    const headers = {
-      "Content-Type": "application/json",
-    };
 
     return await Helper.apiPost(`${route}Workers/PostLoginWorker`, value, "");
   };
 
   saveLogoutAPI = async (id, comment, route) => {
-    var response = {};
     var value = { OId: id, Code: comment };
 
     try {
-      const headers = {
-        "Content-Type": "application/json",
-      };
-
       return await Helper.apiPost(`${route}Workers/PostLogoutWorker`, value);
     } catch (err) {
       if (err.response)

@@ -7,7 +7,6 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 import gridSearchStyles from "../../components/controls/Styles";
 import { Button, IconButton } from "@material-ui/core";
-import CommentIcon from "@material-ui/icons/Comment";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import InputBase from "@mui/material/InputBase";
@@ -27,11 +26,9 @@ import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
 import CardContent from "@material-ui/core/CardContent";
 
-import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 import DividedJobs from "./DividedJobs";
 import ClaimLogic from "../../components/logics/ClaimLogic";
 import Barchart from "../../components/controls/Barchart";
-import Hidden from "@material-ui/core/Hidden";
 import HomeWorkIcon from "@mui/icons-material/HomeWork";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -50,9 +47,6 @@ export default function Jobs(props) {
   );
 
   const [jobs, setJobs] = useState(props.jobs);
-  const [isLoading, setisLoading] = useState(true);
-  const [preJobs, setPreJobs] = useState([]);
-  const [postJobs, setPostJobs] = useState([]);
   const [siteJobs, setSiteJobs] = useState([]);
   const [loadedJobs, setLoadedJobs] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -72,10 +66,27 @@ export default function Jobs(props) {
       value={value}
     />
   ));
+  let lastMove = 0;
+  const returnBack = () => {
+    var now = new Date().getTime();
+
+    if (now - 60000 > lastMove) {
+      props.goBackToStart(1);
+    } else {
+      setTimeout(() => {
+        returnBack();
+      }, 60000);
+    }
+  };
+
   useEffect(() => {
     divideJobs(props.jobs);
+    document.addEventListener("mousemove", (e) => {
+      lastMove = new Date().getTime();
+    });
+    window.scrollTo(0, 0);
     setTimeout(() => {
-      props.goBackToStart(1);
+      returnBack();
     }, 60000);
   }, []);
   async function getPerfStatAPI(fromBtn) {
@@ -333,12 +344,12 @@ export default function Jobs(props) {
                     {!props.settings.HidePreProductionJobs && (
                       <Button
                         variant={
-                          activeButton == "pre" ? "contained" : "outlined"
+                          activeButton === "pre" ? "contained" : "outlined"
                         }
                         style={{
-                          color: activeButton == "pre" ? "white" : "black",
+                          color: activeButton === "pre" ? "white" : "black",
                           backgroundColor:
-                            activeButton == "pre" ? "#196dc4" : "white",
+                            activeButton === "pre" ? "#196dc4" : "white",
                         }}
                         size="small"
                         onClick={() => handleJobsButtonClicked("pre")}
@@ -359,12 +370,12 @@ export default function Jobs(props) {
                   >
                     <Button
                       variant={
-                        activeButton == "prod" ? "contained" : "outlined"
+                        activeButton === "prod" ? "contained" : "outlined"
                       }
                       style={{
-                        color: activeButton == "prod" ? "white" : "black",
+                        color: activeButton === "prod" ? "white" : "black",
                         backgroundColor:
-                          activeButton == "prod" ? "#196dc4" : "white",
+                          activeButton === "prod" ? "#196dc4" : "white",
                       }}
                       size="small"
                       onClick={() => handleJobsButtonClicked("prod")}
@@ -387,12 +398,12 @@ export default function Jobs(props) {
                     {!props.settings.HidePostProductionJobs && (
                       <Button
                         variant={
-                          activeButton == "post" ? "contained" : "outlined"
+                          activeButton === "post" ? "contained" : "outlined"
                         }
                         style={{
-                          color: activeButton == "post" ? "white" : "black",
+                          color: activeButton === "post" ? "white" : "black",
                           backgroundColor:
-                            activeButton == "post" ? "#196dc4" : "white",
+                            activeButton === "post" ? "#196dc4" : "white",
                         }}
                         startIcon={<SubdirectoryArrowLeftOutlinedIcon />}
                         size="small"
@@ -413,12 +424,12 @@ export default function Jobs(props) {
                   >
                     <Button
                       variant={
-                        activeButton == "site" ? "contained" : "outlined"
+                        activeButton === "site" ? "contained" : "outlined"
                       }
                       style={{
-                        color: activeButton == "site" ? "white" : "black",
+                        color: activeButton === "site" ? "white" : "black",
                         backgroundColor:
-                          activeButton == "site" ? "#196dc4" : "white",
+                          activeButton === "site" ? "#196dc4" : "white",
                       }}
                       startIcon={<HomeWorkIcon />}
                       size="small"

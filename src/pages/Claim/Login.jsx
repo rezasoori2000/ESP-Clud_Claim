@@ -1,27 +1,40 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import SearchIcon from "@material-ui/icons/Search";
 import gridSearchStyles from "../../components/controls/Styles";
 import Input from "@material-ui/core/Input";
-import { InputLabel, Switch } from "@material-ui/core";
+import { InputLabel } from "@material-ui/core";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import ArrowBack from "@material-ui/icons/ArrowBack";
 import Button from "@material-ui/core/Button";
 import { useHistory } from "react-router";
-import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
+import Tooltip from "@mui/material/Tooltip";
 
 export default function Login(props) {
   const classes = gridSearchStyles();
+  let lastMove = 0;
   const [logout, setLogout] = useState(props.logoutChecked);
   const history = useHistory();
   const personList = props.loggingOut
     ? props.items.filter((x) => x.IsLoggedIn)
     : props.items;
+
+  const returnBack = () => {
+    var now = new Date().getTime();
+
+    if (now - 5000 > lastMove) {
+      props.goBackToStart(0);
+    } else {
+      setTimeout(() => {
+        returnBack();
+      }, 5000);
+    }
+  };
   function getLabel(e) {
     var name = e.Name + (e.IsOnLeave ? "(on leave)" : "");
 
-    return e.LastClaimTime != null ? (
+    return e.LastClaimTime !== null ? (
       <Tooltip title={`Your last claim/ login was ${e.LastClaimTime} ago`}>
         <span>
           {name}{" "}
@@ -36,10 +49,16 @@ export default function Login(props) {
     );
   }
   useEffect(() => {
+    document.addEventListener("mousemove", (e) => {
+      lastMove = new Date().getTime();
+    });
     window.scrollTo(0, 0);
-    setTimeout(() => {
-      props.goBackToStart(0);
-    }, 60000);
+    if (!props.isReturnHasSet) {
+      props.setIsReturnHasSet(true);
+      setTimeout(() => {
+        returnBack();
+      }, 5000);
+    }
   });
   return (
     <div>

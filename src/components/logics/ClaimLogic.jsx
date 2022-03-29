@@ -1,10 +1,7 @@
 import React from "react";
-import axios from "axios";
-import config from "../../config";
 import Helper from "./Helper";
 class ClaimLogic extends React.Component {
   getJobItemsFromApi = async (jobId, worktypeId, workerId, route) => {
-    var response = {};
     try {
       return await Helper.apiPost(
         `${route}Claim/GetJobItems`,

@@ -12,7 +12,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import MenuIcon from "@material-ui/icons/Menu";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import SettingsIcon from "@material-ui/icons/Settings";
 import { makeStyles, Theme, createStyles } from "@material-ui/core/styles";
@@ -22,7 +21,6 @@ import VerticalStepper from "./controls/VerticalStepper";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import FormatIndentDecreaseIcon from "@mui/icons-material/FormatIndentDecrease";
 import FormatIndentIncreaseIcon from "@mui/icons-material/FormatIndentIncrease";
-import { Redirect } from "react-router-dom";
 import Cookies from "universal-cookie";
 const DrawerContainer = (props) => {
   const drawerWidth = props.menuSize;
@@ -75,7 +73,7 @@ const DrawerContainer = (props) => {
   );
   const classes = useStyles();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const cookies = new Cookies();
+  // const cookies = new Cookies();
   //const { forwardRef, useRef, useImperativeHandle } = React;
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);

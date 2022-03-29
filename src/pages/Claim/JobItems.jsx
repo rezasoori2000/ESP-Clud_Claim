@@ -18,9 +18,6 @@ import InputBase from "@material-ui/core/InputBase";
 import SearchIcon from "@material-ui/icons/Search";
 import { withStyles, fade } from "@material-ui/core/styles";
 import Helper from "../../components/logics/Helper";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
 import IconButton from "@material-ui/core/IconButton";
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
@@ -28,6 +25,8 @@ import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
 import CancelIcon from "@mui/icons-material/Cancel";
+
+let lastMove = 0;
 
 const AirbnbSlider = withStyles({
   root: {
@@ -133,14 +132,32 @@ class JobItems extends React.Component {
     };
   }
   mainJobItems = () => [];
+
+  returnBack = () => {
+    var now = new Date().getTime();
+
+    if (now - 60000 > lastMove) {
+      this.props.goBackToStart(3);
+    } else {
+      setTimeout(() => {
+        this.returnBack();
+      }, 60000);
+    }
+  };
+
   componentWillMount() {
     this.setState({
       //groupPercent: this.groupSliderValue(),
       groupPercent: this.props.totalProgress,
     });
     this.mainJobItems = this.state.jobItems;
+
+    document.addEventListener("mousemove", (e) => {
+      lastMove = new Date().getTime();
+    });
+
     setTimeout(() => {
-      this.props.goBackToStart(3);
+      this.returnBack();
     }, 60000);
   }
   componentDidMount() {}
@@ -201,13 +218,13 @@ class JobItems extends React.Component {
 
   roundNumber(v, g) {
     return v > g
-      ? v % this.props.settings.IncrementPercentage == 0
+      ? v % this.props.settings.IncrementPercentage === 0
         ? v
         : Math.ceil(
             (v - this.props.settings.IncrementPercentage - 1) /
               this.props.settings.IncrementPercentage
           ) * this.props.settings.IncrementPercentage
-      : v % this.props.settings.IncrementPercentage == 0
+      : v % this.props.settings.IncrementPercentage === 0
       ? v
       : Math.floor(
           (v + this.props.settings.IncrementPercentage - 1) /
@@ -221,7 +238,7 @@ class JobItems extends React.Component {
     const items = this.state.jobItems;
     v = btn ? this.roundNumber(v, this.state.groupPercent) : v;
 
-    var changed = v != this.props.totalProgress;
+    var changed = v !== this.props.totalProgress;
     this.setState({
       ...this.state,
       jobItems: items,
@@ -278,8 +295,6 @@ class JobItems extends React.Component {
     });
   };
   render() {
-    const { classes } = this.props;
-
     var allItemsV6 = this.state.jobItems
       .map((e) => e.StdTime)
       .reduce(function (a, b) {

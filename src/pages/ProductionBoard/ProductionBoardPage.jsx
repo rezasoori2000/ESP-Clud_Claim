@@ -1,8 +1,6 @@
 import React, { Fragment, useState } from "react";
 import {
   Grid,
-  Input,
-  InputAdornment,
   InputLabel,
   Dialog,
   DialogTitle,
@@ -21,12 +19,7 @@ import Hidden from "@material-ui/core/Hidden";
 import InputBase from "@mui/material/InputBase";
 import Tooltip from "@material-ui/core/Tooltip";
 import CancelIcon from "@mui/icons-material/Cancel";
-import {
-  createMuiTheme,
-  MuiThemeProvider,
-  withStyles,
-} from "@material-ui/core/styles";
-import Loading from "../loading.js";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 const ProductionBoardPage = (props) => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -86,7 +79,6 @@ const ProductionBoardPage = (props) => {
 
     return tempArray;
   }
-  function getChart() {}
   function beginTr(code, wortTYpes) {
     var wts = wortTYpes.filter((x) => !x.IsPreProduction);
     var chuncked = chunkArray(wts, 4);
@@ -104,8 +96,8 @@ const ProductionBoardPage = (props) => {
       trs.push(<tr>{htd}</tr>);
       htd = [];
       for (var j = 0; j < section.length; j++) {
-        if (section[j].Progress == 100) element = <CheckIcon />;
-        if (section[j].Progress == 0) element = <dir />;
+        if (section[j].Progress === 100) element = <CheckIcon />;
+        if (section[j].Progress === 0) element = <dir />;
         else {
           element = (
             <MuiThemeProvider theme={theme}>
@@ -195,7 +187,7 @@ const ProductionBoardPage = (props) => {
             }}
             onClick={(r) =>
               ClaimOnPBStting &&
-              w.Progress != -1 &&
+              w.Progress !== -1 &&
               claimOnPB(e.Oid, w.Oid, w.JobLevel, e.Code)
             }
           >
@@ -518,7 +510,7 @@ const ProductionBoardPage = (props) => {
                 jobs.map((e, i) => (
                   <tr
                     style={{
-                      backgroundColor: `${i % 2 == 0 ? "#fff" : "#fafafa"}`,
+                      backgroundColor: `${i % 2 === 0 ? "#fff" : "#fafafa"}`,
                     }}
                     className="border-bottom"
                   >
@@ -539,7 +531,7 @@ const ProductionBoardPage = (props) => {
                           </span>
                         </Button>
                       )}
-                      {e.Comments.length == 0 && e.Code}
+                      {e.Comments.length === 0 && e.Code}
                       {e.WorkTypes.filter(
                         (x) =>
                           x.IsPreProduction &&
@@ -578,7 +570,7 @@ const ProductionBoardPage = (props) => {
                           backgroundColor: `${
                             e.TitleBackgroundColor !== ""
                               ? e.TitleBackgroundColor
-                              : i % 2 == 0
+                              : i % 2 === 0
                               ? "#fff"
                               : "#fafafa"
                           }`,
@@ -597,7 +589,7 @@ const ProductionBoardPage = (props) => {
                     <td>{e.Progress}%</td>
                     {e.WorkTypes &&
                       e.WorkTypes.filter((x) => !x.IsPreProduction).map((w) =>
-                        w.Progress == 100 ? (
+                        w.Progress === 100 ? (
                           <td
                             style={{
                               margin: 0,
@@ -607,7 +599,7 @@ const ProductionBoardPage = (props) => {
                           >
                             <CheckIcon />
                           </td>
-                        ) : w.Progress == 0 ? (
+                        ) : w.Progress === 0 ? (
                           <td
                             style={{
                               margin: 0,
@@ -616,7 +608,7 @@ const ProductionBoardPage = (props) => {
                             }}
                             onClick={(r) =>
                               props.settings.ClaimOnPB &&
-                              w.Progress != -1 &&
+                              w.Progress !== -1 &&
                               props.claimOnPB(e.Oid, w.Oid, w.JobLevel, e.Code)
                             }
                           >
@@ -661,7 +653,7 @@ const ProductionBoardPage = (props) => {
                           {e.Code}
                         </Button>
                       )}
-                      {e.Comments.length == 0 && e.Code}
+                      {e.Comments.length === 0 && e.Code}
                     </td>
                     <td colSpan="1">{e.Progress}%</td>
                   </tr>
@@ -678,7 +670,7 @@ const ProductionBoardPage = (props) => {
                           backgroundColor: `${
                             e.TitleBackgroundColor !== ""
                               ? e.TitleBackgroundColor
-                              : i % 2 == 0
+                              : i % 2 === 0
                               ? "#fff"
                               : "#fafafa"
                           }`,

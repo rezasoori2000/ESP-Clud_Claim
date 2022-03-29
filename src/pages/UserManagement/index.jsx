@@ -6,17 +6,7 @@ import ESPSelect from "../../components/controls/ESPSelect";
 import ESPTextField from "../../components/controls/ESPTextField";
 import ESPCheckbox from "../../components/controls/ESPCheckbox";
 import CardHeader from "@material-ui/core/CardHeader";
-import {
-  Avatar,
-  Table,
-  TableHead,
-  TableRow,
-  Paper,
-  TableCell,
-  TableContainer,
-  TableBody,
-  Hidden,
-} from "@material-ui/core";
+import { Avatar, Hidden } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 import Button from "@material-ui/core/Button";
 import Helper from "../../components/logics/Helper";
@@ -114,10 +104,10 @@ class UserManagement extends React.Component {
     }
   };
   onChangePassword = (id) => {
-    const user = this.state.loginUsers.find((x) => x.Id == id);
+    const user = this.state.loginUsers.find((x) => x.Id === id);
     const EspUsers = this.state.model.EspUsers;
     if (!user.IsPublic) {
-      const espUser = EspUsers.find((x) => x.Value == user.WorkerId);
+      const espUser = EspUsers.find((x) => x.Value === user.WorkerId);
       const espInx = EspUsers.indexOf(espUser);
       espUser.Selected = true;
 

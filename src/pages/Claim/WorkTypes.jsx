@@ -10,7 +10,6 @@ import { Button, IconButton } from "@material-ui/core";
 import CommentIcon from "@material-ui/icons/Comment";
 import FullScreenDialog from "../../components/controls/FullScreenDialog";
 import ArrowBack from "@material-ui/icons/ArrowBack";
-import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
 import CancelIcon from "@mui/icons-material/Cancel";
 import Hidden from "@material-ui/core/Hidden";
@@ -18,12 +17,31 @@ import ClaimLogic from "../../components/logics/ClaimLogic";
 
 export default function Worktypes(props) {
   const classes = gridSearchStyles();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setTimeout(() => {
+
+  let lastMove = 0;
+  const returnBack = () => {
+    var now = new Date().getTime();
+
+    if (now - 60000 > lastMove) {
       props.goBackToStart(2);
+    } else {
+      setTimeout(() => {
+        returnBack();
+      }, 60000);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousemove", (e) => {
+      lastMove = new Date().getTime();
+    });
+    window.scrollTo(0, 0);
+
+    setTimeout(() => {
+      returnBack();
     }, 60000);
-  });
+  }, []);
+
   const [note, setNote] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [items, setSearchItems] = useState(props.workTypes);
@@ -165,11 +183,11 @@ export default function Worktypes(props) {
                         fontSize: "0.9rem",
                         textAlign: "center",
                         backgroundColor:
-                          e.CategoryName == "production"
+                          e.CategoryName === "production"
                             ? "#9abf47"
-                            : e.CategoryName == "preproduction"
+                            : e.CategoryName === "preproduction"
                             ? "#b3b31b"
-                            : e.CategoryName == "postproduction"
+                            : e.CategoryName === "postproduction"
                             ? "#adadad"
                             : "white",
                       }}
@@ -237,11 +255,11 @@ export default function Worktypes(props) {
                         fontSize: "0.9rem",
                         textAlign: "center",
                         backgroundColor:
-                          e.CategoryName == "production"
+                          e.CategoryName === "production"
                             ? "#9abf47"
-                            : e.CategoryName == "preproduction"
+                            : e.CategoryName === "preproduction"
                             ? "#b3b31b"
-                            : e.CategoryName == "postproduction"
+                            : e.CategoryName === "postproduction"
                             ? "#adadad"
                             : "white",
                       }}

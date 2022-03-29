@@ -1,36 +1,17 @@
-import React, { Fragment, useState, useEffect } from "react";
+import React from "react";
 import Grid from "@material-ui/core/Grid";
-
-import SearchIcon from "@mui/icons-material/Search";
-
-import CancelIcon from "@mui/icons-material/Cancel";
-
-import gridSearchStyles from "../../components/controls/Styles";
-import { Button, IconButton } from "@material-ui/core";
+import { IconButton } from "@material-ui/core";
 import CommentIcon from "@material-ui/icons/Comment";
-import FullScreenDialog from "../../components/controls/FullScreenDialog";
-import ArrowBack from "@material-ui/icons/ArrowBack";
-import InputBase from "@mui/material/InputBase";
+
 import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Typography from "@material-ui/core/Typography";
-
-import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import SettingsIcon from "@mui/icons-material/Settings";
-import CallMadeOutlinedIcon from "@mui/icons-material/CallMadeOutlined";
-import SubdirectoryArrowLeftOutlinedIcon from "@mui/icons-material/SubdirectoryArrowLeftOutlined";
-
-import Card from "@material-ui/core/Card";
 import Box from "@material-ui/core/Box";
-import CardContent from "@material-ui/core/CardContent";
-
 import CircularProgressWithLabel from "../../components/controls/CircularProgressWithLabel";
-import ClaimLogic from "../../components/logics/ClaimLogic";
 import Loading from "../loading";
 import Hidden from "@material-ui/core/Hidden";
-import HomeWorkIcon from "@mui/icons-material/HomeWork";
 
 export default function DividedJobs(props) {
   return (
@@ -59,18 +40,18 @@ export default function DividedJobs(props) {
             })
             .filter(
               (x) =>
-                (props.activeButton == "post" &&
-                  x.JobStageName == "postproduction") ||
-                (props.activeButton == "pre" &&
-                  x.JobStageName == "preproduction") ||
-                (props.activeButton == "prod" &&
-                  x.JobStageName == "production") ||
-                (props.activeButton == "site" && x.JobStageName == "SiteWork")
+                (props.activeButton === "post" &&
+                  x.JobStageName === "postproduction") ||
+                (props.activeButton === "pre" &&
+                  x.JobStageName === "preproduction") ||
+                (props.activeButton === "prod" &&
+                  x.JobStageName === "production") ||
+                (props.activeButton === "site" && x.JobStageName === "SiteWork")
             )
             .filter(
               (x) =>
-                (props.activeButton != "site" && x.WorkTypes.length > 0) ||
-                props.activeButton == "site"
+                (props.activeButton !== "site" && x.WorkTypes.length > 0) ||
+                props.activeButton === "site"
             )
             .filter((x) => x.WorkTypes.some((w) => w.Progress < 100))
 
@@ -89,23 +70,24 @@ export default function DividedJobs(props) {
                   boxShadow={4}
                   color="white"
                   className={props.classes.boxBolding}
-                  style={{ paddingLeft: "30px", paddingRight: "30px" }}
-                  bgcolor={
-                    e.JobStageName == "production"
-                      ? "#9abf47"
-                      : e.JobStageName == "preproduction"
-                      ? "#b3b31b"
-                      : e.JobStageName == "postproduction"
-                      ? "#b4bebf"
-                      : "white"
-                  }
-                  spacing={3}
                   style={{
+                    paddingLeft: "30px",
+                    paddingRight: "30px",
                     width: "100%",
                     height: "100%",
                     fontSize: "0.8rem",
                     textAlign: "center",
                   }}
+                  bgcolor={
+                    e.JobStageName === "production"
+                      ? "#9abf47"
+                      : e.JobStageName === "preproduction"
+                      ? "#b3b31b"
+                      : e.JobStageName === "postproduction"
+                      ? "#b4bebf"
+                      : "white"
+                  }
+                  spacing={3}
                   onClick={() => {
                     props.handleJobClick(e.OId);
                   }}

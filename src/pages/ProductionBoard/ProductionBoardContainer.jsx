@@ -1,7 +1,5 @@
 import React, { Fragment } from "react";
 import ProductionBoard from "./ProductionBoardPage";
-import config from "../../config";
-import axios from "axios";
 import Helper from "../../components/logics/Helper";
 import Loading from "../loading.js";
 

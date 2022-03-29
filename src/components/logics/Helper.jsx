@@ -33,7 +33,6 @@ class HelperLogic extends React.Component {
   };
 
   apiPost = async (url, value, errorName) => {
-    var response = {};
     // var data = JSON.stringify(value);
     axios.defaults.headers.post["Authorization"] =
       "bearer " + (await this.getLocalToken());
@@ -97,9 +96,9 @@ class HelperLogic extends React.Component {
     var minutes = (hours - rhours) * 60;
     var rminutes = Math.round(minutes).toString();
     return (
-      (rhours.length == 1 ? "0" + rhours : rhours) +
+      (rhours.length === 1 ? "0" + rhours : rhours) +
       ":" +
-      (rminutes.length == 1 ? "0" + rminutes : rminutes)
+      (rminutes.length === 1 ? "0" + rminutes : rminutes)
     );
   };
 

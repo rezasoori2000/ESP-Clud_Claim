@@ -42,7 +42,7 @@ export default function ItemsList(props) {
                 </ListItemAvatar>
                 <ListItemText
                   primary={`Author:${i.Author} ${
-                    i.Resource != null && i.Resource.length > 0
+                    i.Resource !== null && i.Resource.length > 0
                       ? `Resource:${i.Resource}`
                       : ``
                   } `}

@@ -22,7 +22,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Fragment } from "react";
 import Button from "@material-ui/core/Button";
 import Helper from "../../components/logics/Helper";
-import Hidden from "@material-ui/core/Hidden";
 import Barchart from "../../components/controls/Barchart";
 
 const useStyles = makeStyles({
@@ -46,14 +45,32 @@ const useStyles = makeStyles({
 export default function Summary(props) {
   const [comment, setComment] = useState("");
   const classes = useStyles();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    setTimeout(() => {
+
+  let lastMove = 0;
+  const returnBack = () => {
+    var now = new Date().getTime();
+
+    if (now - 60000 > lastMove) {
       props.goBackToStart(4);
+    } else {
+      setTimeout(() => {
+        returnBack();
+      }, 60000);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousemove", (e) => {
+      lastMove = new Date().getTime();
+    });
+    window.scrollTo(0, 0);
+
+    setTimeout(() => {
+      returnBack();
     }, 60000);
   });
+
   var num = 0;
-  var avgStd = 0;
   var changedItems = props.claimingItems.filter(
     (x) => x.Progress100 !== x.Main_Progress100
   ).length;
@@ -261,7 +278,7 @@ export default function Summary(props) {
                             <span style={{ fontSize: "0.0rem" }}>
                               {
                                 (num =
-                                  chartData.filter((x) => x.name == e.Name)
+                                  chartData.filter((x) => x.name === e.Name)
                                     .length + 1)
                               }
                               {!props.jobLevel &&
