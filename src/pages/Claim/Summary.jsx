@@ -63,6 +63,10 @@ export default function Summary(props) {
     document.addEventListener("mousemove", (e) => {
       lastMove = new Date().getTime();
     });
+    document.addEventListener("keypress", (e) => {
+      lastMove = new Date().getTime();
+    });
+
     window.scrollTo(0, 0);
 
     setTimeout(() => {

@@ -23,12 +23,12 @@ export default function Login(props) {
   const returnBack = () => {
     var now = new Date().getTime();
 
-    if (now - 5000 > lastMove) {
+    if (now - 60000 > lastMove) {
       props.goBackToStart(0);
     } else {
       setTimeout(() => {
         returnBack();
-      }, 5000);
+      }, 60000);
     }
   };
   function getLabel(e) {
@@ -57,7 +57,7 @@ export default function Login(props) {
       props.setIsReturnHasSet(true);
       setTimeout(() => {
         returnBack();
-      }, 5000);
+      }, 60000);
     }
   });
   return (

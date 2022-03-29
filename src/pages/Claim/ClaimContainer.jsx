@@ -138,11 +138,13 @@ class CalimContainer extends React.Component {
     this.setState({ ...this.state, isReturnHasSet: val });
   };
   goBackToStart = (pageId) => {
-    if (this.state.page === pageId && !this.state.holdReturnToStart)
+    if (this.state.page === pageId && !this.state.holdReturnToStart) {
       this.setState({
         ...this.state,
         page: -1,
       });
+      this.props.changeStep(1, [], this.state.isAdminJob);
+    }
   };
   start = async () => {
     this.setState(
