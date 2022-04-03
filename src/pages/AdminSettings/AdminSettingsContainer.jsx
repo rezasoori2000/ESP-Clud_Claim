@@ -24,7 +24,17 @@ class AdminSettingsContainer extends React.Component {
     let value = "";
     if (event.target.type !== undefined && event.target.type === "checkbox")
       value = event.target.checked;
-    else value = event.target.value;
+    else {
+      if (
+        (event.target.name === "NoClaimAllowance" ||
+          event.target.name === "EarlyLeaveAllowance" ||
+          event.target.name === "LateAllowance" ||
+          event.target.name === "IncrementPercentage") &&
+        event.target.value === ""
+      ) {
+        value = 0;
+      } else value = event.target.value;
+    }
 
     var changes = this.state.changes;
     changes.push({
@@ -176,7 +186,7 @@ class AdminSettingsContainer extends React.Component {
       );
     } catch (err) {
       if (err.response) alert(`Error in calling ESP API- ${err.response.data}`);
-      else alert(`Error in calling ESP API- ${err}`);
+      //else {alert(`Error in calling ESP API-189- ${err}`);}
     }
   };
 
