@@ -287,13 +287,29 @@ class CalimContainer extends React.Component {
       this.loggedInWorkerClick(worker);
     } else {
       let comment = "";
-      if (
-        Loginlogics.checkWorkerLateLogin(
-          worker,
-          this.state.settings.TrackLateLogin,
-          this.state.settings.LateAllowance
-        )
-      ) {
+
+      var isLate = Loginlogics.checkWorkerLateLogin(
+        worker,
+        this.state.settings.TrackLateLogin,
+        this.state.settings.LateAllowance
+      );
+      var isNotLoggout = worker.LastDayNotLoggedOut;
+      if (isLate && isNotLoggout) {
+        this.setState({
+          ...this.state,
+          claimingOId: id,
+          claimingUser: worker.Name,
+          dialogOpen: true,
+          logoutClicked: false,
+          holdReturnToStart: true,
+          dialogHeader: "Late Login & Missing logout",
+          dialogText:
+            " You did not logout yesterday please advise your manager.Also, Please, specify the reason to late log in.",
+          dialogSave: this.onCommentSave,
+          alert: false,
+          LabelText: [worker.Name],
+        });
+      } else if (isLate) {
         this.setState({
           ...this.state,
           claimingOId: id,
@@ -307,8 +323,7 @@ class CalimContainer extends React.Component {
           alert: false,
           LabelText: [worker.Name],
         });
-      }
-      if (worker.LastDayNotLoggedOut) {
+      } else if (isNotLoggout) {
         this.setState({
           ...this.state,
           claimingOId: id,

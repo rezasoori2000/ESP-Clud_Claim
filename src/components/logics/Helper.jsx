@@ -32,8 +32,30 @@ class HelperLogic extends React.Component {
     return await axios.post(`${route}token`, data, headers);
   };
 
-  apiPost = async (url, value, errorName) => {
+ 
+    // let xmls =
+    //   '<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope"><soap12:Header xmlns:wsa="http://www.w3.org/2005/08/addressing"><wsa:To>https://esporders-test.aplnz.co.nz/ESPHubWebServer/HubService</wsa:To><wsa:Action>http://ESP.Hub.WebServer/IHubMainService/ESP_HS_Customer_IsAlive</wsa:Action></soap12:Header><soap12:Body xmlns:xsi="http://ESP.Hub.WebServer"><xsi:ESP_HS_Customer_IsAlive><corpPassword>1@ie3avb2ebVE1Mn</corpPassword></xsi:ESP_HS_Customer_IsAlive></soap12:Body></soap12:Envelope>';
+    // try {
+    //   var abc = await axios.post(
+    //     "https://esporders-test.aplnz.co.nz/ESPHubWebServer/HubService",
+    //     xmls,
+    //     {
+    //       headers: {
+    //         "Content-Type": "text/soap+xml",
+    //         "Access-Control-Allow-Origin": "*",
+    //         "Access-Control-Allow-Credentials": "true",
+    //         "Access-Control-Allow-Methods": "*",
+    //         SOAPAction:
+    //           "http://ESP.Hub.WebServer/IHubMainService/ESP_HS_Customer_IsAlive",
+    //       },
+    //     }
+    //   );
+    // } catch (ex) {
+    //   console.log(ex);
+    // }
+    // return;
     // var data = JSON.stringify(value);
+    apiPost = async (url, value, errorName) => {
     axios.defaults.headers.post["Authorization"] =
       "bearer " + (await this.getLocalToken());
     axios.defaults.headers.post["Content-Type"] =

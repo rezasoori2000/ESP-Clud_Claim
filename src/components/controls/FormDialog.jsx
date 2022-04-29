@@ -35,9 +35,18 @@ export default function FormDialog(props) {
         onClose={handleSave}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">{props.header}</DialogTitle>
+        <DialogTitle
+          id="form-dialog-title"
+          style={{ color: "#000", fontWeight: 600, fontSize: 24 }}
+        >
+          {props.header}
+        </DialogTitle>
         <DialogContent>
-          <DialogContentText>{props.text}</DialogContentText>
+          <DialogContentText
+            style={{ color: "#000", fontWeight: 400, fontSize: 20 }}
+          >
+            {props.text}
+          </DialogContentText>
           {!props.alert && (
             <TextField
               autoFocus
