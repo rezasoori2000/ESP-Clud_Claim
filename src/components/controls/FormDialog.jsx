@@ -17,7 +17,8 @@ export default function FormDialog(props) {
 
     setComment(e.target.value);
   };
-  const handleSave = () => {
+  const handleSave = (event, reason) => {
+    if (reason && reason == "backdropClick") return;
     if (props.doSaving) {
       props.onCommentSave(comment, !props.logout);
     }

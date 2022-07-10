@@ -753,41 +753,37 @@ class CalimContainer extends React.Component {
           }
         );
       } else {
+        var worker=this.state.claiminWorker;
         var jobItems =
           this.state.groupPercent > 0
             ? this.state.jobItems
             : this.state.jobItems.filter(
                 (x) => x.Progress100 !== x.Main_Progress100
               );
-        await ClaimLogic.submitClaimInAPI(
-          this.state.claimingOId,
-          this.state.jobId,
-          jobItems,
-          this.state.groupPercent,
-          comment,
-          logout,
-          this.props.apiRoute
-        );
-        this.setState(
-          {
-            ...this.state,
-            loading: false,
-            page: -1,
-            LabelText: [],
-            workersList: logout
-              ? this.setWorkerLOgout(this.state.claimingOId)
-              : this.state.workersList,
-          },
-          () => {
-            if (this.props.fromPB)
-              this.props.history.push(`${this.props.mainRoute}productionBoard`);
-            else {
-              if (this.props.role === "a" || this.props.public)
-                this.props.changeStep(1, [], this.state.isAdminJob);
-              else this.props.changeStep(2, [], this.state.isAdminJob);
-            }
-          }
-        );
+              if (logout &&
+                Loginlogics.checkWorkerEarlyLeave(
+                  worker,
+                  this.state.settings.TrackEarlyLeave,
+                  this.state.settings.EarlyLeaveAllowance
+                )
+              ) {
+                this.setState({
+                  ...this.state,
+                  claimingOId: this.state.claimingOId,
+                  claimingUser: worker.Name,
+                  dialogOpen: true,
+                  logoutClicked: true,
+                  dialogHeader: "Early Leave",
+                  dialogText: "Please, specify the reason to early leaving.",
+                  dialogSave: this.onCommentSave,
+                  alert: false,
+                  LabelText: [worker.Name],
+                });
+                this.logoutAndSubmit(jobItems,comment,logout);
+              } else {
+
+                this.logoutAndSubmit(jobItems,comment,logout);
+              }
       }
     } else {
       var e = await ClaimLogic.submitAdminJobClaimInAPI(
@@ -816,6 +812,49 @@ class CalimContainer extends React.Component {
     }
   };
 
+  logoutAndSubmit=async(jobItems,comment,logout) => {
+    const workersList = this.state.workersList;
+    const worker = workersList.filter((x) => x.OId === this.state.claimingOId)[0];
+    if (
+      Loginlogics.checkWorkerEarlyLeave(
+        worker,
+        this.state.settings.TrackEarlyLeave,
+        this.state.settings.EarlyLeaveAllowance
+      )
+    ) {
+      logout=false;
+    }
+    await ClaimLogic.submitClaimInAPI(
+      this.state.claimingOId,
+      this.state.jobId,
+      jobItems,
+      this.state.groupPercent,
+      comment,
+      logout,
+      this.props.apiRoute
+    );
+    this.setState(
+      {
+        ...this.state,
+        loading: false,
+        page: -1,
+        LabelText: [],
+        workersList: logout
+          ? this.setWorkerLOgout(this.state.claimingOId)
+          : this.state.workersList,
+      },
+      () => {
+        if (this.props.fromPB)
+          this.props.history.push(`${this.props.mainRoute}productionBoard`);
+        else {
+          if (this.props.role === "a" || this.props.public)
+            this.props.changeStep(1, [], this.state.isAdminJob);
+          else this.props.changeStep(2, [], this.state.isAdminJob);
+        }
+      }
+    );
+
+  }
   handleFullSubmitClaim = (comment, isAdmin = false) => {};
   /* #endregion */
 
