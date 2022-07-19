@@ -22,3 +22,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 Claim-State.7z
+build/data.json
+build/static/js/main.b23857e2.chunk.js
+build/static/js/main.b23857e2.chunk.js.map
+build/static/js/main.c1d7554a.chunk.js
+build/static/js/main.c1d7554a.chunk.js.map
+*.chunk.js
+*.chunk.js.map
+*.chunk.css
+*.chunk.css.map
